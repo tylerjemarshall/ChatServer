@@ -1,3 +1,4 @@
+package game;
 /**
  * @author Tyler M
  *
@@ -5,6 +6,8 @@
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import client.ChatClient;
 
 import java.awt.event.*;
 import java.awt.image.BufferedImage;

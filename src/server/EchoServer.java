@@ -1,5 +1,8 @@
+package server;
 import java.io.*;
 import java.util.*;
+
+import client.ChatIF;
 
 /**
  * This class overrides some of the methods in the abstract superclass in order

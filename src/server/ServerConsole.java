@@ -1,6 +1,9 @@
+package server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import client.ChatIF;
 
 
 public class ServerConsole implements ChatIF {

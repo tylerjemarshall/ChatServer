@@ -1,3 +1,5 @@
+package server;
+
 
 /**
  * This class takes in ConnectionToClient to be able to handle the HashMap of ConnectionToClient and other variables.

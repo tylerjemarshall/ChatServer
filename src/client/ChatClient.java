@@ -1,7 +1,11 @@
+package client;
 
 
 
 
+
+//import CustomException;
+import game.TicTacToe;
 
 import java.io.*;
 
@@ -282,7 +286,7 @@ public class ChatClient extends AbstractClient
 			try {
 				tryToConnect();
 				sendToServer(msg);
-			} catch (CustomException ce) {
+			} catch (Exception ce) {
 				throw ce;
 			}
 		}
@@ -294,7 +298,7 @@ public class ChatClient extends AbstractClient
 	{
 		if (isConnected())
 		{
-			throw new CustomException("You are already connected");
+			throw new Exception("You are already connected");
 		}
 		else
 		{
@@ -304,12 +308,12 @@ public class ChatClient extends AbstractClient
 			catch (Exception e)
 			{
 				
-				throw new CustomException("Unable to connect");
+				throw new Exception("Unable to connect");
 			}
 			try {
 				sendToServer("#login " + userName);
 			} catch (Exception e2) {
-				throw new CustomException("Failed to send userName to server");
+				throw new Exception("Failed to send userName to server");
 			}
 		}
 		
