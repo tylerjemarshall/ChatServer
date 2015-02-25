@@ -1,5 +1,6 @@
 package game;
 /**
+ * Compatible with online play.
  * @author Tyler M
  *
  */

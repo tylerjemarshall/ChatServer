@@ -2,6 +2,11 @@ package game;
 import javax.swing.JButton;
 
 
+/**
+ * Adds functionality to the JButton, including setTag tag, setValue value.
+ * @author Tyler M
+ *
+ */
 public class GameButton extends JButton {
 
 	private String tag;
