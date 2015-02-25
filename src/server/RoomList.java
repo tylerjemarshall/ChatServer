@@ -13,7 +13,7 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 
 	private int maxClients = DEFAULT_MAX_CLIENTS;
 	private int clientCount = 0;
-	private String defaultRoom = "commoms";
+	private String defaultRoom = "commons";
 	
 	
 	
@@ -38,7 +38,18 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		return clientCount;
 	}
     
-    
+    public boolean roomOpen(String room)
+    {
+    	try
+    	{
+    		Room tempRoom = getRoom(room);
+    		return tempRoom.isOpen();
+    	}
+    	catch(Exception e)
+    	{
+    		return false;
+    	}
+    }
     
     
 
@@ -186,52 +197,90 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 	 * @param clientInfo Client List Item being added to room.
 	 * @param room The room you would like the client to join, referenced by room name
 	 */
-	public void add(ClientInfo clientInfo, String room) {
+	public boolean add(ClientInfo clientInfo, String room) {
 		room = room.toLowerCase();
 		boolean foundRoom = false;
 		for (int i = 0; i < list.size(); i++) {
 			Room currentRoom = list.get(i);
 			if (currentRoom.getName().toLowerCase().equals(room)) {
 				clientInfo.setRoom(room);
-				currentRoom.add(clientInfo);
 				foundRoom = true;
+				currentRoom.add(clientInfo);
 				System.out.println("Added client " + clientInfo + " to room "
-						+ currentRoom);
+					+ currentRoom);
+				
+				
+				
+				if (currentRoom.isEmpty()) {
+					list.remove(currentRoom);
+					System.out.println("Removed empty room.");
+				}
+				
+//				
+//				if (!roomOpen(room))
+//				{
+//					moveClient(clientInfo, "commons");
+//				}
+				
+				
+				return true;
 			}
 		}
 		if (!foundRoom) {
 			System.out.println("Couldn't find room, creating new room");
 			Room newRoom = new Room();
 			newRoom.setName(room);
+			if (room.equals(defaultRoom)) newRoom.setLimit(200);
 			clientInfo.setRoom(room);
 			newRoom.add(clientInfo);
 			list.add(newRoom);
+			return true;
 		}
+		return false;
+		
+		
+		
 	}
-	public void remove(ClientInfo clientInfo) {
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param info
+	 * @param room
+	 * @return Returns false when unable to move client from either Client Doesn't Exist or Room is Closed.
+	 */
+	public boolean moveClient(ClientInfo client, String room)
+	{
+		return (remove(client)) ? add(client, room) : false;
+	}
+	
+	public boolean remove(ClientInfo clientInfo) {
+	
 		String room = clientInfo.getRoom().toLowerCase();
-		boolean foundRoom = false;
+		
 		for (int i = 0; i < list.size(); i++) {
 			Room currentRoom = list.get(i);
 			if (currentRoom.getName().toLowerCase().equals(room)) {
-				if (currentRoom.remove(clientInfo))
-					System.out.println("Removed client");
-				else
-					System.out.println("Client not found.");
-				foundRoom = true;
-				System.out.println("Removed client " + clientInfo + " to room "
+				
+				boolean exit = currentRoom.remove(clientInfo);
+				
+				if (exit)
+				System.out.println("Removed client " + clientInfo + " from room "
 						+ currentRoom);
 
 				if (currentRoom.isEmpty()) {
 					list.remove(currentRoom);
 					System.out.println("Removed empty room.");
 				}
+				return exit;
 
 			}
 		}
-		if (!foundRoom) {
-			System.out.println("Couldn't find room");
-		}
+		return false;
+	
+	
 
 	}
 	

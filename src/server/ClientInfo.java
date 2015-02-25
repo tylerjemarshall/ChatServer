@@ -95,6 +95,8 @@ public class ClientInfo implements Comparable<ClientInfo> {
 		this.userName = userName;
 		this.room = room;
 	}
+	
+
 
 
 	

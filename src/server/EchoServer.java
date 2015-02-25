@@ -224,6 +224,7 @@ public class EchoServer extends AbstractServer {
 		case "#login":
 			if (truncMsg.isEmpty())
 				truncMsg = "User";
+	
 			login(client, truncMsg);
 			break;
 		case "#whisper":
@@ -243,8 +244,9 @@ public class EchoServer extends AbstractServer {
 			sendToAllRooms(info + " Just yelled " + truncMsg + "!");
 			break;
 		case "#join":
-			roomList.remove(info);
-			roomList.add(info, truncMsg);
+//			roomList.remove(info);
+//			roomList.add(info, truncMsg);
+			if (roomList.moveClient(info, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move clienet");
 			tryToSendToClient("You have switched rooms to " + truncMsg, info);
 			sendToARoom(info + " Just joined " + truncMsg, truncMsg);
 			break;
@@ -323,8 +325,8 @@ public class EchoServer extends AbstractServer {
 	 * @param user
 	 *            The userName that the client is going to use.
 	 */
-	private void login(ConnectionToClient client, String user) {
-		login(client, user, "commons");
+	private boolean login(ConnectionToClient client, String user) {
+		return login(client, user, "commons");
 	}
 
 	/**
@@ -338,36 +340,34 @@ public class EchoServer extends AbstractServer {
 	 * @param room
 	 *            The room that the client is joining.
 	 */
-	private void login(ConnectionToClient client, String user, String room) {
+	private boolean login(ConnectionToClient client, String user, String room) {
 		ClientInfo tempClient;
 		try {
 			int id = roomList.getClientCount() + 1;
 			tempClient = new ClientInfo(client, user, id, room);
-			roomList.add(tempClient, room);
+			boolean exit = (roomList.add(tempClient, room)) ? true :false;
 			System.out.println("Added client to room");
+			sendToARoom(tempClient + " just logged in.", room);
+			return exit;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Failed to add client to room");
 			tempClient = new ClientInfo(client, user, 1, room);
-		}
-		sendToARoom(tempClient + " just logged in.", room);
-	}
-
-	public void logoff(ClientInfo client)
-	{
-		try
-		{
-			roomList.remove(client);
-		}
-		catch (Exception e)
-		{
-			display("Failed to remove client");
+			return false;
 		}
 	}
 	
-	public void logoff(ConnectionToClient client)
+
+	public boolean logoff(ClientInfo client) {
+		try {
+			client.getClient().close();
+		} catch (IOException e) {}
+		return roomList.remove(client);
+	}
+	
+	public boolean logoff(ConnectionToClient client)
 	{
-		logoff(roomList.getInfoByClient(client));
+		return logoff(roomList.getInfoByClient(client));
 	}
 	
 	/**
@@ -504,6 +504,9 @@ public class EchoServer extends AbstractServer {
 		try {
 			System.out.println("Client " + roomList.getInfoByClient(client)
 					+ " connected from " + client);
+			
+			
+			
 		} catch (Exception e) {
 			System.out.println("Client connected from " + client);
 		}

@@ -171,29 +171,34 @@ public class Room implements RoomInterface, Comparable<Room>{
 
 	@Override
 	public boolean add(ClientInfo e) {
-		return list.add(e);
+		boolean b = list.add(e);
+		open = (list.size()>limit) ? false : true;
+		return b;
 	}
 
 	@Override
 	public void add(int index, ClientInfo element) {
 		list.add(index, element);
-
+		open = (list.size()>limit) ? false : true;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends ClientInfo> c) {
-		return list.addAll(c);
+		boolean b = list.addAll(c);
+		open = (list.size()>limit) ? false : true;
+		return b;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends ClientInfo> c) {
-		return list.addAll(index, c);
+		boolean b = list.addAll(index, c);
+		open = (list.size()>limit) ? false : true;
+		return b;
 	}
 
 	@Override
 	public void clear() {
 		list.clear();
-
 	}
 
 	@Override
@@ -243,17 +248,23 @@ public class Room implements RoomInterface, Comparable<Room>{
 
 	@Override
 	public boolean remove(Object o) {
-		return list.remove(o);
+		boolean b = list.remove(o);
+		open = (list.size()>limit) ? false : true;
+		return b;
 	}
 
 	@Override
 	public ClientInfo remove(int index) {
-		return list.remove(index);
+		ClientInfo client = list.remove(index);
+		open = (list.size()>limit) ? false : true;
+		return client;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		return removeAll(c);
+		boolean b = removeAll(c);
+		open = (list.size()>limit) ? false : true;
+		return b;
 	}
 
 	@Override
