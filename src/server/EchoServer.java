@@ -257,11 +257,7 @@ public class EchoServer extends AbstractServer {
 			break;
 		case "#logout":
 		case "#logoff":
-			try {
-				roomList.remove(info);
-			} catch (Exception oob) {
-				serverUI.display(oob.toString() + "\nFailed to delete " + info);
-			}
+			logoff(info);
 			sendToARoom(info + " has logged off!", info.getRoom());
 			try {
 				System.out.println("Attempting to close connction to client");
@@ -357,6 +353,23 @@ public class EchoServer extends AbstractServer {
 		sendToARoom(tempClient + " just logged in.", room);
 	}
 
+	public void logoff(ClientInfo client)
+	{
+		try
+		{
+			roomList.remove(client);
+		}
+		catch (Exception e)
+		{
+			display("Failed to remove client");
+		}
+	}
+	
+	public void logoff(ConnectionToClient client)
+	{
+		logoff(roomList.getInfoByClient(client));
+	}
+	
 	/**
 	 * Method that handles the messages being sent to a specific client.
 	 * 
@@ -501,6 +514,7 @@ public class EchoServer extends AbstractServer {
 
 			System.out.println("Client " + roomList.getInfoByClient(client)
 					+ " disconnected from " + client);
+			logoff(client);
 
 		} catch (Exception e) {
 			System.out.println("Client disconnected from " + client);

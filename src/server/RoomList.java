@@ -43,9 +43,10 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		{
 			Room tempRoom = list.get(y);
 			
-			
+			try{
 			if (tempRoom.getName().toLowerCase().equals(room.toLowerCase()))			
-			return tempRoom;
+				return tempRoom;}
+			catch(Exception e){}
 		}
 		return null;
     }
@@ -75,8 +76,11 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 			Room tempRoom = list.get(y);
 			ClientInfo tempClient = tempRoom.getClientInfoById(id);
 			
-			if (tempClient.getId() == id)			
-			return tempClient;
+			try {
+				if (tempClient.getId() == id)			
+					return tempClient;
+			} catch(Exception e){}
+			
 		}
 		return null;
     }
@@ -87,9 +91,10 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		{
 			Room tempRoom = list.get(y);
 			ClientInfo tempClient = tempRoom.getInfoByClient(client);
-			
-			if (tempClient.getClient() == client)			
-			return tempClient;
+			try {
+				if (tempClient.getClient() == client)
+					return tempClient;	
+			} catch (Exception e){}
 		}
 		return null;
 		
