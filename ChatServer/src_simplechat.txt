@@ -1,0 +1,7 @@
+M:\SimpleChat\AbstractClient.java
+M:\SimpleChat\AbstractServer.java
+M:\SimpleChat\ChatClient.java
+M:\SimpleChat\ChatIF.java
+M:\SimpleChat\ClientConsole.java
+M:\SimpleChat\ConnectionToClient.java
+M:\SimpleChat\EchoServer.java
