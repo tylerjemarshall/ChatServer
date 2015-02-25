@@ -17,6 +17,7 @@ public class Room implements RoomInterface, Comparable<Room>{
     private int limit = DEFAULT_LIMIT;
     private String name = "commons";
     private int id;
+    private boolean open = true;
     
     
     /**
@@ -109,9 +110,25 @@ public class Room implements RoomInterface, Comparable<Room>{
 	}
 
 
+	/**
+	 * If the Room is accepting new clients, true. Else is closed and sending new clients to their default room.
+	 * @return Returns true if Room is open. False if closed.
+	 */
+	public boolean isOpen() {
+		return open;
+	}
+
+
+
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
+
+
 	public String toString()
 	{
-		return name + " contains " + list;
+		return name + "(" + list.size()+"/"+getLimit()+")";
 	}
 	
 	
@@ -268,6 +285,5 @@ public class Room implements RoomInterface, Comparable<Room>{
 	public <T> T[] toArray(T[] a) {
 		return list.toArray(a);
 	}
-
 
 }

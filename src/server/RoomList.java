@@ -13,6 +13,7 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 
 	private int maxClients = DEFAULT_MAX_CLIENTS;
 	private int clientCount = 0;
+	private String defaultRoom = "commoms";
 	
 	
 	
@@ -37,20 +38,66 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		return clientCount;
 	}
     
-    public Room getRoom(String room)
+    
+    
+    
+
+//	public boolean roomIsJoinable(Room room) {
+//		boolean a = false;
+//		boolean b = false;
+//		try {
+//			a = room.isOpen();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			a = false;
+//		}
+//		try {
+//			b = room.size() < room.getLimit();
+//		} catch (Exception e) {
+//			b = false;
+//		}
+//		return a && b;
+//
+//	}
+
+//	public boolean roomIsJoinable(String room) {
+//		try
+//		{
+//			Room tempRoom = getRoom(room.toLowerCase());
+//			return roomIsJoinable(tempRoom);
+//		}
+//		catch (Exception e){return false;}	
+//	}
+    
+    public String getDefaultRoom() {
+		return defaultRoom;
+	}
+
+
+	public void setDefaultRoom(String defaultRoom) {
+		this.defaultRoom = defaultRoom;
+	}
+
+
+	public Room getRoom(String room)
     {
 		for (int y = 0; y < list.size(); y++) 
 		{
 			Room tempRoom = list.get(y);
-			
 			try{
-			if (tempRoom.getName().toLowerCase().equals(room.toLowerCase()))			
-				return tempRoom;}
+			if (tempRoom.getName().toLowerCase().equals(room.toLowerCase()))
+			{
+				return tempRoom;
+			}
+				}
 			catch(Exception e){}
 		}
 		return null;
     }
     
+	/**
+	 * Method that is private, to count the sum of all clients in all room lists.
+	 */
     private void countClients()
     {
     	int count = 0;
@@ -84,7 +131,13 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		}
 		return null;
     }
-	
+	/**
+	 * Method that finds a client by their ConnectionToClient
+	 * Returns null if not found
+	 * 
+	 * @param itemName The ID that is being searched for.
+	 * @return ClientInfo client if found, else null
+	 */
 	public ClientInfo getInfoByClient(ConnectionToClient client)
 	{
 		for (int y = 0; y < list.size(); y++) 
@@ -116,16 +169,13 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		for (int y = 0; y < list.size(); y++) 
 		{
 			Room tempRoom = list.get(y);
-			//ClientInfo tempClient = tempRoom.getClientInfoById(id);
 			ClientInfo tempClient = tempRoom.getClientInfoByName(name);
 			
 			if (tempClient.getUserName().toLowerCase().equals(name))
 			{
-				System.out.println(true);
 				return true;
 			}
 		}
-		System.out.println(false);
 		return false;
     }
     
@@ -137,7 +187,6 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 	 * @param room The room you would like the client to join, referenced by room name
 	 */
 	public void add(ClientInfo clientInfo, String room) {
-
 		room = room.toLowerCase();
 		boolean foundRoom = false;
 		for (int i = 0; i < list.size(); i++) {
@@ -157,11 +206,8 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 			clientInfo.setRoom(room);
 			newRoom.add(clientInfo);
 			list.add(newRoom);
-			System.out.println("Added client " + clientInfo + " to new room "
-					+ newRoom);
 		}
 	}
-	
 	public void remove(ClientInfo clientInfo) {
 		String room = clientInfo.getRoom().toLowerCase();
 		boolean foundRoom = false;
@@ -189,8 +235,6 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 
 	}
 	
-    //From List. If i want to implement more List functions, need to add here.
-
     public int getMaxClients() {
 		return maxClients;
 	}
@@ -199,7 +243,9 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		this.maxClients = maxClients;
 	}
 
-
+	////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	public Iterator<Room> getIter(){
         return list.iterator();
     }
@@ -209,26 +255,23 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		return list.add(e);
 	}
 
+
 	@Override
 	public void add(int index, Room element) {
 		list.add(index, element);
-
 	}
 
-	@Override
-	public boolean addAll(Collection<? extends Room> c) {
-		return list.addAll(c);
-	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends Room> c) {
-		return list.addAll(index, c);
+	public List<Room> subList(int fromIndex, int toIndex) {
+		return list.subList(fromIndex, toIndex);
 	}
+
+	
 
 	@Override
 	public void clear() {
 		list.clear();
-
 	}
 
 	@Override
@@ -306,10 +349,6 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		return list.size();
 	}
 
-	@Override
-	public List<Room> subList(int fromIndex, int toIndex) {
-		return list.subList(fromIndex, toIndex);
-	}
 
 	@Override
 	public Object[] toArray() {
@@ -320,6 +359,15 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 	public <T> T[] toArray(T[] a) {
 		return list.toArray(a);
 	}
+	
+	
+	@Override
+	public boolean addAll(Collection<? extends Room> c) {
+		return list.addAll(c);
+	}
 
-
+	@Override
+	public boolean addAll(int index, Collection<? extends Room> c) {
+		return list.addAll(index, c);
+	}
 }
