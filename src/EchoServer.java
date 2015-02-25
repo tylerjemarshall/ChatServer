@@ -82,7 +82,13 @@ public class EchoServer extends AbstractServer {
 		if (((String) msg).charAt(0) == '#') {
 			handleClientCommand(msg, client);
 		} else {
-			ClientInfo info = roomList.getInfoByClient(client);
+			ClientInfo info = null;
+			try
+			{
+							info = roomList.getInfoByClient(client);
+
+			}
+			catch(Exception e){e.printStackTrace();}
 			try {
 				serverUI.display(msg.toString(), info.toString());
 			} catch (Exception e) {
@@ -266,8 +272,15 @@ public class EchoServer extends AbstractServer {
 		case "#listclients":
 			break;
 		case "#listrooms":
-			Collections.sort(roomList);
+			try{
+				Collections.sort(roomList);
 			tryToSendToClient(roomList.toString(), info);
+			}catch(Exception e)
+			{
+				System.out.println("Failed to list rooms");
+			}
+			
+			
 			break;
 		// Game Stuff
 		case "#game":
@@ -473,32 +486,42 @@ public class EchoServer extends AbstractServer {
 	 * @param client
 	 *            Client the message is being sent to
 	 */
-	private void tryToSendToClient(String message, ClientInfo info)
-	{
+	
+	
+	private void tryToSendToClient(String message, ClientInfo info) {
 		try {
 			info.getClient().sendToClient(message);
 		} catch (IOException e) {
-			System.out.println("Failed to send to client "
-					+ info);
+			System.out.println("Failed to send to client " + info);
 			e.printStackTrace();
 		}
-		
 	}
 
 	protected void clientConnected(ConnectionToClient client) {
-		System.out.println("Client " + roomList.getInfoByClient(client)
-				+ " connected from " + client);
-		
+		try {
+			System.out.println("Client " + roomList.getInfoByClient(client)
+					+ " connected from " + client);
+		} catch (Exception e) {
+			System.out.println("Client connected from " + client);
+		}
 	}
 
 	protected void clientDisconnected(ConnectionToClient client) {
-		System.out.println("Client " + roomList.getInfoByClient(client)
-				+ " disconnected from " + client);
+		try {
+
+			System.out.println("Client " + roomList.getInfoByClient(client)
+					+ " disconnected from " + client);
+		} catch (Exception e) {
+			System.out.println("Client disconnected from " + client);
+		}
 	}
 
 	protected void clientException(ConnectionToClient client,
 			Throwable exception) {
-		clientDisconnected(client);
+		try {
+			clientDisconnected(client);
+		} catch (Exception e) {
+		}
 	}
 
 }
