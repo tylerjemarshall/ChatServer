@@ -1,4 +1,5 @@
 package server;
+
 import java.io.*;
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class EchoServer extends AbstractServer {
 
 	private EchoServer server;
 	private RoomList roomList = new RoomList();
-	
+
 	ChatIF serverUI;
 
 	// Constructors ****************************************************
@@ -26,7 +27,8 @@ public class EchoServer extends AbstractServer {
 	/**
 	 * Constructs an instance of the echo server.
 	 * 
-	 * @param port The port number to connect on.
+	 * @param port
+	 *            The port number to connect on.
 	 */
 	public EchoServer(int port) {
 		super(port);
@@ -35,8 +37,10 @@ public class EchoServer extends AbstractServer {
 	/**
 	 * Constructs an instance of the echo server.
 	 * 
-	 * @param port The port number to connect on.
-	 * @param serverUI  Extends EchoServer
+	 * @param port
+	 *            The port number to connect on.
+	 * @param serverUI
+	 *            Extends EchoServer
 	 */
 	public EchoServer(int port, ChatIF serverUI) {
 		super(port);
@@ -61,9 +65,8 @@ public class EchoServer extends AbstractServer {
 				handleMessageFromServerUI(message);
 			}
 		} catch (Exception ex) {
-			System.out
-					.println(ex.toString()
-							+ "\nEcho Server - Unexpected error while reading from console!");
+			display(ex.toString()
+					+ "\nEcho Server - Error while reading from console!");
 		}
 	}
 
@@ -78,31 +81,31 @@ public class EchoServer extends AbstractServer {
 	/**
 	 * This method handles any messages received from the client.
 	 * 
-	 * @param msg The message received from the client.
-	 * @param client The connection from which the message originated.
+	 * @param msg
+	 *            The message received from the client.
+	 * @param client
+	 *            The connection from which the message originated.
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		if (((String) msg).charAt(0) == '#') {
+		String message = msg.toString();
+		if (message.indexOf("#") == 0) {
 			handleClientCommand(msg, client);
 		} else {
 			ClientInfo info = null;
-			try
-			{
-							info = roomList.getInfoByClient(client);
-
-			}
-			catch(Exception e){e.printStackTrace();}
 			try {
-				serverUI.display(msg.toString(), info.toString());
+				info = roomList.getInfoByClient(client);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String message = "#from " + info + " " + msg.toString();
+			try {
+				display(msg.toString(), info.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			message = "#from " + info + " " + message;
 			this.sendToARoom(message, info.getRoom());
 		}
 	}
-	
-	
 
 	/**
 	 * Method that handles the message sent from the ServerUI
@@ -112,27 +115,24 @@ public class EchoServer extends AbstractServer {
 	 */
 	public void handleMessageFromServerUI(String message) {
 		if (message.isEmpty()) {
-			serverUI.display("Message Empty");
+			display("Message Empty");
 		} else if (message.indexOf("#") == 0) {
-
 			handleServerCommand(message);
 		} else {
-
 			try {
 				serverUI.display(message, "SERVER MSG");
 				sendToAllRooms("#server " + message);
 			} catch (Exception e) {
 				serverUI.display("Could not send message to clients.  ");
-
 			}
 		}
 	}
 
 	/**
-	 * Method that handles commands from the Server
-	 * Most of these are broken FYI
+	 * Method that handles commands from the Server Most of these are broken FYI
 	 * 
-	 * @param message The command being sent.
+	 * @param message
+	 *            The command being sent.
 	 */
 	private void handleServerCommand(String msg) {
 		String cmd;
@@ -197,13 +197,13 @@ public class EchoServer extends AbstractServer {
 	/**
 	 * Method that handles the commands coming from the client.
 	 * 
-	 * @param objMsg The message containing the command.
-	 * @param client The client that send the command.
+	 * @param objMsg
+	 *            The message containing the command.
+	 * @param client
+	 *            The client that send the command.
 	 */
 	public void handleClientCommand(Object objMsg, ConnectionToClient client) {
-
-		
-		//Converts the string to usable variables.
+		// Converts the string to usable variables.
 		String msg = objMsg.toString();
 		String cmd = "";
 		cmd = (msg.indexOf(" ") == -1) ? msg : msg.substring(0,
@@ -211,13 +211,14 @@ public class EchoServer extends AbstractServer {
 		int end = msg.length();
 		int space = (msg.indexOf(" ") == -1) ? cmd.length() : msg.indexOf(" ");
 		String truncMsg = msg.substring(space, end).trim();
-		
-		//Declares info and tries to Initialize it.
+
+		// Declares info and tries to Initialize it.
 		ClientInfo info = null;
-		try {info=roomList.getInfoByClient(client);}catch(Exception e){}
-		
-		
-		
+		try {
+			info = roomList.getInfoByClient(client);
+		} catch (Exception e) {
+		}
+
 		switch (cmd) {
 		case "#logon":
 		case "#login":
@@ -235,12 +236,11 @@ public class EchoServer extends AbstractServer {
 			if (isNumber(user))
 				whisperToClient(Integer.parseInt(user), whisper, info);
 			else
-				tryToSendToClient("Must enter clients ID" , info);
+				tryToSendToClient("Must enter clients ID", info);
 			break;
 		case "#yell":
 			truncMsg = truncMsg.toUpperCase();
-			sendToAllRooms(info
-					+ " Just yelled " + truncMsg + "!");
+			sendToAllRooms(info + " Just yelled " + truncMsg + "!");
 			break;
 		case "#join":
 			roomList.remove(info);
@@ -249,8 +249,7 @@ public class EchoServer extends AbstractServer {
 			sendToARoom(info + " Just joined " + truncMsg, truncMsg);
 			break;
 		case "#info":
-			sendToAClient(info.getId(), info + " is in room: "
-							+ info.getRoom());
+			sendToAClient(info.getId(), info + " is in room: " + info.getRoom());
 			break;
 		case "#exit":
 		case "#quit":
@@ -258,37 +257,33 @@ public class EchoServer extends AbstractServer {
 			break;
 		case "#logout":
 		case "#logoff":
-				try {
-					roomList.remove(info);
-				} catch (Exception oob) {
-					serverUI.display(oob.toString() + "\nFailed to delete " + info);
-				}
-				sendToARoom(info + " has logged off!", info.getRoom());
+			try {
+				roomList.remove(info);
+			} catch (Exception oob) {
+				serverUI.display(oob.toString() + "\nFailed to delete " + info);
+			}
+			sendToARoom(info + " has logged off!", info.getRoom());
 			try {
 				System.out.println("Attempting to close connction to client");
 				client.close();
 			} catch (IOException e1) {
 				System.out.println("Failed to close connection.");
 			}
-	
+
 			break;
 		case "#listclients":
 			break;
 		case "#listrooms":
-			try{
+			try {
 				Collections.sort(roomList);
-			tryToSendToClient(roomList.toString(), info);
-			}catch(Exception e)
-			{
+				tryToSendToClient(roomList.toString(), info);
+			} catch (Exception e) {
 				System.out.println("Failed to list rooms");
 			}
-			
-			
 			break;
 		// Game Stuff
-		case "#game":
-		{
-			
+		case "#game": {
+
 		}
 		case "#move":
 			sendToARoom(msg, client.getInfo("room").toString());
@@ -297,17 +292,16 @@ public class EchoServer extends AbstractServer {
 			sendToARoom(msg, client.getInfo("room").toString());
 			break;
 		default:
-			display("Invalid Command " + cmd + " sent by "
-					+ info);
+			display("Invalid Command " + cmd + " sent by " + info);
 		}
-
 	}
 
 	/**
 	 * Method that checks to see if a String contains only numerical digits.
 	 * Returns true if the String is a number.
 	 * 
-	 * @param number The number being checked.
+	 * @param number
+	 *            The number being checked.
 	 * @return Returns true if the string is a number.
 	 */
 	private static boolean isNumber(final String number) {
@@ -323,14 +317,15 @@ public class EchoServer extends AbstractServer {
 		return isNumber;
 	}
 
-	
 	/**
 	 * Method that logs the client into the room Commons when connecting to the
 	 * server. The server also assigns a unique ID to the client during this
 	 * time.
 	 * 
-	 * @param client The client that is logging in.
-	 * @param user The userName that the client is going to use.
+	 * @param client
+	 *            The client that is logging in.
+	 * @param user
+	 *            The userName that the client is going to use.
 	 */
 	private void login(ConnectionToClient client, String user) {
 		login(client, user, "commons");
@@ -349,21 +344,18 @@ public class EchoServer extends AbstractServer {
 	 */
 	private void login(ConnectionToClient client, String user, String room) {
 		ClientInfo tempClient;
-			try
-			{
-				int id = roomList.getClientCount() + 1;
-				tempClient = new ClientInfo(client, user, id, room);
-				roomList.add(tempClient, room);
-				System.out.println("Added client to room");
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				System.out.println("Failed to add client to room");
-				tempClient = new ClientInfo(client, user, 1, room);
-			}
-			sendToARoom(tempClient + " just logged in.", room);
+		try {
+			int id = roomList.getClientCount() + 1;
+			tempClient = new ClientInfo(client, user, id, room);
+			roomList.add(tempClient, room);
+			System.out.println("Added client to room");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Failed to add client to room");
+			tempClient = new ClientInfo(client, user, 1, room);
 		}
+		sendToARoom(tempClient + " just logged in.", room);
+	}
 
 	/**
 	 * Method that handles the messages being sent to a specific client.
@@ -378,7 +370,6 @@ public class EchoServer extends AbstractServer {
 		tryToSendToClient(message, tempClient);
 	}
 
-
 	/**
 	 * Method that handles messages being sent to a specific user based on their
 	 * ID.
@@ -390,10 +381,8 @@ public class EchoServer extends AbstractServer {
 	 * @param clientFrom
 	 *            The client that is sending the whisper
 	 */
-
 	public void whisperToClient(int user, String message, ClientInfo clientFrom) {
 		ClientInfo clientTo = roomList.getInfoById(user);
-
 		message = clientFrom + " whispered to you: " + message;
 		tryToSendToClient(message, clientTo);
 	}
@@ -417,8 +406,8 @@ public class EchoServer extends AbstractServer {
 		} else {
 			System.out.println("Couldn't find room, not sending message.");
 		}
-
 	}
+
 	/**
 	 * Method that handles messages being sent to all rooms.
 	 * 
@@ -430,12 +419,11 @@ public class EchoServer extends AbstractServer {
 		for (int i = 0; i < roomList.size(); i++) {
 			Room currentRoom = roomList.get(i);
 			for (int r = 0; r < currentRoom.size(); r++) {
-
 				tryToSendToClient(message, currentRoom.get(r));
-
 			}
 		}
 	}
+
 	/**
 	 * This method overrides the one in the superclass. Called when the server
 	 * starts listening for connections.
@@ -489,8 +477,7 @@ public class EchoServer extends AbstractServer {
 	 * @param client
 	 *            Client the message is being sent to
 	 */
-	
-	
+
 	private void tryToSendToClient(String message, ClientInfo info) {
 		try {
 			info.getClient().sendToClient(message);
@@ -514,6 +501,7 @@ public class EchoServer extends AbstractServer {
 
 			System.out.println("Client " + roomList.getInfoByClient(client)
 					+ " disconnected from " + client);
+
 		} catch (Exception e) {
 			System.out.println("Client disconnected from " + client);
 		}
