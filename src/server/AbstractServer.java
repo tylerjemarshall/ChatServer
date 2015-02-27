@@ -2,6 +2,7 @@ package server;
 
 
 import java.net.*;
+//import java.util.ArrayList;
 //import java.util.*;
 import java.io.*;
 
@@ -22,7 +23,9 @@ import java.io.*;
 */
 public abstract class AbstractServer implements Runnable
 {
-  // INSTANCE VARIABLES *********************************************
+	// MY STUFF *******************************************************
+	//private RoomList roomList = new RoomList();
+	// INSTANCE VARIABLES *********************************************
 
   /**
    * The server socket: listens for clients who want to connect.
@@ -180,7 +183,7 @@ public abstract class AbstractServer implements Runnable
   public void sendToAllClients(Object msg)
   {
     Thread[] clientThreadList = getClientConnections();
-
+    
     for (int i=0; i<clientThreadList.length; i++)
     {
       try
@@ -190,6 +193,52 @@ public abstract class AbstractServer implements Runnable
       catch (Exception ex) {}
     }
   }
+
+  
+// MY STUFF *******************************************************
+//public ClientInfo getClientInfo(ConnectionToClient client)
+//{
+//	//ArrayList<Thread[]> room = new ArrayList<Thread[]>();
+//	ClientInfo clientInfo;
+//	
+//	Thread[] clientThreadList = getClientConnections();
+//	//clientThreadList.
+//
+//    for (int i=0; i<clientThreadList.length; i++)
+//    {
+//      try
+//      {
+//    	  //clientInfo=((ConnectionToClient)clientThreadList[i]);
+//    	if (clientInfo.equals(client))
+//    	{
+//    		return clientInfo;
+//    	}
+//    	 
+//    	  
+//      }
+//      catch (Exception ex) {}
+//    }
+//	return new ClientInfo(null, 0, null);
+//}
+//  
+//  public void addClientToRoom(ConnectionToClient client, String room){
+//	  ClientInfo clientInfo = null;
+//	  
+//	  
+//	  try
+//	  {
+//		 clientInfo = roomList.getInfoByClient(client);
+//		 if (roomList.remove(clientInfo))
+//		 roomList.add(clientInfo, room);
+//		 
+//	  }
+//	  catch (Exception e)
+//	  {
+//		  e.printStackTrace();
+//	  }
+//	  
+//  }
+
 
 
 // ACCESSING METHODS ------------------------------------------------
@@ -204,13 +253,23 @@ public abstract class AbstractServer implements Runnable
     return (connectionListener != null);
   }
 
-  /**
+//  public RoomList getRoomList() {
+//	return roomList;
+//}
+//
+//
+////public void setRoomList(RoomList roomList) {
+////	this.roomList = roomList;
+////}
+
+
+/**
    * Returns an array containing the existing
    * client connections. This can be used by
    * concrete subclasses to implement messages that do something with
    * each connection (e.g. kill it, send a message to it etc.).
    * Remember that after this array is obtained, some clients
-   * in this migth disconnect. New clients can also connect,
+   * in this might disconnect. New clients can also connect,
    * these later will not appear in the array.
    *
    * @return an array of <code>Thread</code> containing
@@ -315,6 +374,24 @@ public abstract class AbstractServer implements Runnable
             @SuppressWarnings("unused")
 			ConnectionToClient c = new ConnectionToClient(
               this.clientThreadGroup, clientSocket, this);
+//            try
+//            {
+//            	System.out.println("Trying to add client to room");
+//            	ClientInfo newClient = new ClientInfo(null, this.getNumberOfClients(), "User");
+//            	newClient.setClient(new ConnectionToClient(
+//              this.clientThreadGroup, clientSocket, this));
+//            	System.out.println("Trying to add client to room");
+//            	roomList.add(new ClientInfo(null, this.getNumberOfClients(), "User"), "commons");
+//            	
+//            }
+//            catch (Exception e) {
+//            	
+//            	e.printStackTrace();
+//            	System.out.println("I fucked up, doing what it was doing before...");
+//              @SuppressWarnings("unused")
+//    			ConnectionToClient c = new ConnectionToClient(
+//                  this.clientThreadGroup, clientSocket, this);
+//            }
           }
         }
         catch (InterruptedIOException exception)
