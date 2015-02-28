@@ -11,7 +11,7 @@ import java.util.ListIterator;
 
 public class Room implements RoomInterface, Comparable<Room>{
 
-    protected ArrayList<ClientInfo> list;
+    protected ArrayList<ConnectionToClient> list;
 
     
     private int limit = DEFAULT_LIMIT;
@@ -25,14 +25,14 @@ public class Room implements RoomInterface, Comparable<Room>{
      * Will have a limit to clients in a room and custom attributes.
      */
     public Room(){
-        list = new ArrayList<ClientInfo>();
+        list = new ArrayList<ConnectionToClient>();
     }
     
 	
     
 	public int getClientIndex(int itemName) {
 		for (int i = 0; i < list.size(); i++) {
-			ClientInfo client = list.get(i);
+			ClientInfo client = list.get(i).getClientInfo();
 			if (itemName == (Integer) client.getId()) {
 				return i;
 			}
@@ -41,11 +41,11 @@ public class Room implements RoomInterface, Comparable<Room>{
 		return -1;
 	}
     
-    public ClientInfo getClientInfoById(int id)
+    public ConnectionToClient getClientById(int id)
     {
 	
 		for (int y = 0; y < list.size(); y++) {
-			ClientInfo tempClient = list.get(y);
+			ConnectionToClient tempClient = list.get(y);
 			if (tempClient.getId() == id) {
 				return tempClient;
 			}
@@ -53,30 +53,32 @@ public class Room implements RoomInterface, Comparable<Room>{
 		return null;
     }
     
-    public ClientInfo getClientInfoByName(String name)
+    
+    
+    public ConnectionToClient getClientByName(String name)
     {
     	name=name.toLowerCase();
     	for (int y = 0; y < list.size(); y++) {
-			ClientInfo tempClient = list.get(y);
-			if (tempClient.getUserName().toLowerCase().equals(name)) {
+			ConnectionToClient tempClient = list.get(y);
+			if (tempClient.getClientInfo().getUserName().toLowerCase().equals(name)) {
 				return tempClient;
 			}
 		}
     	return null;
     }
     
-    public ClientInfo getInfoByClient(ConnectionToClient client)
-    {
-    	for (int y = 0; y < list.size(); y++) {
-			ClientInfo tempClient = list.get(y);
-			if (tempClient.getClient().equals(client)) {
-				return tempClient;
-			}
-		}
-    	return null;
-    	
-    }
-	
+//    public ClientInfo getInfoByClient(ConnectionToClient client)
+//    {
+//    	for (int y = 0; y < list.size(); y++) {
+//			ClientInfo tempClient = list.get(y).getClientInfo();
+//			if (tempClient.getClient().equals(client)) {
+//				return tempClient;
+//			}
+//		}
+//    	return null;
+//    	
+//    }
+//	
 	//Basic Getters and Setters for custom variables.
 	public String getName() {
 		return name;
@@ -85,7 +87,7 @@ public class Room implements RoomInterface, Comparable<Room>{
 
 	public void setName(String name) {
 		for (int i = 0; i < list.size(); i++) {
-			ClientInfo client = list.get(i);
+			ClientInfo client = list.get(i).getClientInfo();
 			client.setRoom(name);
 		}
 		
@@ -165,32 +167,32 @@ public class Room implements RoomInterface, Comparable<Room>{
 
     //From List. If i want to implement more List functions, need to add here.
 
-    public Iterator<ClientInfo> getIter(){
+    public Iterator<ConnectionToClient> getIter(){
         return list.iterator();
     }
 
 	@Override
-	public boolean add(ClientInfo e) {
+	public boolean add(ConnectionToClient e) {
 		boolean b = list.add(e);
 		open = (list.size()>limit) ? false : true;
 		return b;
 	}
 
 	@Override
-	public void add(int index, ClientInfo element) {
+	public void add(int index, ConnectionToClient element) {
 		list.add(index, element);
 		open = (list.size()>limit) ? false : true;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends ClientInfo> c) {
+	public boolean addAll(Collection<? extends ConnectionToClient> c) {
 		boolean b = list.addAll(c);
 		open = (list.size()>limit) ? false : true;
 		return b;
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends ClientInfo> c) {
+	public boolean addAll(int index, Collection<? extends ConnectionToClient> c) {
 		boolean b = list.addAll(index, c);
 		open = (list.size()>limit) ? false : true;
 		return b;
@@ -212,7 +214,7 @@ public class Room implements RoomInterface, Comparable<Room>{
 	}
 
 	@Override
-	public ClientInfo get(int index) {
+	public ConnectionToClient get(int index) {
 		return list.get(index);
 	}
 
@@ -227,7 +229,7 @@ public class Room implements RoomInterface, Comparable<Room>{
 	}
 
 	@Override
-	public Iterator<ClientInfo> iterator() {
+	public Iterator<ConnectionToClient> iterator() {
 		return list.iterator();
 	}
 
@@ -237,12 +239,12 @@ public class Room implements RoomInterface, Comparable<Room>{
 	}
 
 	@Override
-	public ListIterator<ClientInfo> listIterator() {
+	public ListIterator<ConnectionToClient> listIterator() {
 		return list.listIterator();
 	}
 
 	@Override
-	public ListIterator<ClientInfo> listIterator(int index) {
+	public ListIterator<ConnectionToClient> listIterator(int index) {
 		return list.listIterator(index);
 	}
 
@@ -254,8 +256,8 @@ public class Room implements RoomInterface, Comparable<Room>{
 	}
 
 	@Override
-	public ClientInfo remove(int index) {
-		ClientInfo client = list.remove(index);
+	public ConnectionToClient remove(int index) {
+		ConnectionToClient client = list.remove(index);
 		open = (list.size()>limit) ? false : true;
 		return client;
 	}
@@ -273,7 +275,7 @@ public class Room implements RoomInterface, Comparable<Room>{
 	}
 
 	@Override
-	public ClientInfo set(int index, ClientInfo element) {
+	public ConnectionToClient set(int index, ConnectionToClient element) {
 		return list.set(index, element);
 	}
 
@@ -283,7 +285,7 @@ public class Room implements RoomInterface, Comparable<Room>{
 	}
 
 	@Override
-	public List<ClientInfo> subList(int fromIndex, int toIndex) {
+	public List<ConnectionToClient> subList(int fromIndex, int toIndex) {
 		return list.subList(fromIndex, toIndex);
 	}
 
