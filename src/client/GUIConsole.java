@@ -43,9 +43,15 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private boolean controlsEnabled = false;
 
 
-	public  GUIConsole ( String host, int port, final String userName)
+	public  GUIConsole ( String[] args)
 	{
-			super("Simple Chat GUI");
+		super("Simple Chat GUI");
+		
+	    String host = args[0];
+	    int port = Integer.parseInt(args[1]);
+	    String userName = args[2];
+		
+			
 			setSize(300, 400);
 		
 			messageList.setWrapStyleWord(true);
@@ -100,6 +106,20 @@ public class GUIConsole extends JFrame implements ChatIF {
 			//This establishes the connection and welcomes the user
 			while(!controlsEnabled) //Can't proceed until client is declared.
 			{
+				
+				LoginDialog loginDlg = new LoginDialog(new JFrame("Frame"), args);
+				
+				
+		        loginDlg.setVisible(true);
+		        // if logon successfully
+		        if(loginDlg.isSucceeded()){
+		            System.out.println("Success!");
+		        }
+		        else System.exit(0);
+			    
+			    
+				
+				
 				Scanner cin = new Scanner( System.in );
 				
 				try 
@@ -271,6 +291,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	}
 	
 	
+
+	
 	/**
 	 * Main method, creates the JFrame for GUIConsole.
 	 * 
@@ -292,7 +314,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    }
 	    catch(ArrayIndexOutOfBoundsException e)
 	    {
-	      host = "localhost";
+	    	args[0] = "localhost";
+	    	host = "localhost";
 	    }
 	    
 	    try//tries to set port to command line args
@@ -301,6 +324,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    }
 	    catch(Throwable t)
 	    {
+	    	args[1] = DEFAULT_PORT + "";
 	      port = DEFAULT_PORT; //Set port to 5555
 	    }
 	    try//tries to set userName to command line.
@@ -309,11 +333,22 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    }
 	    catch(Throwable t)
 	    {
+	    	args[2] = "User";
 	      userName = "User"; //Set userName to "User" if fails
 	    }
-	    		
+	    
+	    
+	    
+	    //while(!login(new JFrame("Login"), args));
+	    //login(new JFrame("Login"), args);		
 	    @SuppressWarnings("unused")
-		GUIConsole clientConsole = new GUIConsole(host , port, userName);
+	    
+		GUIConsole clientConsole = new GUIConsole(args);
+	    
 	}
+	
+	
+	
+
 
 }
