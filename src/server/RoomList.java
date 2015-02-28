@@ -126,13 +126,13 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 	 * @param itemName The ID that is being searched for.
 	 * @return ClientInfo client if found, else null
 	 */
-	public ClientInfo getInfoById(int id)
+	public ConnectionToClient getClientById(int id)
     {
 	
 		for (int y = 0; y < list.size(); y++) 
 		{
 			Room tempRoom = list.get(y);
-			ClientInfo tempClient = tempRoom.getClientInfoById(id);
+			ConnectionToClient tempClient = tempRoom.getClientById(id);
 			
 			try {
 				if (tempClient.getId() == id)			
@@ -142,28 +142,54 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		}
 		return null;
     }
+	
+	
 	/**
-	 * Method that finds a client by their ConnectionToClient
+	 * Method that finds a client by their ID
 	 * Returns null if not found
 	 * 
 	 * @param itemName The ID that is being searched for.
 	 * @return ClientInfo client if found, else null
 	 */
-	public ClientInfo getInfoByClient(ConnectionToClient client)
-	{
+	public ConnectionToClient getClientByName(String name)
+    {
+	
 		for (int y = 0; y < list.size(); y++) 
 		{
 			Room tempRoom = list.get(y);
-			ClientInfo tempClient = tempRoom.getInfoByClient(client);
+			ConnectionToClient tempClient = tempRoom.getClientByName(name);
+			
 			try {
-				if (tempClient.getClient() == client)
-					return tempClient;	
-			} catch (Exception e){}
+				if (tempClient.getName() == name)			
+					return tempClient;
+			} catch(Exception e){}
+			
 		}
 		return null;
-		
-	}
-    
+    }
+	
+//	/**
+//	 * Method that finds a client by their ConnectionToClient
+//	 * Returns null if not found
+//	 * 
+//	 * @param itemName The ID that is being searched for.
+//	 * @return ClientInfo client if found, else null
+//	 */
+//	public ClientInfo getInfoByClient(ConnectionToClient client)
+//	{
+//		for (int y = 0; y < list.size(); y++) 
+//		{
+//			Room tempRoom = list.get(y);
+//			ClientInfo tempClient = tempRoom.getInfoByClient(client);
+//			try {
+//				if (tempClient.getClient() == client)
+//					return tempClient;	
+//			} catch (Exception e){}
+//		}
+//		return null;
+//		
+//	}
+//    
 	
 	
     /**
@@ -180,9 +206,9 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		for (int y = 0; y < list.size(); y++) 
 		{
 			Room tempRoom = list.get(y);
-			ClientInfo tempClient = tempRoom.getClientInfoByName(name);
+			ConnectionToClient tempClient = tempRoom.getClientByName(name);
 			
-			if (tempClient.getUserName().toLowerCase().equals(name))
+			if (tempClient.getClientInfo().getUserName().toLowerCase().equals(name))
 			{
 				return true;
 			}
@@ -197,16 +223,16 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 	 * @param clientInfo Client List Item being added to room.
 	 * @param room The room you would like the client to join, referenced by room name
 	 */
-	public boolean add(ClientInfo clientInfo, String room) {
+	public boolean add(ConnectionToClient client, String room) {
 		room = room.toLowerCase();
 		boolean foundRoom = false;
 		for (int i = 0; i < list.size(); i++) {
 			Room currentRoom = list.get(i);
 			if (currentRoom.getName().toLowerCase().equals(room)) {
-				clientInfo.setRoom(room);
+				client.getClientInfo().setRoom(room);
 				foundRoom = true;
-				currentRoom.add(clientInfo);
-				System.out.println("Added client " + clientInfo + " to room "
+				currentRoom.add(client);
+				System.out.println("Added client " + client + " to room "
 					+ currentRoom);
 				
 				
@@ -216,11 +242,18 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 					System.out.println("Removed empty room.");
 				}
 				
-//				
-//				if (!roomOpen(room))
-//				{
-//					moveClient(clientInfo, "commons");
-//				}
+				
+				
+				
+				if (!roomOpen(room))
+				{
+					System.out.println("Room is closed, moving to commons");
+					boolean moved = moveClient(client, "commons");
+					if(moved)
+					{
+						System.out.println(client + " sent to room " + defaultRoom);
+					}
+				}
 				
 				
 				return true;
@@ -231,9 +264,10 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 			Room newRoom = new Room();
 			newRoom.setName(room);
 			if (room.equals(defaultRoom)) newRoom.setLimit(200);
-			clientInfo.setRoom(room);
-			newRoom.add(clientInfo);
+			client.getClientInfo().setRoom(room);
+			newRoom.add(client);
 			list.add(newRoom);
+			
 			return true;
 		}
 		return false;
@@ -251,23 +285,23 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 	 * @param room
 	 * @return Returns false when unable to move client from either Client Doesn't Exist or Room is Closed.
 	 */
-	public boolean moveClient(ClientInfo client, String room)
+	public boolean moveClient(ConnectionToClient client, String room)
 	{
 		return (remove(client)) ? add(client, room) : false;
 	}
 	
-	public boolean remove(ClientInfo clientInfo) {
+	public boolean remove(ConnectionToClient client) {
 	
-		String room = clientInfo.getRoom().toLowerCase();
+		String room = client.getClientInfo().getRoom().toLowerCase();
 		
 		for (int i = 0; i < list.size(); i++) {
 			Room currentRoom = list.get(i);
 			if (currentRoom.getName().toLowerCase().equals(room)) {
 				
-				boolean exit = currentRoom.remove(clientInfo);
+				boolean exit = currentRoom.remove(client);
 				
 				if (exit)
-				System.out.println("Removed client " + clientInfo + " from room "
+				System.out.println("Removed client " + client + " from room "
 						+ currentRoom);
 
 				if (currentRoom.isEmpty()) {

@@ -30,22 +30,22 @@ public class ClientInfo implements Comparable<ClientInfo> {
 	}
 
 	public String getUserName() {
-		userName=client.getInfo("userName").toString();
+		//userName=client.getInfo("userName").toString();
 		return userName;
 	}
 
 	public void setUserName(String userName) {
-		client.setInfo("userName", userName);
+		//client.setInfo("userName", userName);
 		this.userName = userName;
 	}
 
 	public int getId() {
-		id=(Integer)client.getInfo("id");
+		//id=(Integer)client.getInfo("id");
 		return id;
 	}
 
 	public void setId(int id) {
-		client.setInfo("id", id);
+		//client.setInfo("id", id);
 		this.id = id;
 	}
 
@@ -54,7 +54,7 @@ public class ClientInfo implements Comparable<ClientInfo> {
 	}
 
 	public void setRoom(String room) {
-		client.setInfo("room", room);
+		//client.setInfo("room", room);
 		this.room = room;
 	}
 	
@@ -88,9 +88,9 @@ public class ClientInfo implements Comparable<ClientInfo> {
 	 * @param room Declares the room for client
 	 */
 	public ClientInfo(ConnectionToClient client, String userName, int id, String room) {
-		client.setInfo("userName", userName);
-		client.setInfo("id", id);
-		client.setInfo("room", room);
+//		client.setInfo("userName", userName);
+//		client.setInfo("id", id);
+//		client.setInfo("room", room);
 		this.client = client;
 		this.userName = userName;
 		this.room = room;

@@ -91,19 +91,19 @@ public class EchoServer extends AbstractServer {
 		if (message.indexOf("#") == 0) {
 			handleClientCommand(msg, client);
 		} else {
-			ClientInfo info = null;
+			//ClientInfo info = null;
 			try {
-				info = roomList.getInfoByClient(client);
+				//info = roomList.getInfoByClient(client);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			try {
-				display(msg.toString(), info.toString());
+				display(msg.toString(), client.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			message = "#from " + info + " " + message;
-			this.sendToARoom(message, info.getRoom());
+			message = "#from " + client + " " + message;
+			this.sendToARoom(message, client.getClientInfo().getRoom());
 		}
 	}
 
@@ -213,11 +213,11 @@ public class EchoServer extends AbstractServer {
 		String truncMsg = msg.substring(space, end).trim();
 
 		// Declares info and tries to Initialize it.
-		ClientInfo info = null;
-		try {
-			info = roomList.getInfoByClient(client);
-		} catch (Exception e) {
-		}
+		//ClientInfo info = client.getClientInfo();
+//		try {
+//			info = roomList.getInfoByClient(client);
+//		} catch (Exception e) {
+//		}
 
 		switch (cmd) {
 		case "#logon":
@@ -235,32 +235,32 @@ public class EchoServer extends AbstractServer {
 					: truncMsg.substring(truncMsg.indexOf(" "),
 							truncMsg.length()).trim();
 			if (isNumber(user))
-				whisperToClient(Integer.parseInt(user), whisper, info);
+				whisperToClient(Integer.parseInt(user), whisper, client);
 			else
-				tryToSendToClient("Must enter clients ID", info);
+				tryToSendToClient("Must enter clients ID", client);
 			break;
 		case "#yell":
 			truncMsg = truncMsg.toUpperCase();
-			sendToAllRooms(info + " Just yelled " + truncMsg + "!");
+			sendToAllRooms(client + " Just yelled " + truncMsg + "!");
 			break;
 		case "#join":
 //			roomList.remove(info);
 //			roomList.add(info, truncMsg);
-			if (roomList.moveClient(info, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move clienet");
-			tryToSendToClient("You have switched rooms to " + truncMsg, info);
-			sendToARoom(info + " Just joined " + truncMsg, truncMsg);
+			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
+			tryToSendToClient("You have switched rooms to " + truncMsg, client);
+			sendToARoom(client + " Just joined " + truncMsg, truncMsg);
 			break;
 		case "#info":
-			sendToAClient(info.getId(), info + " is in room: " + info.getRoom());
+			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());
 			break;
 		case "#exit":
 		case "#quit":
-			sendToARoom(info + " has left the chat!", info.getRoom());
+			sendToARoom(client + " has left the chat!", client.getClientInfo().getRoom());
 			break;
 		case "#logout":
 		case "#logoff":
-			logoff(info);
-			sendToARoom(info + " has logged off!", info.getRoom());
+			logoff(client);
+			sendToARoom(client + " has logged off!", client.getClientInfo().getRoom());
 			try {
 				System.out.println("Attempting to close connction to client");
 				client.close();
@@ -274,7 +274,7 @@ public class EchoServer extends AbstractServer {
 		case "#listrooms":
 			try {
 				Collections.sort(roomList);
-				tryToSendToClient(roomList.toString(), info);
+				tryToSendToClient(roomList.toString(), client);
 			} catch (Exception e) {
 				System.out.println("Failed to list rooms");
 			}
@@ -290,7 +290,7 @@ public class EchoServer extends AbstractServer {
 			sendToARoom(msg, client.getInfo("room").toString());
 			break;
 		default:
-			display("Invalid Command " + cmd + " sent by " + info);
+			display("Invalid Command " + cmd + " sent by " + client);
 		}
 	}
 
@@ -341,34 +341,37 @@ public class EchoServer extends AbstractServer {
 	 *            The room that the client is joining.
 	 */
 	private boolean login(ConnectionToClient client, String user, String room) {
-		ClientInfo tempClient;
+		//ClientInfo info;
 		try {
 			int id = roomList.getClientCount() + 1;
-			tempClient = new ClientInfo(client, user, id, room);
-			boolean exit = (roomList.add(tempClient, room)) ? true :false;
+			//info = new ClientInfo(client, user, id, room);
+			//client.setClientInfo(info);
+			client.setId(id);
+			boolean exit = (roomList.add(client, room)) ? true :false;
 			System.out.println("Added client to room");
-			sendToARoom(tempClient + " just logged in.", room);
+			
+			sendToARoom(client + " just logged in.", room);
 			return exit;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Failed to add client to room");
-			tempClient = new ClientInfo(client, user, 1, room);
+			//info = new ClientInfo(client, user, 1, room);
 			return false;
 		}
 	}
 	
 
-	public boolean logoff(ClientInfo client) {
+	public boolean logoff(ConnectionToClient client) {
 		try {
-			client.getClient().close();
+			client.close();
 		} catch (IOException e) {}
 		return roomList.remove(client);
 	}
 	
-	public boolean logoff(ConnectionToClient client)
-	{
-		return logoff(roomList.getInfoByClient(client));
-	}
+//	public boolean logoff(ConnectionToClient client)
+//	{
+//		return logoff(roomList.getInfoByClient(client));
+//	}
 	
 	/**
 	 * Method that handles the messages being sent to a specific client.
@@ -379,7 +382,7 @@ public class EchoServer extends AbstractServer {
 	 *            The message that is being sent.
 	 */
 	public void sendToAClient(int user, String message) {
-		ClientInfo tempClient = roomList.getInfoById(user);
+		ConnectionToClient tempClient = roomList.getClientById(user);
 		tryToSendToClient(message, tempClient);
 	}
 
@@ -394,8 +397,8 @@ public class EchoServer extends AbstractServer {
 	 * @param clientFrom
 	 *            The client that is sending the whisper
 	 */
-	public void whisperToClient(int user, String message, ClientInfo clientFrom) {
-		ClientInfo clientTo = roomList.getInfoById(user);
+	public void whisperToClient(int user, String message, ConnectionToClient clientFrom) {
+		ConnectionToClient clientTo = roomList.getClientById(user);
 		message = clientFrom + " whispered to you: " + message;
 		tryToSendToClient(message, clientTo);
 	}
@@ -491,18 +494,18 @@ public class EchoServer extends AbstractServer {
 	 *            Client the message is being sent to
 	 */
 
-	private void tryToSendToClient(String message, ClientInfo info) {
+	private void tryToSendToClient(String message, ConnectionToClient client) {
 		try {
-			info.getClient().sendToClient(message);
+			client.sendToClient(message);
 		} catch (IOException e) {
-			System.out.println("Failed to send to client " + info);
+			System.out.println("Failed to send to client " + client);
 			e.printStackTrace();
 		}
 	}
 
 	protected void clientConnected(ConnectionToClient client) {
 		try {
-			System.out.println("Client " + roomList.getInfoByClient(client)
+			System.out.println("Client " + client
 					+ " connected from " + client);
 			
 			
@@ -515,7 +518,7 @@ public class EchoServer extends AbstractServer {
 	protected void clientDisconnected(ConnectionToClient client) {
 		try {
 
-			System.out.println("Client " + roomList.getInfoByClient(client)
+			System.out.println("Client " + client
 					+ " disconnected from " + client);
 			//logoff(client);
 
