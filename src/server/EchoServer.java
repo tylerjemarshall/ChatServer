@@ -343,10 +343,12 @@ public class EchoServer extends AbstractServer {
 	private boolean login(ConnectionToClient client, String user, String room) {
 		//ClientInfo info;
 		try {
+			
 			int id = roomList.getClientCount() + 1;
 			//info = new ClientInfo(client, user, id, room);
 			//client.setClientInfo(info);
 			client.setId(id);
+			client.setClientName(user);
 			boolean exit = (roomList.add(client, room)) ? true :false;
 			System.out.println("Added client to room");
 			
