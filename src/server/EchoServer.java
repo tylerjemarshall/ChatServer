@@ -244,8 +244,6 @@ public class EchoServer extends AbstractServer {
 			sendToAllRooms(client + " Just yelled " + truncMsg + "!");
 			break;
 		case "#join":
-//			roomList.remove(info);
-//			roomList.add(info, truncMsg);
 			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
 			tryToSendToClient("You have switched rooms to " + truncMsg, client);
 			sendToARoom(client + " Just joined " + truncMsg, truncMsg);
@@ -259,14 +257,8 @@ public class EchoServer extends AbstractServer {
 			break;
 		case "#logout":
 		case "#logoff":
-			logoff(client);
 			sendToARoom(client + " has logged off!", client.getClientInfo().getRoom());
-			try {
-				System.out.println("Attempting to close connction to client");
-				client.close();
-			} catch (IOException e1) {
-				System.out.println("Failed to close connection.");
-			}
+			logoff(client);
 
 			break;
 		case "#listclients":

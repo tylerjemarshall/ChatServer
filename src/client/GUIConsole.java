@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 
 /**
@@ -38,6 +38,12 @@ public class GUIConsole extends JFrame implements ChatIF {
 	
 	private ChatClient client;
 	private Profile profile = new Profile();
+	private String[] args;
+	
+	
+	
+	//Makes the client accessible from LoginDialog
+	//static GUIConsole clientConsole;
 	
 	public ChatClient getChatClient()
 	{
@@ -49,59 +55,118 @@ public class GUIConsole extends JFrame implements ChatIF {
 		this.client = chatClient;
 	}
 	
-	private boolean controlsEnabled = false;
+	public String[] getArgs()
+	{
+		
+		return null;
+	}
+	
+	
+	//private boolean controlsEnabled = false;
 
 
 	public  GUIConsole ( String[] args)
 	{
 		super("Simple Chat GUI");
+		this.args = args;
 		
-	    String host = args[0];
-	    int port = Integer.parseInt(args[1]);
-	    String userName = args[2];
+	    //String host = args[0];
+	    //int port = Integer.parseInt(args[1]);
+	    //String userName = args[2];
 		
 			
-			setSize(300, 400);
-		
-			messageList.setWrapStyleWord(true);
-			messageList.setSize(300, 1000);
-
-		    profile.setFont("Tahoma",Font.PLAIN,12);
-			messageList.setFont(profile.getFont());
-
-			setLayout( new BorderLayout(5,5));
-			final Panel bottom = new Panel();
-			add( "Center", messageList );
-			add( "South" , bottom);
-			
-			bottom.setLayout( new GridLayout(5,2,5,5));
-			bottom.add(hostLB); 		bottom.add(hostTxF);
-			bottom.add(portLB); 		bottom.add(portTxF);
-			bottom.add(messageLB); 		bottom.add(messageTxF);
-			bottom.add(openB); 			bottom.add(sendB);
-			bottom.add(closeB); 		bottom.add(quitB);
-			  	
-
-			hostTxF.setText(host);
-			
-			portTxF.setText("" + port);
-			
+		setSize(300, 400);
 	
-			//This handles closing the client with the X Button
-			setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-			addWindowListener(new java.awt.event.WindowAdapter() {
-			    @Override
-			    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-			        if (JOptionPane.showConfirmDialog(bottom, 
+		messageList.setWrapStyleWord(true);
+		messageList.setSize(300, 1000);
+
+	    profile.setFont("Tahoma",Font.PLAIN,12);
+		messageList.setFont(profile.getFont());
+
+		setLayout( new BorderLayout(5,5));
+		final Panel bottom = new Panel();
+		add( "Center", messageList );
+		add( "South" , bottom);
+		
+		bottom.setLayout( new GridLayout(5,2,5,5));
+		bottom.add(hostLB); 		bottom.add(hostTxF);
+		bottom.add(portLB); 		bottom.add(portTxF);
+		bottom.add(messageLB); 		bottom.add(messageTxF);
+		bottom.add(openB); 			bottom.add(sendB);
+		bottom.add(closeB); 		bottom.add(quitB);
+		  	
+
+		hostTxF.setText(args[0]);
+		portTxF.setText("" + Integer.parseInt(args[1]));
+		
+
+		//This handles closing the client with the X Button
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        if (JOptionPane.showConfirmDialog(bottom, 
+		            "Are you sure to close this window?", "Really Closing?", 
+		            JOptionPane.YES_NO_OPTION,
+		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+		        	client.handleMessageFromClientUI("Good Bye!");
+		        	try 
+		        	{
+						client.closeConnection();
+					} 
+		        	catch (IOException e) 
+		        	{
+						display("Unable to close connection, terminating client");
+					}
+		        	finally
+		        	{
+		        		System.exit(0);
+		        	}
+		        }
+		}});
+		
+		//This establishes the connection and welcomes the user
+		{
+			{
+				LoginDialog loginDlg = new LoginDialog(args, this);
+		        loginDlg.setVisible(true);
+		        // if Login successfully
+		        if(loginDlg.isSucceeded()){
+		            System.out.println("Success!");
+		        }
+		        else 
+	        	{
+	        		System.out.println("Failed to login, trying again.");
+	        	}
+			}
+		}
+		
+		// This handles the Enter Key being pressed when sending message
+		messageTxF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				handleGUIMessage();
+			}
+		});
+		// This handles the Send Button being pressed, same as above
+		sendB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				handleGUIMessage();
+			}
+		});
+		//This handles when the Quit button is pressed
+		quitB.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (JOptionPane.showConfirmDialog(bottom, 
 			            "Are you sure to close this window?", "Really Closing?", 
 			            JOptionPane.YES_NO_OPTION,
 			            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
 			        	client.handleMessageFromClientUI("Good Bye!");
 			        	try 
 			        	{
-							client.closeConnection();
+							client.sendToServer("#logout");
 						} 
-			        	catch (IOException e) 
+			        	catch (IOException ioe) 
 			        	{
 							display("Unable to close connection, terminating client");
 						}
@@ -110,123 +175,38 @@ public class GUIConsole extends JFrame implements ChatIF {
 			        		System.exit(0);
 			        	}
 			        }
-			}});
-			
-			//This establishes the connection and welcomes the user
-			while(!controlsEnabled) //Can't proceed until client is declared.
-			{
-//				boolean success = false;
-				//while(!success)
-				{
-					LoginDialog loginDlg = new LoginDialog(args, this);
-					
-					
-			        loginDlg.setVisible(true);
-			        // if logon successfully
-			        if(loginDlg.isSucceeded()){
-			            System.out.println("Success!");
-//			            success = true;
-//			            loginDlg.dispose();
-			            controlsEnabled = true;
-			        }
-			        else 
-		        	{
-//		        		success = false;
-		        		System.out.println("Failed to login, trying again.");
-		        	}
-				}
-				
-				
-			    
-			    
-				
-//				
-//				Scanner cin = new Scanner( System.in );
-//				
-//				try 
-//			    {
-//			      client= new ChatClient(host, port, this, userName);
-//			      controlsEnabled = true;
-//			      display("Welcome " + userName);
-//			      cin.close();
-//			    } 
-//			    catch(IOException e) 
-//			    {
-//			      System.out.println("GUIConsole - Can't initialize client! (" + host + " & " + port + ").");
-//			      System.out.println("Please enter new Host: ");
-//			      host = cin.next();
-//			      System.out.println("Please enter new Port: ");
-//			      port = cin.nextInt();
-//			      controlsEnabled = false; 
-//			    }
 			}
-			
-			// This handles the Enter Key being pressed when sending message
-			messageTxF.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					handleGUIMessage();
+		});
+		
+		//This handles the Close Connection button
+		closeB.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				client.handleMessageFromClientUI("Good Bye!");
+				try 
+				{
+					client.sendToServer("#logout");
+					//client.closeConnection();
+				} 
+				catch (IOException e1) 
+				{
+					display("Failed to close connection!");	
+		}}});
+		
+		//This handles the Open Connection button.
+		openB.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					client.tryToConnect(hostTxF.getText(), Integer.parseInt(portTxF.getText()));
+					//controlsEnabled = true;
+				} catch (Exception e1) {
+					display(e1.toString());
+					//controlsEnabled = false;
 				}
-			});
-			// This handles the Send Button being pressed, same as above
-			sendB.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					handleGUIMessage();
-				}
-			});
-			//This handles when the Quit button is pressed
-			quitB.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (JOptionPane.showConfirmDialog(bottom, 
-				            "Are you sure to close this window?", "Really Closing?", 
-				            JOptionPane.YES_NO_OPTION,
-				            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-				        	client.handleMessageFromClientUI("Good Bye!");
-				        	try 
-				        	{
-								client.sendToServer("#logout");
-							} 
-				        	catch (IOException ioe) 
-				        	{
-								display("Unable to close connection, terminating client");
-							}
-				        	finally
-				        	{
-				        		System.exit(0);
-				        	}
-				        }
-				}
-			});
-			
-			//This handles the Close Connection button
-			closeB.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					client.handleMessageFromClientUI("Good Bye!");
-					try 
-					{
-						client.sendToServer("#logout");
-						//client.closeConnection();
-					} 
-					catch (IOException e1) 
-					{
-						display("Failed to close connection!");	
-			}}});
-			
-			//This handles the Open Connection button.
-			openB.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					try {
-						client.tryToConnect(hostTxF.getText(), Integer.parseInt(portTxF.getText()));
-						controlsEnabled = true;
-					} catch (Exception e1) {
-						display(e1.toString());
-						controlsEnabled = false;
-					}
-				}
-			});
-			setVisible(true);
+			}
+		});
+		setVisible(true);
 	}
 
 	
@@ -237,7 +217,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private void handleGUIMessage() {
 		if (messageTxF.getText().isEmpty()) {
 			display("Please Enter Something");
-		} else if (controlsEnabled) {
+		} else if (true) {
 			
 			String msg = messageTxF.getText();
 			System.out.println("msg: " + msg);
@@ -245,8 +225,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 				handleGUIClientCommand(msg);	
 			else
 				send();
-		} else
-			display("Error: Controls are disabled");
+		} //else
+			//display("Error: Controls are disabled");
 	}
 
 	
@@ -297,8 +277,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 			messageList.insert("> " + message + "\n", 0);
 	}
 
-	public void display(String message, String user) // not sure if this is a
-														// correct solution
+	public void display(String message, String user) 
 	{
 		messageList.insert(user + "> " + message + "\n", 0);
 	}
@@ -307,6 +286,12 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 * Method to send message to the Server
 	 */
 	public void send() {
+		if(!client.isConnected())
+		{
+			LoginDialog loginDlg = new LoginDialog(args, this);
+	        loginDlg.setVisible(true);
+			
+		}
 		client.handleMessageFromClientUI(messageTxF.getText());
 		messageTxF.setText("");
 	}
@@ -323,6 +308,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 * @param args[2] = userName
 	 * @param args[3] = room (not yet)
 	 */
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		//Initializes temporary local variables
 		String userName = "";
@@ -336,7 +322,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    catch(ArrayIndexOutOfBoundsException e)
 	    {
 	    	args[0] = "localhost";
-	    	host = "localhost";
+//	    	host = "localhost";
 	    }
 	    
 	    try//tries to set port to command line args
@@ -346,7 +332,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    catch(Throwable t)
 	    {
 	    	args[1] = DEFAULT_PORT + "";
-	      port = DEFAULT_PORT; //Set port to 5555
+//	      port = DEFAULT_PORT; //Set port to 5555
 	    }
 	    try//tries to set userName to command line.
 	    {	
@@ -355,16 +341,16 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    catch(Throwable t)
 	    {
 	    	args[2] = "User";
-	      userName = "User"; //Set userName to "User" if fails
+//	      userName = "User"; //Set userName to "User" if fails
 	    }
 	    
 	    
 	    
 	    //while(!login(new JFrame("Login"), args));
-	    //login(new JFrame("Login"), args);		
-	    @SuppressWarnings("unused")
+	    //login(new JFrame("Login"), args);	
 	    
 		GUIConsole clientConsole = new GUIConsole(args);
+	
 	    
 	}
 	

@@ -1,6 +1,7 @@
 package client;
 
 import game.TicTacToe;
+
 import java.io.*;
 
 /**
@@ -286,6 +287,8 @@ public class ChatClient extends AbstractClient {
 			throw new Exception("You are already connected");
 		} else {
 			try {
+				
+				//LoginDialog loginDlg = new LoginDialog();
 				openConnection();
 			} catch (Exception e) {
 
