@@ -22,7 +22,7 @@ public class Login {
 	    	
 	    }
 
-       if (args[2].toLowerCase().equals("tyler") && true) { //password.equals("secret")
+       if (args[2].toLowerCase().equals("tyler") && args[3].equals("secret")) { //password.equals("secret")
     	   System.out.println("Password " + args[3] + " accepted");
             return true;
         }

@@ -50,12 +50,12 @@ public class LoginDialog extends JDialog {
 
 	// Passed Variables
 	private GUIConsole parent;
-	private String[] args;
+	//private String[] args;
 
 	public LoginDialog(String[] args, GUIConsole parent) {
 		super(parent, "Login", true);
 		this.parent = parent;
-		this.args = args;
+		//this.args = args;
 		
 		hostTxF = new JTextField(args[0]);
 		portTxF = new JTextField(args[1]);
