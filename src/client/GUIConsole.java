@@ -39,6 +39,15 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private ChatClient client;
 	private Profile profile = new Profile();
 	
+	public ChatClient getChatClient()
+	{
+		return this.client;
+	}
+	
+	public void setChatClient(ChatClient chatClient)
+	{
+		this.client = chatClient;
+	}
 	
 	private boolean controlsEnabled = false;
 
@@ -106,16 +115,26 @@ public class GUIConsole extends JFrame implements ChatIF {
 			//This establishes the connection and welcomes the user
 			while(!controlsEnabled) //Can't proceed until client is declared.
 			{
+				boolean success = false;
+				while(!success)
+				{
+					LoginDialog loginDlg = new LoginDialog(args, this);
+					
+					
+			        loginDlg.setVisible(true);
+			        // if logon successfully
+			        if(loginDlg.isSucceeded()){
+			            System.out.println("Success!");
+			            success = true;
+			        }
+			        else 
+		        	{
+		        		success = false;
+		        		System.out.println("Failed to login, trying again.");
+		        	}
+				}
 				
-				LoginDialog loginDlg = new LoginDialog(new JFrame("Frame"), args);
 				
-				
-		        loginDlg.setVisible(true);
-		        // if logon successfully
-		        if(loginDlg.isSucceeded()){
-		            System.out.println("Success!");
-		        }
-		        else System.exit(0);
 			    
 			    
 				

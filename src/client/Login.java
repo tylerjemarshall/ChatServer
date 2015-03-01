@@ -1,13 +1,13 @@
 package client;
 
-import java.awt.Frame;
+//import java.awt.Frame;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Login {
 
 	
-	public static boolean authenticate(String[] args, Frame parent, ChatClient client) throws IOException {
+	public static boolean authenticate(String[] args, GUIConsole parent) throws IOException {
         // hardcoded username and password
 		
 		
@@ -16,7 +16,9 @@ public class Login {
 		try 
 	    {
 			
-	      client= new ChatClient(args[0], Integer.parseInt(args[1]), parent, args[2]);
+//	    client= new ChatClient(args[0], Integer.parseInt(args[1]), parent, args[2]);
+			System.out.println(args);
+		  parent.setChatClient(new ChatClient(args[0], Integer.parseInt(args[1]), parent, args[2]));
 	      cin.close();
 	    } 
 	    catch(IOException e) 
