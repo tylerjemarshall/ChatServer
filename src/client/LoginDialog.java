@@ -123,7 +123,7 @@ public class LoginDialog extends JDialog {
 						JOptionPane.showMessageDialog(LoginDialog.this,
 								"Invalid username or password", "Login",
 								JOptionPane.ERROR_MESSAGE);
-						userTxF.setText("");
+						//userTxF.setText(""); only clears password field.
 						passPwF.setText("");
 						displayLB.setText("Incorrect username or password!");
 						succeeded = false;

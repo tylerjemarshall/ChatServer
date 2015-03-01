@@ -21,18 +21,18 @@ public class GUIConsole extends JFrame implements ChatIF {
 	final public static int DEFAULT_PORT = 5555;
 	
 	private static final long serialVersionUID = 1L;
-	private JButton closeB = new JButton("Close");
-	private JButton openB = new JButton("Open");
+//	private JButton closeB = new JButton("Close");
+//	private JButton openB = new JButton("Open");
 	private JButton sendB = new JButton("Send");
 	private JButton quitB = new JButton("Quit");
 		
-	private JTextField portTxF = new JTextField(5555);
-	private JTextField hostTxF = new JTextField("127.0.0.1");
+//	private JTextField portTxF = new JTextField(5555);
+//	private JTextField hostTxF = new JTextField("127.0.0.1");
 	private JTextField messageTxF = new JTextField("");
 		
-	private JLabel portLB = new JLabel("Port: ", JLabel.RIGHT);
-	private JLabel hostLB = new JLabel("Host: ", JLabel.RIGHT);
-	private JLabel messageLB = new JLabel("Message: ", JLabel.RIGHT);
+//	private JLabel portLB = new JLabel("Port: ", JLabel.RIGHT);
+//	private JLabel hostLB = new JLabel("Host: ", JLabel.RIGHT);
+	//private JLabel messageLB = new JLabel("Message: ", JLabel.RIGHT);
 		
 	private JTextArea messageList = new JTextArea();
 	
@@ -84,20 +84,50 @@ public class GUIConsole extends JFrame implements ChatIF {
 		messageList.setFont(profile.getFont());
 
 		setLayout( new BorderLayout(5,5));
-		final Panel bottom = new Panel();
+		final Panel southBox = new Panel();
+			final Panel southInput = new Panel();
+			final Panel southButtons = new Panel();
 		add( "Center", messageList );
-		add( "South" , bottom);
 		
-		bottom.setLayout( new GridLayout(5,2,5,5));
-		bottom.add(hostLB); 		bottom.add(hostTxF);
-		bottom.add(portLB); 		bottom.add(portTxF);
-		bottom.add(messageLB); 		bottom.add(messageTxF);
-		bottom.add(openB); 			bottom.add(sendB);
-		bottom.add(closeB); 		bottom.add(quitB);
+		add( "South" , southBox);
+		southBox.setLayout( new GridLayout(2,1,5,5));
+			southBox.add(southInput);
+				southInput.setLayout(new GridLayout(1, 1, 5, 5));
+				southInput.add(messageTxF);
+			southBox.add(southButtons);
+				southButtons.setLayout(new GridLayout(1, 2, 5, 5));
+				southButtons.add(quitB);
+				southButtons.add(sendB);
+		
+		
+		messageList.setLineWrap(true);
+		messageList.setEditable(false);
+		
+		JScrollPane scroll = new JScrollPane (messageList);
+	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	          scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	    add(scroll);
+				
+	    
+//		southBox.add(southInput);
+		
+		
+		
+//		south.setLayout( new GridLayout(1, 1, 5, 5));
+		
+		//bottom.add(hostLB); 		bottom.add(hostTxF);
+		//bottom.add(portLB); 		bottom.add(portTxF);
+		//bottom.add(messageLB); 		
+//		southBox.add(messageTxF);
+//		south.add(quitB);			south.add(sendB);
+		 		
+		//going to remove close and open, and host and port
+		 		//bottom.add(closeB);
+		 		//bottom.add(openB);
 		  	
 
-		hostTxF.setText(args[0]);
-		portTxF.setText("" + Integer.parseInt(args[1]));
+//		hostTxF.setText(args[0]);
+//		portTxF.setText("" + Integer.parseInt(args[1]));
 		
 
 		//This handles closing the client with the X Button
@@ -105,7 +135,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 		addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-		        if (JOptionPane.showConfirmDialog(bottom, 
+		        if (JOptionPane.showConfirmDialog(southBox, 
 		            "Are you sure to close this window?", "Really Closing?", 
 		            JOptionPane.YES_NO_OPTION,
 		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
@@ -157,7 +187,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 		quitB.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (JOptionPane.showConfirmDialog(bottom, 
+				if (JOptionPane.showConfirmDialog(southBox, 
 			            "Are you sure to close this window?", "Really Closing?", 
 			            JOptionPane.YES_NO_OPTION,
 			            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
@@ -178,34 +208,34 @@ public class GUIConsole extends JFrame implements ChatIF {
 			}
 		});
 		
-		//This handles the Close Connection button
-		closeB.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				client.handleMessageFromClientUI("Good Bye!");
-				try 
-				{
-					client.sendToServer("#logout");
-					//client.closeConnection();
-				} 
-				catch (IOException e1) 
-				{
-					display("Failed to close connection!");	
-		}}});
+//		//This handles the Close Connection button
+//		closeB.addActionListener(new ActionListener(){
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				client.handleMessageFromClientUI("Good Bye!");
+//				try 
+//				{
+//					client.sendToServer("#logout");
+//					//client.closeConnection();
+//				} 
+//				catch (IOException e1) 
+//				{
+//					display("Failed to close connection!");	
+//		}}});
 		
-		//This handles the Open Connection button.
-		openB.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					client.tryToConnect(hostTxF.getText(), Integer.parseInt(portTxF.getText()));
-					//controlsEnabled = true;
-				} catch (Exception e1) {
-					display(e1.toString());
-					//controlsEnabled = false;
-				}
-			}
-		});
+//		//This handles the Open Connection button.
+//		openB.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				try {
+//					client.tryToConnect(hostTxF.getText(), Integer.parseInt(portTxF.getText()));
+//					//controlsEnabled = true;
+//				} catch (Exception e1) {
+//					display(e1.toString());
+//					//controlsEnabled = false;
+//				}
+//			}
+//		});
 		setVisible(true);
 	}
 
@@ -231,7 +261,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 
 	
 	/**
-	 * Handles commands from within the GUI that partains to only the GUI.
+	 * Handles commands from within the GUI that pertains to only the GUI.
 	 * 
 	 * @param msg The command being sent for GUIConsole to handle.
 	 */
@@ -275,11 +305,13 @@ public class GUIConsole extends JFrame implements ChatIF {
 	@Override
 	public void display(String message) {
 			messageList.insert("> " + message + "\n", 0);
+			//messageList.setCaretPosition(0);
 	}
 
 	public void display(String message, String user) 
 	{
 		messageList.insert(user + "> " + message + "\n", 0);
+		//messageList.setCaretPosition(0);
 	}
 
 	/**
@@ -293,12 +325,9 @@ public class GUIConsole extends JFrame implements ChatIF {
 			
 		}
 		client.handleMessageFromClientUI(messageTxF.getText());
-		messageTxF.setText("");
+		//messageTxF.setText("");
+		//messageList.setCaretPosition(0);
 	}
-	
-	
-
-	
 	/**
 	 * Main method, creates the JFrame for GUIConsole.
 	 * 
