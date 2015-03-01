@@ -132,11 +132,11 @@ public class LoginDialog extends JDialog {
 								JOptionPane.ERROR_MESSAGE);
 						userTxF.setText("");
 						passPwF.setText("");
-						displayLB.setText("Failed to login!");
+						displayLB.setText("Incorrect username or password!");
 						succeeded = false;
 					}
 				} catch (IOException e1) {
-					displayLB.setText("Failed to login!");
+					displayLB.setText("Failed to connect!");
 					succeeded = false;
 				}
 			
@@ -163,8 +163,9 @@ public class LoginDialog extends JDialog {
 		return parent;
 	}
 
+	@SuppressWarnings("deprecation")
 	public String[] getArgs() {
-		return args;
+		return new String[]{hostTxF.getText(), portTxF.getText(), userTxF.getText(), passPwF.getText()};
 	}
 
 	public boolean isSucceeded() {
