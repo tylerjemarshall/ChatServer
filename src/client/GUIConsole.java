@@ -39,13 +39,28 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private ChatClient client;
 	private Profile profile = new Profile();
 	
+	public ChatClient getChatClient()
+	{
+		return this.client;
+	}
+	
+	public void setChatClient(ChatClient chatClient)
+	{
+		this.client = chatClient;
+	}
 	
 	private boolean controlsEnabled = false;
 
 
-	public  GUIConsole ( String host, int port, final String userName)
+	public  GUIConsole ( String[] args)
 	{
-			super("Simple Chat GUI");
+		super("Simple Chat GUI");
+		
+	    String host = args[0];
+	    int port = Integer.parseInt(args[1]);
+	    String userName = args[2];
+		
+			
 			setSize(300, 400);
 		
 			messageList.setWrapStyleWord(true);
@@ -100,24 +115,50 @@ public class GUIConsole extends JFrame implements ChatIF {
 			//This establishes the connection and welcomes the user
 			while(!controlsEnabled) //Can't proceed until client is declared.
 			{
-				Scanner cin = new Scanner( System.in );
+//				boolean success = false;
+				//while(!success)
+				{
+					LoginDialog loginDlg = new LoginDialog(args, this);
+					
+					
+			        loginDlg.setVisible(true);
+			        // if logon successfully
+			        if(loginDlg.isSucceeded()){
+			            System.out.println("Success!");
+//			            success = true;
+//			            loginDlg.dispose();
+			            controlsEnabled = true;
+			        }
+			        else 
+		        	{
+//		        		success = false;
+		        		System.out.println("Failed to login, trying again.");
+		        	}
+				}
 				
-				try 
-			    {
-			      client= new ChatClient(host, port, this, userName);
-			      controlsEnabled = true;
-			      display("Welcome " + userName);
-			      cin.close();
-			    } 
-			    catch(IOException e) 
-			    {
-			      System.out.println("GUIConsole - Can't initialize client! (" + host + " & " + port + ").");
-			      System.out.println("Please enter new Host: ");
-			      host = cin.next();
-			      System.out.println("Please enter new Port: ");
-			      port = cin.nextInt();
-			      controlsEnabled = false; 
-			    }
+				
+			    
+			    
+				
+//				
+//				Scanner cin = new Scanner( System.in );
+//				
+//				try 
+//			    {
+//			      client= new ChatClient(host, port, this, userName);
+//			      controlsEnabled = true;
+//			      display("Welcome " + userName);
+//			      cin.close();
+//			    } 
+//			    catch(IOException e) 
+//			    {
+//			      System.out.println("GUIConsole - Can't initialize client! (" + host + " & " + port + ").");
+//			      System.out.println("Please enter new Host: ");
+//			      host = cin.next();
+//			      System.out.println("Please enter new Port: ");
+//			      port = cin.nextInt();
+//			      controlsEnabled = false; 
+//			    }
 			}
 			
 			// This handles the Enter Key being pressed when sending message
@@ -271,6 +312,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	}
 	
 	
+
+	
 	/**
 	 * Main method, creates the JFrame for GUIConsole.
 	 * 
@@ -292,7 +335,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    }
 	    catch(ArrayIndexOutOfBoundsException e)
 	    {
-	      host = "localhost";
+	    	args[0] = "localhost";
+	    	host = "localhost";
 	    }
 	    
 	    try//tries to set port to command line args
@@ -301,6 +345,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    }
 	    catch(Throwable t)
 	    {
+	    	args[1] = DEFAULT_PORT + "";
 	      port = DEFAULT_PORT; //Set port to 5555
 	    }
 	    try//tries to set userName to command line.
@@ -309,11 +354,22 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    }
 	    catch(Throwable t)
 	    {
+	    	args[2] = "User";
 	      userName = "User"; //Set userName to "User" if fails
 	    }
-	    		
+	    
+	    
+	    
+	    //while(!login(new JFrame("Login"), args));
+	    //login(new JFrame("Login"), args);		
 	    @SuppressWarnings("unused")
-		GUIConsole clientConsole = new GUIConsole(host , port, userName);
+	    
+		GUIConsole clientConsole = new GUIConsole(args);
+	    
 	}
+	
+	
+	
+
 
 }
