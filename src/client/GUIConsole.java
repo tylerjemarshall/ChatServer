@@ -115,8 +115,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 			//This establishes the connection and welcomes the user
 			while(!controlsEnabled) //Can't proceed until client is declared.
 			{
-				boolean success = false;
-				while(!success)
+//				boolean success = false;
+				//while(!success)
 				{
 					LoginDialog loginDlg = new LoginDialog(args, this);
 					
@@ -125,11 +125,13 @@ public class GUIConsole extends JFrame implements ChatIF {
 			        // if logon successfully
 			        if(loginDlg.isSucceeded()){
 			            System.out.println("Success!");
-			            success = true;
+//			            success = true;
+//			            loginDlg.dispose();
+			            controlsEnabled = true;
 			        }
 			        else 
 		        	{
-		        		success = false;
+//		        		success = false;
 		        		System.out.println("Failed to login, trying again.");
 		        	}
 				}
@@ -138,25 +140,25 @@ public class GUIConsole extends JFrame implements ChatIF {
 			    
 			    
 				
-				
-				Scanner cin = new Scanner( System.in );
-				
-				try 
-			    {
-			      client= new ChatClient(host, port, this, userName);
-			      controlsEnabled = true;
-			      display("Welcome " + userName);
-			      cin.close();
-			    } 
-			    catch(IOException e) 
-			    {
-			      System.out.println("GUIConsole - Can't initialize client! (" + host + " & " + port + ").");
-			      System.out.println("Please enter new Host: ");
-			      host = cin.next();
-			      System.out.println("Please enter new Port: ");
-			      port = cin.nextInt();
-			      controlsEnabled = false; 
-			    }
+//				
+//				Scanner cin = new Scanner( System.in );
+//				
+//				try 
+//			    {
+//			      client= new ChatClient(host, port, this, userName);
+//			      controlsEnabled = true;
+//			      display("Welcome " + userName);
+//			      cin.close();
+//			    } 
+//			    catch(IOException e) 
+//			    {
+//			      System.out.println("GUIConsole - Can't initialize client! (" + host + " & " + port + ").");
+//			      System.out.println("Please enter new Host: ");
+//			      host = cin.next();
+//			      System.out.println("Please enter new Port: ");
+//			      port = cin.nextInt();
+//			      controlsEnabled = false; 
+//			    }
 			}
 			
 			// This handles the Enter Key being pressed when sending message

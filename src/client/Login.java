@@ -20,6 +20,7 @@ public class Login {
 			System.out.println(args);
 		  parent.setChatClient(new ChatClient(args[0], Integer.parseInt(args[1]), parent, args[2]));
 	      cin.close();
+	      return true;
 	    } 
 	    catch(IOException e) 
 	    {
@@ -38,9 +39,9 @@ public class Login {
 		
 		
 		
-        if (args[2].equals("tyler") && true) { //password.equals("secret")
-            return true;
-        }
-        return false;
+//       /if (args[2].equals("tyler") && true) { //password.equals("secret")
+//            return true;
+//        }
+//        return false;
     }
 }

@@ -49,51 +49,14 @@ public class LoginDialog extends JDialog {
 	private JButton exitBtn = new JButton("Exit");
 
 	// Passed Variables
-	// private ChatClient client;
 	private GUIConsole parent;
 	private String[] args;
 
 	public LoginDialog(String[] args, GUIConsole parent) {
 		super(parent, "Login", true);
 		this.parent = parent;
-		// this.client = parent.getChatClient();
 		this.args = args;
-		//
-		// JPanel panel = new JPanel(new GridBagLayout());
-		// GridBagConstraints cs = new GridBagConstraints();
-
-		// cs.fill = GridBagConstraints.HORIZONTAL;
-
-		// lbUsername = new JLabel("Username: ");
-		// cs.gridx = 0;
-		// cs.gridy = 0;
-		// cs.gridwidth = 1;
-		// panel.add(lbUsername, cs);
-
-		//
-		//
-		// tfUsername = new JTextField(20);
-		// cs.gridx = 1;
-		// cs.gridy = 0;
-		// cs.gridwidth = 2;
-		// panel.add(tfUsername, cs);
-		//
-		// lbPassword = new JLabel("Password: ");
-		// cs.gridx = 0;
-		// cs.gridy = 1;
-		// cs.gridwidth = 1;
-		// panel.add(lbPassword, cs);
-		//
-		// pfPassword = new JPasswordField(20);
-		// cs.gridx = 1;
-		// cs.gridy = 1;
-		// cs.gridwidth = 2;
-		// panel.add(pfPassword, cs);
-		// panel.setBorder(new LineBorder(Color.GRAY));
-		//
-		// btnLogin = new JButton("Login");
-		//
-
+		
 		hostTxF = new JTextField(args[0]);
 		portTxF = new JTextField(args[1]);
 		userTxF = new JTextField(args[2]);
@@ -107,16 +70,7 @@ public class LoginDialog extends JDialog {
 		JPanel north = new JPanel();
 		JPanel south = new JPanel();
 
-		//
-		// super.setSize(500, 450);
-		// this.setSize(500, 450);
-		// box.setSize(500, 450);
-		// box.setFont(font);
-
 		box.setLayout(new BorderLayout(6, 5));
-		// box.getRootPane().setBorder(BorderFactory.createMatteBorder(4, 4, 4,
-		// 4, Color.BLACK));
-		// box.setBorder(new LineBorder(Color.GRAY));
 
 		box.add("North", north);
 		box.add("Center", center);
@@ -141,18 +95,29 @@ public class LoginDialog extends JDialog {
 
 		south.add(displayLB);
 
-		box.setVisible(true);
+		
+
+		
+//		JPanel bp = new JPanel();
+//		bp.add(loginBtn);
+//		bp.add(exitBtn);
+
+//		getContentPane().add(center, BorderLayout.CENTER);
+//		getContentPane().add(bp, BorderLayout.PAGE_END);
+		
+
+		getContentPane().add(box, BorderLayout.CENTER);
+		
+		//pack();
+		setSize(300, 200);
+		setResizable(false);
+		setAlwaysOnTop(true);
+		setLocationRelativeTo(parent);
 
 		loginBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-
-				// while(!succeeded)
-
 				System.out.println("You pressed login!");
-
-				// if (Login.authenticate(getUsername(), getPassword()))
-				// String[] args, GUIConsole console, ChatClient client
 				try {
 					if (Login.authenticate(getArgs(), getParent())) {
 						JOptionPane.showMessageDialog(LoginDialog.this, "Hi "
@@ -160,54 +125,30 @@ public class LoginDialog extends JDialog {
 								+ "! You have successfully logged in.",
 								"Login", JOptionPane.INFORMATION_MESSAGE);
 						succeeded = true;
-
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(LoginDialog.this,
 								"Invalid username or password", "Login",
 								JOptionPane.ERROR_MESSAGE);
-						// reset username and password
 						userTxF.setText("");
 						passPwF.setText("");
 						displayLB.setText("Failed to login!");
 						succeeded = false;
-
 					}
 				} catch (IOException e1) {
 					displayLB.setText("Failed to login!");
-					System.out.println("Failed to Login!");
 					succeeded = false;
-
-					// TODO Auto-generated catch block
-					// e1.printStackTrace();
-					// System.out.println("GUIConsole - Can't initialize client! ("
-					// + host + " & " + port + ").");
-					// System.out.println("Please enter new Host: ");
-					// host = cin.next();
-					// System.out.println("Please enter new Port: ");
-					// port = cin.nextInt();
-					// controlsEnabled = false;
 				}
-
+			
 			}
 		});
-		// exitBtn = new JButton("Cancel");
 		exitBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				System.exit(0);
 			}
 		});
-		JPanel bp = new JPanel();
-		bp.add(loginBtn);
-		bp.add(exitBtn);
-
-		getContentPane().add(center, BorderLayout.CENTER);
-		getContentPane().add(bp, BorderLayout.PAGE_END);
-
-		pack();
-		setResizable(false);
-		setLocationRelativeTo(parent);
 	}
 
 	public String getUsername() {
@@ -221,11 +162,6 @@ public class LoginDialog extends JDialog {
 	public GUIConsole getParent() {
 		return parent;
 	}
-
-	//
-	// public ChatClient getClient() {
-	// return client;
-	// }
 
 	public String[] getArgs() {
 		return args;
