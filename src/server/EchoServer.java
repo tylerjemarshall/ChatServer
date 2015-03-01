@@ -523,10 +523,13 @@ public class EchoServer extends AbstractServer {
 			System.out.println("Client " + client
 					+ " disconnected from " + client);
 			//logoff(client);
+			roomList.remove(client);
+			System.out.println("Removed client from roomList");
 
 		} catch (Exception e) {
 			System.out.println("Client disconnected from " + client);
 			e.printStackTrace();
+			System.out.println("Failed to remove client from roomList");
 		}
 	}
 
