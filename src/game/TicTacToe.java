@@ -46,6 +46,7 @@ public class TicTacToe extends JFrame {
 	public TicTacToe() {
 		super("TicTacToe");
 		setSize(300, 300);
+		setLocationRelativeTo(getParent());
 
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {

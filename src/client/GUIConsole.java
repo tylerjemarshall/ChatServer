@@ -109,6 +109,10 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    add(scroll);
 				
 	    
+	    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	    this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+	    
+	    
 //		southBox.add(southInput);
 		
 		
@@ -325,7 +329,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 			
 		}
 		client.handleMessageFromClientUI(messageTxF.getText());
-		//messageTxF.setText("");
+		messageTxF.setText("");
 		//messageList.setCaretPosition(0);
 	}
 	/**

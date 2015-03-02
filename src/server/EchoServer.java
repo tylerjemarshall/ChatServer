@@ -409,7 +409,6 @@ public class EchoServer extends AbstractServer {
 		String message = (String) msg;
 		Room tempRoom = roomList.getRoom(room);
 		if (!tempRoom.equals(null)) {
-			System.out.println("Found room " + tempRoom);
 			for (int r = 0; r < tempRoom.size(); r++) {
 				tryToSendToClient(message, tempRoom.get(r));
 			}

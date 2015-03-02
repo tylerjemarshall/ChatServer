@@ -151,7 +151,7 @@ public class Room implements RoomInterface, Comparable<Room>{
 	           return false;
 	       }
 	       
-	       ClientInfo guest = (ClientInfo) o;
+	       ConnectionToClient guest = (ConnectionToClient) o;
 	       return (this.getId() == guest.getId()); //&&
 
 	}
