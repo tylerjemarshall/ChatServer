@@ -212,13 +212,6 @@ public class EchoServer extends AbstractServer {
 		int space = (msg.indexOf(" ") == -1) ? cmd.length() : msg.indexOf(" ");
 		String truncMsg = msg.substring(space, end).trim();
 
-		// Declares info and tries to Initialize it.
-		//ClientInfo info = client.getClientInfo();
-//		try {
-//			info = roomList.getInfoByClient(client);
-//		} catch (Exception e) {
-//		}
-
 		switch (cmd) {
 		case "#logon":
 		case "#login":
@@ -239,6 +232,7 @@ public class EchoServer extends AbstractServer {
 			else
 				tryToSendToClient("Must enter clients ID", client);
 			break;
+		case "#y":
 		case "#yell":
 			truncMsg = truncMsg.toUpperCase();
 			sendToAllRooms(client + " Just yelled " + truncMsg + "!");
@@ -260,63 +254,39 @@ public class EchoServer extends AbstractServer {
 		case "#logoff":
 			sendToARoom(client + " has logged off!", client.getClientInfo().getRoom());
 			logoff(client);
-
 			break;
-		case "#lc":
-		case "#listclients":
-			
-			break;
-			
-			
 		case "#setlimit":
-			
 			try{
 				if (isNumber(truncMsg))
-					roomList.getRoomByClient(client).setLimit(Integer.parseInt(truncMsg));
+				{
+					int limit = (Integer.parseInt(truncMsg) < 1) ? 1 : Integer.parseInt(truncMsg); //if truncMsg less than 1, will set to 1.
+					roomList.getRoomByClient(client).setLimit(limit);
+				}//note: i just realized could of also did client.getInfo().getRoom() instead. 
 				else
 					tryToSendToClient("Must enter a #", client);	
 			}
-			
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
-			
-			
-			
-//			roomList.getRoomByClient(client).setLimit(Integer.parseInt(truncMsg));
-			
-			
+		case "#lc":
+		case "#listclients":	
 		case "#listrooms":
-			try {
-				Collections.sort(roomList);
-				tryToSendToClient(roomList.toString(), client);
-			} catch (Exception e) {
-				System.out.println("Failed to list rooms");
-			}
+			Collections.sort(roomList);
+			tryToSendToClient(roomList.toString(), client);
 			break;
 		// Game Stuff
 		case "#game": {
-			
 			break;
-
 		}
 		case "#move":
-			try
-			{
-							sendToARoom(msg, client.getClientInfo().getRoom());
-
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
+			sendToARoom(msg, client.getClientInfo().getRoom());
 			break;
 		case "#clearboard":
 			sendToARoom(msg, client.getClientInfo().getRoom());
 			break;
 		default:
-			display("Invalid Command " + cmd + " sent by " + client);
+			tryToSendToClient("Invalid command: " + cmd, client);
 		}
 	}
 
