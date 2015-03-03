@@ -153,6 +153,13 @@ public class Room implements RoomInterface, Comparable<Room>{
 	           return false;
 	       }
 	       
+	     //use instanceof instead of getClass here for two reasons
+	       //1. if need be, it can match any supertype, and not just one class;
+	       //2. it renders an explict check for "that == null" redundant, since
+	       //it does the check for null already - "null instanceof [type]" always
+	       //returns false. (See Effective Java by Joshua Bloch.)
+	       if ( !(o instanceof ConnectionToClient) ) return false;
+	       
 	       ConnectionToClient guest = (ConnectionToClient) o;
 	       return (this.name == guest.getName()); //&&
 	       
