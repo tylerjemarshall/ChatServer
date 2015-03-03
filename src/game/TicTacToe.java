@@ -45,10 +45,12 @@ public class TicTacToe extends JFrame {
 	private GUIConsole console = null;
 	
 
-	public TicTacToe() {
+	public TicTacToe(GUIConsole parent) {
 		super("TicTacToe");
 		
-		console = (GUIConsole) getParent();
+//		console = (GUIConsole) getParent();
+		this.console=parent;
+		
 		
 		setSize(300, 300);
 		setLocationRelativeTo(getParent());
@@ -413,7 +415,7 @@ public class TicTacToe extends JFrame {
 
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
-		TicTacToe g = new TicTacToe();
+		TicTacToe g = new TicTacToe(null);
 	}
 
 }

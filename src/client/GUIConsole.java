@@ -2,6 +2,8 @@ package client;
 
 
 
+import game.TicTacToe;
+
 import javax.swing.*;
 
 import java.awt.event.*;
@@ -281,6 +283,21 @@ public class GUIConsole extends JFrame implements ChatIF {
 		  String truncMsg = msg.substring(space, end).trim();  	  
 		  switch (cmd)
 		  {
+		  case "#game":
+
+				TicTacToe game = new TicTacToe(this);
+				//game.setClient(this);
+				//game.set
+				game.setOnline(true);
+//				try {
+//					client.sendToServer(msg);
+//				} catch (IOException e2) {
+//					this.display("Failed to send command to server.");
+//				}
+				break;
+		  
+		  
+		  
 		  case "#fontsize": 
 			  profile.setFontSize(Integer.parseInt(truncMsg));
 			  messageList.setFont(profile.getFont());	  

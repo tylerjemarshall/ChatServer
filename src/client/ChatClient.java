@@ -18,7 +18,7 @@ public class ChatClient extends AbstractClient {
 	 */
 	ChatIF clientUI;
 	private String userName = "User";
-//	private TicTacToe game;
+	private TicTacToe game;
 	private Profile profile;
 
 	// Constructors ****************************************************
@@ -175,17 +175,7 @@ public class ChatClient extends AbstractClient {
 		}
 
 		switch (cmd) {
-		case "#game":
-
-			game = new TicTacToe();
-			game.setClient(this);
-			game.setOnline(true);
-			try {
-				sendToServer(message);
-			} catch (IOException e2) {
-				clientUI.display("Failed to send command to server.");
-			}
-			break;
+		
 
 		case "#sethost":
 			String newHost = message.substring(space, end).trim();
