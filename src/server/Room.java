@@ -18,6 +18,7 @@ public class Room implements RoomInterface, Comparable<Room>{
     private String name = "commons";
     private int id;
     private boolean open = true;
+    private String owner = "server";
     
     
     /**
@@ -147,22 +148,24 @@ public class Room implements RoomInterface, Comparable<Room>{
 
 	       if(this == o) return true;
 		      
+	       	
 	       if(o == null || (this.getClass() != o.getClass())){
 	           return false;
 	       }
 	       
 	       ConnectionToClient guest = (ConnectionToClient) o;
-	       return (this.getId() == guest.getId()); //&&
-
+	       return (this.name == guest.getName()); //&&
+	       
+	       
 	}
 	
     @Override
    public int hashCode(){
-       int result = 0;
-       result = 31*result + id;
-       result = 31*result + (name !=null ? name.hashCode() : 0);
+       //int result = 0;
+       //result = 31*result + id;
+       //result = 31*result + (name !=null ? name.hashCode() : 0);
       
-       return result;
+       return (name !=null ? name.hashCode() : 0);
    }
 
     //From List. If i want to implement more List functions, need to add here.

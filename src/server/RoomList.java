@@ -168,6 +168,25 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		return null;
     }
 	
+	public Room getRoomByClient (ConnectionToClient client)
+    {
+	
+		for (int y = 0; y < list.size(); y++)
+		{
+			Room tempRoom = list.get(y);
+//			ConnectionToClient tempClient = tempRoom.getClientByName(Client.getName());
+			
+			try {
+				if (tempRoom.contains(client))			
+					return tempRoom;
+			} catch(Exception e){
+				e.printStackTrace();
+			}
+			
+		}
+		return null;
+    }
+	
 //	/**
 //	 * Method that finds a client by their ConnectionToClient
 //	 * Returns null if not found

@@ -243,6 +243,7 @@ public class EchoServer extends AbstractServer {
 			truncMsg = truncMsg.toUpperCase();
 			sendToAllRooms(client + " Just yelled " + truncMsg + "!");
 			break;
+		case "#j":
 		case "#join":
 			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
 			tryToSendToClient("You have switched rooms to " + truncMsg, client);
@@ -261,8 +262,31 @@ public class EchoServer extends AbstractServer {
 			logoff(client);
 
 			break;
+		case "#lc":
 		case "#listclients":
+			
 			break;
+			
+			
+		case "#setlimit":
+			
+			try{
+				if (isNumber(truncMsg))
+					roomList.getRoomByClient(client).setLimit(Integer.parseInt(truncMsg));
+				else
+					tryToSendToClient("Must enter a #", client);	
+			}
+			
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			
+			
+//			roomList.getRoomByClient(client).setLimit(Integer.parseInt(truncMsg));
+			
+			
 		case "#listrooms":
 			try {
 				Collections.sort(roomList);
