@@ -85,16 +85,11 @@ public class LoginDialog extends JDialog {
 
 		north.add(welcomeLB);
 
-		center.add(portLB);
-		center.add(portTxF);
-		center.add(hostLB);
-		center.add(hostTxF);
-		center.add(userLB);
-		center.add(userTxF);
-		center.add(passLB);
-		center.add(passPwF);
-		center.add(exitBtn);
-		center.add(loginBtn);
+		center.add(portLB);		center.add(portTxF);
+		center.add(hostLB);		center.add(hostTxF);
+		center.add(userLB);		center.add(userTxF);
+		center.add(passLB);		center.add(passPwF);
+		center.add(exitBtn);	center.add(loginBtn);
 
 		south.add(displayLB);
 
@@ -106,6 +101,34 @@ public class LoginDialog extends JDialog {
 		setResizable(false);
 		setAlwaysOnTop(true);
 		setLocationRelativeTo(parent);
+		passPwF.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("You pressed login!");
+				try {
+					if (Login.authenticate(getArgs(), getParent())) {
+						JOptionPane.showMessageDialog(LoginDialog.this, "Hi "
+								+ getUsername()
+								+ "! You have successfully logged in.",
+								"Login", JOptionPane.INFORMATION_MESSAGE);
+						succeeded = true;
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(LoginDialog.this,
+								"Invalid username or password", "Login",
+								JOptionPane.ERROR_MESSAGE);
+						//userTxF.setText(""); only clears password field.
+						passPwF.setText("");
+						displayLB.setText("Incorrect username or password!");
+						succeeded = false;
+					}
+				} catch (IOException e1) {
+					displayLB.setText("Failed to connect!");
+					succeeded = false;
+				}
+			
+			}
+		});
 
 		loginBtn.addActionListener(new ActionListener() {
 
