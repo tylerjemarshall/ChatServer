@@ -8,7 +8,8 @@ package game;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import client.ChatClient;
+//import client.ChatClient;
+import client.GUIConsole;
 
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -40,11 +41,15 @@ public class TicTacToe extends JFrame {
 
 	// Online Variables
 	private boolean online = false;
-	private ChatClient client = null;
+	//private ChatClient client = null;
+	private GUIConsole console = null;
 	
 
 	public TicTacToe() {
 		super("TicTacToe");
+		
+		console = (GUIConsole) getParent();
+		
 		setSize(300, 300);
 		setLocationRelativeTo(getParent());
 
@@ -343,7 +348,7 @@ public class TicTacToe extends JFrame {
 
 	private void sendCommand(String command) throws IOException {
 		//System.out.println("Sending command: " + command);
-		client.sendToServer(command);
+		console.getChatClient().sendToServer(command);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -398,13 +403,13 @@ public class TicTacToe extends JFrame {
 		this.online = online;
 	}
 
-	public ChatClient getClient() {
-		return client;
-	}
+//	public ChatClient getClient() {
+//		return console.getChatClient();
+//	}
 
-	public void setClient(ChatClient chatClient) {
-		this.client = chatClient;
-	}
+//	public void setClient(ChatClient chatClient) {
+//		this.client = chatClient;
+//	}
 
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")

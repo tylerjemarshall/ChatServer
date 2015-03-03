@@ -18,7 +18,7 @@ public class ChatClient extends AbstractClient {
 	 */
 	ChatIF clientUI;
 	private String userName = "User";
-	private TicTacToe game;
+//	private TicTacToe game;
 	private Profile profile;
 
 	// Constructors ****************************************************
