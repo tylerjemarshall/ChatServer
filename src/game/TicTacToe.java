@@ -243,7 +243,7 @@ public class TicTacToe extends JFrame {
 		if (!fromServer) {
 			try {
 				sendCommand("#clearboard");
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else
@@ -333,7 +333,7 @@ public class TicTacToe extends JFrame {
 			try {
 				//System.out.println("Asking server to move piece");
 				sendCommand("#move " + x + " " + y);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -348,9 +348,18 @@ public class TicTacToe extends JFrame {
 	// sendCommand
 	// ///////////////////////////////////////////////////////////////////
 
-	private void sendCommand(String command) throws IOException {
+	private void sendCommand(String command) throws Exception {
 		//System.out.println("Sending command: " + command);
-		console.getChatClient().sendToServer(command);
+		try
+		{
+			console.getChatClient().sendToServer(command);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new Exception("Could not send to server");
+		}
+		
 	}
 
 	/////////////////////////////////////////////////////////////////////

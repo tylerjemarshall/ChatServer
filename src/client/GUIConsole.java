@@ -193,13 +193,14 @@ public class GUIConsole extends JFrame implements ChatIF {
 		  switch (cmd)
 		  {
 		  case "#game":
-				TicTacToe game = new TicTacToe(this);
-				game.setOnline(true);
-//				try {
-//					client.sendToServer(msg);
-//				} catch (IOException e2) {
-//					this.display("Failed to send command to server.");
-//				}
+				client.setGame(new TicTacToe(this));
+				client.getGame().setOnline(true);
+				try {
+					client.tryToSendToServer(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+					display("Failed to send command to server.");
+				}
 				break;
 		  case "#fontsize": 
 			  profile.setFontSize(Integer.parseInt(truncMsg));

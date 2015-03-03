@@ -92,7 +92,6 @@ public class ChatClient extends AbstractClient {
 
 			switch (cmd) {
 			case "#from":
-
 				String user = (truncMsg.indexOf(" ") == -1) ? truncMsg
 						: truncMsg.substring(0, truncMsg.indexOf(" ")).trim();
 				String whisper = (truncMsg.indexOf(" ") == -1) ? truncMsg
@@ -103,7 +102,6 @@ public class ChatClient extends AbstractClient {
 			case "#server":
 				clientUI.display(truncMsg, "SERVER MSG");
 				break;
-
 			case "#move":
 				System.out.println("Entered move case");
 				String x = (truncMsg.indexOf(" ") == -1) ? "-1" : truncMsg
@@ -113,12 +111,20 @@ public class ChatClient extends AbstractClient {
 				String y = (truncMsg.indexOf(" ") == -1) ? "-1" : truncMsg
 						.substring(space2, truncMsg.length()).trim();
 
-				if (x == "-1" || y == "-1") {
+				try
+				{
+					if (x == "-1" || y == "-1") {
 					System.out
 							.println("Invalid move...\nx: " + x + "\ny: " + y);
 				} else
 					game.movePiece(Integer.parseInt(x), Integer.parseInt(y),
 							true);
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
 				break;
 			case "#clearboard":
 				game.clearBoard(true);
@@ -256,7 +262,7 @@ public class ChatClient extends AbstractClient {
 	/**
 	 * This method tries to send message to server then throws Exception
 	 */
-	public void tryToSendToServer(String msg) throws Exception {
+	public void tryToSendToServer(Object msg) throws Exception {
 		try {
 			sendToServer(msg);
 		} catch (IOException e) {
@@ -268,7 +274,7 @@ public class ChatClient extends AbstractClient {
 			}
 		}
 	}
-
+	
 	/**
 	 * This method tries to connect to server then throws Exception
 	 */
@@ -313,6 +319,14 @@ public class ChatClient extends AbstractClient {
 
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+	}
+
+	public TicTacToe getGame() {
+		return game;
+	}
+
+	public void setGame(TicTacToe game) {
+		this.game = game;
 	}
 
 	/**

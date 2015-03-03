@@ -297,13 +297,23 @@ public class EchoServer extends AbstractServer {
 			break;
 		// Game Stuff
 		case "#game": {
+			
+			break;
 
 		}
 		case "#move":
-			sendToARoom(msg, client.getInfo("room").toString());
+			try
+			{
+							sendToARoom(msg, client.getClientInfo().getRoom());
+
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 			break;
 		case "#clearboard":
-			sendToARoom(msg, client.getInfo("room").toString());
+			sendToARoom(msg, client.getClientInfo().getRoom());
 			break;
 		default:
 			display("Invalid Command " + cmd + " sent by " + client);
