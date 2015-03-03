@@ -23,6 +23,9 @@ public class ChatClient extends AbstractClient {
 
 	// Constructors ****************************************************
 
+	
+	
+	//this is a changef
 	/**
 	 * Constructs an instance of the chat client.
 	 * 
