@@ -32,11 +32,24 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private ChatClient client;
 	private Profile profile = new Profile();
 	private String[] args;
-	private String[] roomList;
 	
+	
+	private String[] roomArray;
+	private JButton refresh = new JButton("Refresh Rooms");
+	private JComboBox roomList = new JComboBox();
 	
 	
 	//Makes the client accessible from LoginDialog
+	public void setRoomList(JComboBox arg)
+	{
+		this.roomList = arg;
+	}
+	
+	public JComboBox getRoomList()
+	{
+		return this.roomList;
+	}
+	
 	public ChatClient getChatClient()
 	{
 		return this.client;
@@ -47,12 +60,12 @@ public class GUIConsole extends JFrame implements ChatIF {
 		this.client = chatClient;
 	}
 	
-	public String[] getRoomList() {
-		return roomList;
+	public String[] getRoomArray() {
+		return roomArray;
 	}
 
-	public void setRoomList(String[] roomList) {
-		this.roomList = roomList;
+	public void setRoomArray(String[] roomArray) {
+		this.roomArray = roomArray;
 	}
 
 	public String[] getArgs()
@@ -73,25 +86,29 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    profile.setFont("Tahoma",Font.PLAIN,12);
 		messageList.setFont(profile.getFont());
 
-		JComboBox roomList = new JComboBox();
+		
+//		roomList.
+		final Panel roomBox = new Panel();
 		
 		
-		
-		setLayout( new BorderLayout(5,5));
+		setLayout( new BorderLayout(0,0));
 		final Panel southBox = new Panel();
 			final Panel southInput = new Panel();
 			final Panel southButtons = new Panel();
+		add( "North" , roomBox);	
+			roomBox.setLayout(new GridLayout(1, 2, 5, 5));
+				roomBox.add(roomList);
+				roomBox.add(refresh);
 		add( "Center", messageList );
-		
 		add( "South" , southBox);
-		southBox.setLayout( new GridLayout(3,1,5,5));
-			southBox.add(southInput);
-				southInput.setLayout(new GridLayout(1, 1, 5, 5));
-				southInput.add(messageTxF);
-			southBox.add(southButtons);
-				southButtons.setLayout(new GridLayout(1, 2, 5, 5));
-				southButtons.add(quitB);	southButtons.add(sendB);
-			southBox.add(roomList);
+			southBox.setLayout( new GridLayout(2,1,5,5));
+				southBox.add(southInput);
+					southInput.setLayout(new GridLayout(1, 1, 5, 5));
+					southInput.add(messageTxF);
+				southBox.add(southButtons);
+					southButtons.setLayout(new GridLayout(1, 2, 5, 5));
+					southButtons.add(quitB);	southButtons.add(sendB);
+			
 			
 			
 		
@@ -108,25 +125,28 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	    this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
+
+	    refresh.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		setRoomList(new javax.swing.JComboBox());
+	    		getRoomList().setModel(new javax.swing.DefaultComboBoxModel(client.getRoomList()));
+	    		getRoomList().setName("roomList");
+	    	}
+	    });
 	    
-//	    String[] petStrings = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
-
-	  //Create the combo box, select item at index 4.
-	  //Indices start at 0, so 4 specifies the pig.
-
-//	  roomList.addActionListener(this);
 	    
 		//This creates the Login Dialog which will establish the connection and welcomes the user.
 		LoginDialog loginDlg = new LoginDialog(args, this);
         loginDlg.setVisible(true);
 
 
-		// Handles dropdown box
+		// Handles Combo Box
 		roomList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JComboBox<String[]> roomList = (JComboBox<String[]>) e.getSource();
-				roomList.removeAll();
-				roomList.addItem(getRoomList());
+//				JComboBox<String[]> roomList = (JComboBox<String[]>) e.getSource();
+//				roomList.removeAll();
+//				((JComboBox) e.getSource()).addItem(client.getRoomList());
+//				((JComboBox) e.getSource()).setModel(new DefaultComboBoxModel(client.getRoomList()));
 			}
 		});
         
