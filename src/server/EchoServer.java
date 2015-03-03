@@ -87,24 +87,32 @@ public class EchoServer extends AbstractServer {
 	 *            The connection from which the message originated.
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
-		String message = msg.toString();
-		if (message.indexOf("#") == 0) {
-			handleClientCommand(msg, client);
-		} else {
-			//ClientInfo info = null;
-			try {
-				//info = roomList.getInfoByClient(client);
-			} catch (Exception e) {
-				e.printStackTrace();
+		if (msg instanceof String) {
+			String message = msg.toString();
+			if (message.indexOf("#") == 0) {
+				handleClientCommand(msg, client);
+			} else {
+				// ClientInfo info = null;
+				try {
+					// info = roomList.getInfoByClient(client);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					display(msg.toString(), client.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				message = "#from " + client + " " + message;
+				this.sendToARoom(message, client.getClientInfo().getRoom());
 			}
-			try {
-				display(msg.toString(), client.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			message = "#from " + client + " " + message;
-			this.sendToARoom(message, client.getClientInfo().getRoom());
+
 		}
+		else
+		{
+			System.out.println("Recieved an object from " + client);
+		}
+
 	}
 
 	/**
@@ -173,14 +181,22 @@ public class EchoServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-		case "#getPort":
-			serverUI.display("Port is: " + server.getPort());
+		case "#getport":
+			try
+			{
+				serverUI.display("Port is: " + server.getPort());
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				serverUI.display("Port is: null");
+			}
 			break;
-		case "#setPort":
+		case "#setport":
 			server.setPort(Integer.parseInt(truncMsg));
 			serverUI.display("Port set to: " + server.getPort());
 			break;
-		case "#allowYell":
+		case "#allowyell":
 			String user = (truncMsg.indexOf(" ") == -1) ? truncMsg : truncMsg
 					.substring(0, truncMsg.indexOf(" ")).trim();
 			Boolean yell = Boolean
@@ -188,6 +204,7 @@ public class EchoServer extends AbstractServer {
 							: truncMsg.substring(truncMsg.indexOf(" "),
 									truncMsg.length()).trim());
 			serverUI.display(user + " can yell is " + yell);
+			roomList.getClientByName(user).getClientInfo().setYellable(yell);
 			break;
 		default:
 			break;
@@ -235,7 +252,11 @@ public class EchoServer extends AbstractServer {
 		case "#y":
 		case "#yell":
 			truncMsg = truncMsg.toUpperCase();
-			sendToAllRooms(client + " Just yelled " + truncMsg + "!");
+			
+			if(client.getClientInfo().isYellable())
+				sendToAllRooms(client + " Just yelled " + truncMsg + "!");
+			else
+				tryToSendToClient("You are not allowed to yell", client);
 			break;
 		case "#j":
 		case "#join":

@@ -86,8 +86,10 @@ public class GUIConsole extends JFrame implements ChatIF {
 		
 		JScrollPane scroll = new JScrollPane (messageList);
 	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	          scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+	    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    
 	    add(scroll);
+	    
 				
 	    
 	    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

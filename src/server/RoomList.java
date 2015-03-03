@@ -33,6 +33,17 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
     	return list.toString();
     }
     
+    public String[] toStringArray()
+    {
+    	String[] array = new String[this.size()];
+    	for (int y = 0; y < list.size(); y++) 
+    	{
+    		array[y] = list.get(y).toString();
+    	}
+		return array;
+    	
+    }
+    
     public int getClientCount() {
     	countClients();
 		return clientCount;
@@ -162,7 +173,7 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 			try {
 				if (tempClient.getName() == name)			
 					return tempClient;
-			} catch(Exception e){}
+			} catch(Exception e){e.printStackTrace();}
 			
 		}
 		return null;
