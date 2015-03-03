@@ -20,6 +20,7 @@ public class ChatClient extends AbstractClient {
 	private String userName = "User";
 	private TicTacToe game;
 	private Profile profile;
+	private String[] roomList;
 
 	// Constructors ****************************************************
 
@@ -80,8 +81,33 @@ public class ChatClient extends AbstractClient {
 	 *            The message from the server.
 	 */
 	public void handleMessageFromServer(Object message) {
-		String msg = message.toString();
+		if (message instanceof String) {
+			String msg = message.toString();
 
+			if (msg.indexOf("#") == 0) {
+				handleCommandFromServer(msg);
+
+			} else {
+				clientUI.display(msg);
+			}
+		}
+		else
+		{
+			System.out.println("Recieved object from server!");
+			if(message instanceof String[])
+			{
+				roomList = ((String[])message);
+				
+				clientUI.display(roomList[0]);
+			}
+			
+		}
+		
+
+	}
+
+	public void handleCommandFromServer(String msg)
+	{
 		if (msg.indexOf("#") == 0) {
 			String cmd;
 			cmd = (msg.indexOf(" ") == -1) ? msg : msg.substring(0,
@@ -132,12 +158,11 @@ public class ChatClient extends AbstractClient {
 			default:
 				break;
 			}
-		} else {
-			clientUI.display(msg);
 		}
-
+		
 	}
-
+	
+	
 	/**
 	 * This method handles all data coming from the UI
 	 * 
@@ -178,8 +203,6 @@ public class ChatClient extends AbstractClient {
 		}
 
 		switch (cmd) {
-		
-
 		case "#sethost":
 			String newHost = message.substring(space, end).trim();
 
@@ -328,6 +351,11 @@ public class ChatClient extends AbstractClient {
 	public void setGame(TicTacToe game) {
 		this.game = game;
 	}
+
+	public String[] getRoomList() {
+		return roomList;
+	}
+
 
 	/**
 	 * This method terminates the client.

@@ -92,9 +92,7 @@ public class EchoServer extends AbstractServer {
 			if (message.indexOf("#") == 0) {
 				handleClientCommand(msg, client);
 			} else {
-				// ClientInfo info = null;
 				try {
-					// info = roomList.getInfoByClient(client);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -306,6 +304,10 @@ public class EchoServer extends AbstractServer {
 		case "#clearboard":
 			sendToARoom(msg, client.getClientInfo().getRoom());
 			break;
+		// Test Stuff
+		case "#getlist":
+			tryToSendToClient(roomList.toStringArray(), client);
+			break;
 		default:
 			tryToSendToClient("Invalid command: " + cmd, client);
 		}
@@ -512,7 +514,7 @@ public class EchoServer extends AbstractServer {
 	 *            Client the message is being sent to
 	 */
 
-	private void tryToSendToClient(String message, ConnectionToClient client) {
+	private void tryToSendToClient(Object message, ConnectionToClient client) {
 		try {
 			client.sendToClient(message);
 		} catch (IOException e) {

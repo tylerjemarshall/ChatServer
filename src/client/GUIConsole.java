@@ -32,6 +32,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private ChatClient client;
 	private Profile profile = new Profile();
 	private String[] args;
+	private String[] roomList;
 	
 	
 	
@@ -46,6 +47,14 @@ public class GUIConsole extends JFrame implements ChatIF {
 		this.client = chatClient;
 	}
 	
+	public String[] getRoomList() {
+		return roomList;
+	}
+
+	public void setRoomList(String[] roomList) {
+		this.roomList = roomList;
+	}
+
 	public String[] getArgs()
 	{
 		return this.args;
@@ -64,6 +73,10 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    profile.setFont("Tahoma",Font.PLAIN,12);
 		messageList.setFont(profile.getFont());
 
+		JComboBox roomList = new JComboBox();
+		
+		
+		
 		setLayout( new BorderLayout(5,5));
 		final Panel southBox = new Panel();
 			final Panel southInput = new Panel();
@@ -71,14 +84,16 @@ public class GUIConsole extends JFrame implements ChatIF {
 		add( "Center", messageList );
 		
 		add( "South" , southBox);
-		southBox.setLayout( new GridLayout(2,1,5,5));
+		southBox.setLayout( new GridLayout(3,1,5,5));
 			southBox.add(southInput);
 				southInput.setLayout(new GridLayout(1, 1, 5, 5));
 				southInput.add(messageTxF);
 			southBox.add(southButtons);
 				southButtons.setLayout(new GridLayout(1, 2, 5, 5));
-				southButtons.add(quitB);
-				southButtons.add(sendB);
+				southButtons.add(quitB);	southButtons.add(sendB);
+			southBox.add(roomList);
+			
+			
 		
 		
 		messageList.setLineWrap(true);
@@ -90,17 +105,31 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    
 	    add(scroll);
 	    
-				
-	    
 	    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	    this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
+	    
+//	    String[] petStrings = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
+
+	  //Create the combo box, select item at index 4.
+	  //Indices start at 0, so 4 specifies the pig.
+
+//	  roomList.addActionListener(this);
 	    
 		//This creates the Login Dialog which will establish the connection and welcomes the user.
 		LoginDialog loginDlg = new LoginDialog(args, this);
         loginDlg.setVisible(true);
 
 
+		// Handles dropdown box
+		roomList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JComboBox<String[]> roomList = (JComboBox<String[]>) e.getSource();
+				roomList.removeAll();
+				roomList.addItem(getRoomList());
+			}
+		});
+        
 		//This handles closing the client with the X Button
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new java.awt.event.WindowAdapter() {
