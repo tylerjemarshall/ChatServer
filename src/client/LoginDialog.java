@@ -50,13 +50,11 @@ public class LoginDialog extends JDialog {
 
 	// Passed Variables
 	private GUIConsole parent;
-	//private String[] args;
 
 
 	public LoginDialog(String[] args, GUIConsole parent) { //String[] args, 
 		super(parent, "Login", true);
 		this.parent = parent;
-		//this.args = args;
 		
 		
 		
@@ -96,11 +94,12 @@ public class LoginDialog extends JDialog {
 
 		getContentPane().add(box, BorderLayout.CENTER);
 		
-		//pack();
 		setSize(300, 200);
 		setResizable(false);
 		setAlwaysOnTop(true);
 		setLocationRelativeTo(parent);
+		
+		
 		passPwF.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {

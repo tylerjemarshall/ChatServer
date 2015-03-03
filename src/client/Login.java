@@ -13,7 +13,6 @@ public class Login {
 	    catch(IOException e) 
 	    {
 	    	throw new IOException("Can't connection to server!");
-	    	
 	    }
 
        if (args[2].toLowerCase().equals("tyler") && args[3].equals("secret")) { //password.equals("secret")
@@ -21,6 +20,10 @@ public class Login {
             return true;
         }
        else if (args[2].toLowerCase().equals("robby") && args[3].equals("fuku")) { //password.equals("secret")
+    	   System.out.println("Password " + args[3] + " accepted");
+            return true;
+       }
+       else if (args[2].toLowerCase().equals("eric") && args[3].equals("pass")) { //password.equals("secret")
     	   System.out.println("Password " + args[3] + " accepted");
             return true;
        }
