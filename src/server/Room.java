@@ -31,6 +31,18 @@ public class Room implements RoomInterface, Comparable<Room>{
     
 	
     
+	public String getOwner() {
+		return owner;
+	}
+
+
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+
+
 	public int getClientIndex(int itemName) {
 		for (int i = 0; i < list.size(); i++) {
 			ClientInfo client = list.get(i).getClientInfo();
