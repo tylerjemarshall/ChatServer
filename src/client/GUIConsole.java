@@ -151,8 +151,12 @@ public class GUIConsole extends JFrame implements ChatIF {
 		        Object tempRoom = cb.getSelectedItem();
 		        String truncRoom = (room.indexOf("(") == -1) ? room : room.substring(0, room.indexOf("("));
 		        
-		        if(!currentRoom.equals(tempRoom))
+		        //don't change room if you are already in the room
+		        if(room.equals("Create Room"))
+		        	client.handleMessageFromClientUI("I want to make a room");
+		        else if(!currentRoom.equals(tempRoom))
 		        	client.handleMessageFromClientUI("#join " + truncRoom);
+		        
 		        
 		        
 		        currentRoom=tempRoom;
@@ -315,6 +319,7 @@ public class GUIConsole extends JFrame implements ChatIF {
                   newString);
 		  roomList.setSelectedItem(currentRoom);
           roomList.setModel(cbm);
+          roomList.addItem("Create Room");
           
           
 		}
