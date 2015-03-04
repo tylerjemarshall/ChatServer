@@ -113,6 +113,11 @@ public class ClientConsole implements ChatIF
     System.out.println(user + "> " + message);
   }
   
+  @Override
+  public void sendToUI(Object o) {
+  	// TODO Auto-generated method stub
+  	
+  }
   
   //Class methods ***************************************************
   
@@ -168,5 +173,8 @@ public class ClientConsole implements ChatIF
     
     
   }
+
+
+
 }
 //End of ConsoleChat class

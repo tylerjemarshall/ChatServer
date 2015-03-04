@@ -59,7 +59,11 @@ public class ServerConsole implements ChatIF {
 	    System.out.println(user + "> " + message);
 	  }
 	  
-	
+		@Override
+		public void sendToUI(Object o) {
+			// TODO Auto-generated method stub
+			
+		}
 	
 	public void accept() 
 	  {
@@ -81,5 +85,7 @@ public class ServerConsole implements ChatIF {
 	        (ex.toString() + "\nServerConsole - Unexpected error while reading from console!");
 	    }
 	  }
+
+
 
 }

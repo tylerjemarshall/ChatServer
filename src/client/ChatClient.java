@@ -93,12 +93,10 @@ public class ChatClient extends AbstractClient {
 		}
 		else
 		{
-			System.out.println("Recieved object from server!");
 			if(message instanceof String[])
 			{
-				roomList = ((String[])message);
-				
-				clientUI.display(roomList[0]);
+				roomList = (String[])message;
+				clientUI.sendToUI(roomList);
 			}
 			
 		}

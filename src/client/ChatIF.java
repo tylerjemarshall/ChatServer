@@ -7,5 +7,6 @@ public interface ChatIF
    */
   public abstract void display(String message);
   public abstract void display(String message, String user); 
+  public abstract void sendToUI(Object o);
    
 }

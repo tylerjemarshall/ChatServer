@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.IOException;
-//import java.util.Scanner;
+
 
 
 /**
@@ -36,15 +36,18 @@ public class GUIConsole extends JFrame implements ChatIF {
 	
 	private String[] roomArray;
 	private JButton refresh = new JButton("Refresh Rooms");
+	@SuppressWarnings("rawtypes")
 	private JComboBox roomList = new JComboBox();
 	
 	
 	//Makes the client accessible from LoginDialog
+	@SuppressWarnings("rawtypes")
 	public void setRoomList(JComboBox arg)
 	{
 		this.roomList = arg;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public JComboBox getRoomList()
 	{
 		return this.roomList;
@@ -110,9 +113,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 					southButtons.add(quitB);	southButtons.add(sendB);
 			
 			
-			
 		
-		
+		//making messageList look nice
 		messageList.setLineWrap(true);
 		messageList.setEditable(false);
 		
@@ -121,18 +123,33 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    
 	    add(scroll);
+	
 	    
+	    //centering the window to middle of screen.
 	    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	    this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
 
+	    //Refreshes the combo box
 	    refresh.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		setRoomList(new javax.swing.JComboBox());
-	    		getRoomList().setModel(new javax.swing.DefaultComboBoxModel(client.getRoomList()));
-	    		getRoomList().setName("roomList");
+	    		
+	    		client.handleMessageFromClientUI("#getlist");
 	    	}
 	    });
+	    
+		// Handles Combo Box
+		roomList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				client.handleMessageFromClientUI("#getlist");
+				
+		        JComboBox cb = (JComboBox)e.getSource();
+		        String room = (String)cb.getSelectedItem();		        
+		        String truncRoom = (room.indexOf("(") == -1) ? room : room.substring(0, room.indexOf("("));
+		        client.handleMessageFromClientUI("#join " + truncRoom);
+
+			}
+		});
 	    
 	    
 		//This creates the Login Dialog which will establish the connection and welcomes the user.
@@ -140,15 +157,7 @@ public class GUIConsole extends JFrame implements ChatIF {
         loginDlg.setVisible(true);
 
 
-		// Handles Combo Box
-		roomList.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-//				JComboBox<String[]> roomList = (JComboBox<String[]>) e.getSource();
-//				roomList.removeAll();
-//				((JComboBox) e.getSource()).addItem(client.getRoomList());
-//				((JComboBox) e.getSource()).setModel(new DefaultComboBoxModel(client.getRoomList()));
-			}
-		});
+
         
 		//This handles closing the client with the X Button
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -287,6 +296,19 @@ public class GUIConsole extends JFrame implements ChatIF {
 		messageList.insert(user + "> " + message + "\n", 0);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void sendToUI(Object o) {
+		if(o instanceof String[])
+		{
+			String[] newString = (String[]) o;
+			DefaultComboBoxModel cbm = new DefaultComboBoxModel(
+                  newString);
+          roomList.setModel(cbm);
+		}
+		
+	}
+	
 	/**
 	 * Method to send message to the Server. If client is not connected, will create LoginDialog
 	 */
@@ -299,6 +321,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 		client.handleMessageFromClientUI(messageTxF.getText());
 		messageTxF.setText("");
 	}
+	
+	
 	/**
 	 * Main method, creates the JFrame for GUIConsole.
 	 * @param args
@@ -327,4 +351,6 @@ public class GUIConsole extends JFrame implements ChatIF {
 		}
 		GUIConsole clientConsole = new GUIConsole(args);
 	}
+
+
 }
