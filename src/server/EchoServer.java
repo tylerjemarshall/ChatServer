@@ -276,7 +276,8 @@ public class EchoServer extends AbstractServer {
 			logoff(client);
 			break;
 		case "#setlimit":
-			try{
+			try
+			{
 				if (isNumber(truncMsg))
 				{
 					int limit = (Integer.parseInt(truncMsg) < 1) ? 1 : Integer.parseInt(truncMsg); //if truncMsg less than 1, will set to 1.
@@ -289,6 +290,7 @@ public class EchoServer extends AbstractServer {
 			{
 				e.printStackTrace();
 			}
+			break;
 		case "#lc":
 		case "#listclients":	
 		case "#listrooms":
