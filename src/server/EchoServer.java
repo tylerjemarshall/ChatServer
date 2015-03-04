@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import client.ChatIF;
+import client.RoomInfo;
 
 /**
  * This class overrides some of the methods in the abstract superclass in order
@@ -106,6 +107,29 @@ public class EchoServer extends AbstractServer {
 			}
 
 		}
+		
+		//client requesting room being created
+		
+		 else if (msg instanceof RoomInfo)
+		 {
+		 RoomInfo roomInfo = (RoomInfo) msg; //cast obj into RoomInfo
+
+
+
+		 System.out.println("Recieved RoomInfo from " + client);
+		 Room newRoom = new Room();
+		 newRoom.setName(roomInfo.getRoom());
+		 newRoom.setPassword(roomInfo.getPassword());
+		 newRoom.setLimit(roomInfo.getLimit());
+		 newRoom.setOpen(roomInfo.getOpen());
+		 roomList.add(newRoom);
+
+
+		 roomList.moveClient(client, newRoom.getName());
+
+
+		 }
+
 		else
 		{
 			System.out.println("Recieved an object from " + client);

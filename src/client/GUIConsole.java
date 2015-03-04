@@ -23,7 +23,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	final public static int DEFAULT_PORT = 5555;
 	
 	private static final long serialVersionUID = 1L;
-	
+	private static GUIConsole clientConsole = null;
 	private JButton sendB = new JButton("Send");
 	private JButton quitB = new JButton("Quit");
 	private JTextField messageTxF = new JTextField("");		
@@ -100,7 +100,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 		final Panel southBox = new Panel();
 			final Panel southInput = new Panel();
 			final Panel southButtons = new Panel();
-		add( "North" , roomBox);	
+		add( "North" , roomBox);
 			roomBox.setLayout(new GridLayout(1, 2, 5, 5));
 				roomBox.add(roomList);
 				roomBox.add(refresh);
@@ -153,7 +153,11 @@ public class GUIConsole extends JFrame implements ChatIF {
 		        
 		        //don't change room if you are already in the room
 		        if(room.equals("Create Room"))
-		        	client.handleMessageFromClientUI("I want to make a room");
+		        	{
+		        	RoomDialogue roomDlg = new RoomDialogue(getClientConsole());
+			        roomDlg.setVisible(true);
+
+		        	}
 		        else if(!currentRoom.equals(tempRoom))
 		        	client.handleMessageFromClientUI("#join " + truncRoom);
 		        
@@ -340,6 +344,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	}
 	
 	
+	
 	/**
 	 * Main method, creates the JFrame for GUIConsole.
 	 * @param args
@@ -366,7 +371,15 @@ public class GUIConsole extends JFrame implements ChatIF {
 		} catch (Throwable t) {
 			args[2] = "User";
 		}
-		GUIConsole clientConsole = new GUIConsole(args);
+		setClientConsole(new GUIConsole(args));
+	}
+
+	public static GUIConsole getClientConsole() {
+		return clientConsole;
+	}
+
+	public static void setClientConsole(GUIConsole clientConsole) {
+		GUIConsole.clientConsole = clientConsole;
 	}
 
 

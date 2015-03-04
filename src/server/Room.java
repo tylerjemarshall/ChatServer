@@ -19,6 +19,7 @@ public class Room implements RoomInterface, Comparable<Room>{
     private int id;
     private boolean open = true;
     private String owner = "server";
+    private String password = "";
     
     
     /**
@@ -29,8 +30,19 @@ public class Room implements RoomInterface, Comparable<Room>{
         list = new ArrayList<ConnectionToClient>();
     }
     
-	
+//    public void setPassword(String password) {
+//		
+//		
+//    }
     
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public String getOwner() {
 		return owner;
 	}
@@ -320,5 +332,9 @@ public class Room implements RoomInterface, Comparable<Room>{
 	public <T> T[] toArray(T[] a) {
 		return list.toArray(a);
 	}
+
+
+
+	
 
 }

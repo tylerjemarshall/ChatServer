@@ -51,7 +51,8 @@ public class LoginDialog extends JDialog {
 	// Passed Variables
 	private GUIConsole parent;
 
-
+///////////////////
+	
 	public LoginDialog(String[] args, GUIConsole parent) { //String[] args, 
 		super(parent, "Login", true);
 		this.parent = parent;
