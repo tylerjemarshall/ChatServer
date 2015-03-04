@@ -39,6 +39,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	@SuppressWarnings("rawtypes")
 	private JComboBox roomList = new JComboBox();
 	
+	private Object currentRoom = "commons";
+	
 	
 	//Makes the client accessible from LoginDialog
 	@SuppressWarnings("rawtypes")
@@ -140,13 +142,20 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    
 		// Handles Combo Box
 		roomList.addActionListener(new ActionListener() {
+			@SuppressWarnings("rawtypes")
 			public void actionPerformed(ActionEvent e) {
-				client.handleMessageFromClientUI("#getlist");
 				
 		        JComboBox cb = (JComboBox)e.getSource();
-		        String room = (String)cb.getSelectedItem();		        
+		        
+		        String room = (String)cb.getSelectedItem();
+		        Object tempRoom = cb.getSelectedItem();
 		        String truncRoom = (room.indexOf("(") == -1) ? room : room.substring(0, room.indexOf("("));
-		        client.handleMessageFromClientUI("#join " + truncRoom);
+		        
+		        if(!currentRoom.equals(tempRoom))
+		        	client.handleMessageFromClientUI("#join " + truncRoom);
+		        
+		        
+		        currentRoom=tempRoom;
 
 			}
 		});
@@ -304,7 +313,10 @@ public class GUIConsole extends JFrame implements ChatIF {
 			String[] newString = (String[]) o;
 			DefaultComboBoxModel cbm = new DefaultComboBoxModel(
                   newString);
+		  roomList.setSelectedItem(currentRoom);
           roomList.setModel(cbm);
+          
+          
 		}
 		
 	}

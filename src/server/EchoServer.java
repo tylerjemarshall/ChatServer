@@ -261,6 +261,7 @@ public class EchoServer extends AbstractServer {
 			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
 			tryToSendToClient("You have switched rooms to " + truncMsg, client);
 			sendToARoom(client + " Just joined " + truncMsg, truncMsg);
+			tryToSendToClient(roomList.toStringArray(), client);
 			break;
 		case "#info":
 			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());
@@ -300,6 +301,7 @@ public class EchoServer extends AbstractServer {
 		}
 		case "#move":
 			sendToARoom(msg, client.getClientInfo().getRoom());
+			tryToSendToClient(roomList.toStringArray(), client);
 			break;
 		case "#clearboard":
 			sendToARoom(msg, client.getClientInfo().getRoom());
@@ -372,6 +374,7 @@ public class EchoServer extends AbstractServer {
 			System.out.println("Added client to room");
 			
 			sendToARoom(client + " just logged in.", room);
+			//tryToSendToClient(roomList.toStringArray(), client);
 			return exit;
 		} catch (Exception e) {
 			e.printStackTrace();
