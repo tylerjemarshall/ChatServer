@@ -10,7 +10,7 @@ public class RoomValidation {
 
 		String room = args[0];
 		if (room.isEmpty()) throw new NumberFormatException("Name required");
-		//if (room.contains("(") || room.contains(")") || room.contains(" ")) throw new NumberFormatException("Name can't have () or spaces");
+		if (room.contains("(") || room.contains(")") ) throw new NumberFormatException("Name can't have (Parentheses)");
 		
 		if (room.length() > 20) throw new NumberFormatException("Name too long");
 		
@@ -35,6 +35,7 @@ public class RoomValidation {
 		String password = args[2];
 		
 		if (password.length() > 20) throw new NumberFormatException("Password too long");
+		
 
 		Boolean open = Boolean.valueOf(args[3]);
 		if (open) password = "";

@@ -138,7 +138,7 @@ public class RoomDialogue extends JDialog {
 					JOptionPane.showMessageDialog(RoomDialogue.this, 
 							 "Room Created.",
 							"Create a room", JOptionPane.INFORMATION_MESSAGE);
-					//succeeded = true;
+//					//succeeded = true;
 					dispose();
 				} else {
 					JOptionPane.showMessageDialog(RoomDialogue.this,
