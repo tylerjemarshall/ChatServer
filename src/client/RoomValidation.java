@@ -1,55 +1,58 @@
 package client;
 
-import java.io.IOException;
+
 
 public class RoomValidation {
 
 	public static boolean authenticate(String[] args, GUIConsole parent)
-			throws IOException {
+			throws Exception {
 
 
 		String room = args[0];
-
+		if (room.isEmpty()) throw new NumberFormatException("Name required");
+		if (room.contains(" ")) throw new NumberFormatException("Can't have a space in name");
+		
+		if (room.length() > 20) throw new NumberFormatException("Name too long");
+		
 		int limit = 0;
-		try {
-			if (isNumber(args[1])) {
+		try 
+		{
+			if (isNumber(args[1])) 
+			{
 				limit = Integer.parseInt(args[1]);
-			} else
-				throw new IOException("Please enter a valid number.");
-		} catch (Exception e) {
-			throw new IOException("IDK");
+			}
+				
+		} 
+		catch (Exception e) 
+		{
+			throw new NumberFormatException(e.getMessage());
 		}
 
-		if (limit < 2)
-			throw new IOException("Room size too small");
+		if (limit < 2) throw new NumberFormatException("Room size too small");
+		if (limit > 30) throw new NumberFormatException("Room size too big");
 
+		
 		String password = args[2];
+		
+		if (password.length() > 20) throw new NumberFormatException("Password too long");
 
 		Boolean open = Boolean.valueOf(args[3]);
-
-		System.out.println(room + " " + limit + " " + open + " " + password);
+		if (open) password = "";
+		
+		if (!open && password.isEmpty()) throw new NumberFormatException("Password required");
+		
 
 		RoomInfo newRoom = new RoomInfo ( room, limit, open, password );
+
+		try
+		{
+			parent.getChatClient().sendToServer(newRoom);
+		}
+		catch (Exception e)
+		{
+			throw new Exception("Unable to send to server: " + e.getMessage());
+		}
 		
-		      
-//		      try
-//		      {
-//		         e = (Employee) in.readObject();
-//		         in.close();
-//		         fileIn.close();
-//		      }catch(IOException i)
-//		      {
-//		         i.printStackTrace();
-//		         return;
-//		      }catch(ClassNotFoundException c)
-//		      {
-//		         System.out.println("Employee class not found");
-//		         c.printStackTrace();
-//		         return;
-//		      }
-//		
-//		parent.getChatClient().sendToServer(new RoomInfo( room, limit, open, password ));
-//
 		 return true;
 		
 	}
@@ -62,7 +65,7 @@ public class RoomValidation {
 			Integer.parseInt(number);
 			isNumber = true;
 		} catch (NumberFormatException ne) {
-			throw new IOException("fuck");
+			throw new NumberFormatException("Not a number: " + ne.getMessage());
 		}
 		return isNumber;
 	}

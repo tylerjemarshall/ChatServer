@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -146,33 +145,10 @@ public class RoomDialogue extends JDialog {
 
 		//'Create' button actionlistener
 		
-		createBtn.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("You pressed create");
-				try {
-					if (RoomValidation.authenticate(getArgs(), getParent())) {
-						JOptionPane.showMessageDialog(RoomDialogue.this, 
-								 "Room Created.",
-								"Create a room", JOptionPane.INFORMATION_MESSAGE);
-						//succeeded = true;
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(RoomDialogue.this,
-								"A problem has occurred", "Error",
-								JOptionPane.ERROR_MESSAGE);
-						//userTxF.setText(""); only clears password field.
-						passwordPwF.setText("");
-						displayLB.setText("A problem has happened");
-					}
-				} catch (IOException e1) {
-					displayLB.setText("ERROR: " + e1.toString());
-					e1.printStackTrace();
-				//	succeeded = false;
-				}
-			
-			}
-		});
+		createBtn.addActionListener(new RoomValidationAL() );
+		passwordPwF.addActionListener(new RoomValidationAL() );
+		limitTxF.addActionListener(new RoomValidationAL() );
+		nameTxF.addActionListener(new RoomValidationAL() );
 		
 		//'Cancel' button actionlistener
 		
@@ -184,6 +160,33 @@ public class RoomDialogue extends JDialog {
 		});	
 	}
 	
+	
+	
+	private class RoomValidationAL implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				if (RoomValidation.authenticate(getArgs(), getParent())) {
+					JOptionPane.showMessageDialog(RoomDialogue.this, 
+							 "Room Created.",
+							"Create a room", JOptionPane.INFORMATION_MESSAGE);
+					//succeeded = true;
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(RoomDialogue.this,
+							"A problem has occurred", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					//userTxF.setText(""); only clears password field.
+					passwordPwF.setText("");
+					displayLB.setText("A problem has happened");
+				}
+			} catch (Exception e1) {
+				displayLB.setText(e1.getMessage());
+//				e1.printStackTrace();
+			//	succeeded = false;
+			}
+		
+		}
+	}
 	
 	
 	public GUIConsole getParent() {

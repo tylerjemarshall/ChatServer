@@ -321,8 +321,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 			String[] newString = (String[]) o;
 			DefaultComboBoxModel cbm = new DefaultComboBoxModel(
                   newString);
-		  roomList.setSelectedItem(currentRoom);
           roomList.setModel(cbm);
+          roomList.setSelectedItem(currentRoom);
           roomList.addItem("Create Room");
           
           

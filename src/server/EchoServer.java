@@ -127,7 +127,7 @@ public class EchoServer extends AbstractServer {
 
 		 roomList.moveClient(client, newRoom.getName());
 
-
+		 tryToSendToClient(roomList.toStringArray(), client);
 		 }
 
 		else
