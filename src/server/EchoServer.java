@@ -105,36 +105,39 @@ public class EchoServer extends AbstractServer {
 				message = "#from " + client + " " + message;
 				this.sendToARoom(message, client.getClientInfo().getRoom());
 			}
-
 		}
-		
-		//client requesting room being created
-		
-		 else if (msg instanceof RoomInfo)
-		 {
-		 RoomInfo roomInfo = (RoomInfo) msg; //cast obj into RoomInfo
-
-
-
-		 System.out.println("Recieved RoomInfo from " + client);
-		 Room newRoom = new Room();
-		 newRoom.setName(roomInfo.getRoom());
-		 newRoom.setPassword(roomInfo.getPassword());
-		 newRoom.setLimit(roomInfo.getLimit());
-		 newRoom.setOpen(roomInfo.getOpen());
-		 roomList.add(newRoom);
-
-
-		 roomList.moveClient(client, newRoom.getName());
-
-		 tryToSendToClient(roomList.toStringArray(), client);
-		 }
-
-		else
-		{
+		// client requesting room being created
+		else if (msg instanceof RoomInfo) {
+			System.out.println("Recieved object");
+			
+			try
+			{
+				RoomInfo roomInfo = (RoomInfo) msg; // cast obj into RoomInfo
+				if (roomList.getRoom(roomInfo.getRoom()) != null) { // || roomList.getRoom(roomInfo.getRoom()).equals(roomList.getDefaultRoom())
+					tryToSendToClient("Room already exists. Going to try and join", client);
+					roomList.moveClient(client, roomInfo.getRoom());
+				} else {
+					Room newRoom = new Room();
+					newRoom.setName(roomInfo.getRoom());
+					newRoom.setPassword(roomInfo.getPassword());
+					newRoom.setLimit(roomInfo.getLimit());
+					roomList.add(newRoom);
+					roomList.moveClient(client, newRoom.getName());
+					newRoom.setOpen(roomInfo.getOpen());
+					Collections.sort(roomList);
+					tryToSendToClient(roomList.toStringArray(), client);
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			
+		}
+		else {
 			System.out.println("Recieved an object from " + client);
 		}
-
 	}
 
 	/**

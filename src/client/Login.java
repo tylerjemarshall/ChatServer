@@ -5,7 +5,7 @@ import java.io.IOException;
 public class Login {
 
 	
-	public static boolean authenticate(String[] args, GUIConsole parent) throws IOException {
+	public static boolean authenticate(String[] args, GUIConsole parent) throws Exception {
 		try 
 	    {
 		  parent.setChatClient(new ChatClient(args[0], Integer.parseInt(args[1]), parent, args[2]));
@@ -15,24 +15,23 @@ public class Login {
 	    	throw new IOException("Can't connection to server!");
 	    }
 
-       if (args[2].toLowerCase().equals("tyler") && args[3].equals("secret")) { //password.equals("secret")
-    	   System.out.println("Password " + args[3] + " accepted");
+		
+       if (args[2].toLowerCase().equals("tyler") && args[3].equals("secret")) { 
             return true;
         }
-       else if (args[2].toLowerCase().equals("robby") && args[3].equals("fuku")) { //password.equals("secret")
-    	   System.out.println("Password " + args[3] + " accepted");
+       else if (args[2].toLowerCase().equals("robby") && args[3].equals("fuku")) { 
+    	   
             return true;
        }
-       else if (args[2].toLowerCase().equals("eric") && args[3].equals("pass")) { //password.equals("secret")
-    	   System.out.println("Password " + args[3] + " accepted");
+       else if (args[2].toLowerCase().equals("eric") && args[3].equals("pass")) { 
+    	   
             return true;
        }
        else
        {
     	   
-    	   System.out.println("Password " + args[3] + " rejected");
     	   parent.getChatClient().closeConnection();
-    	   return false;
+    	   throw new Exception("Username or password incorrect");
        }
         
     }

@@ -37,7 +37,7 @@ public class RoomDialogue extends JDialog {
 	private JLabel nullLB = new JLabel(" ", JLabel.LEFT);
 	private JLabel passwordLB = new JLabel("Password: ", JLabel.LEFT);
 
-	private JLabel displayLB = new JLabel("Error messages go here",
+	private JLabel displayLB = new JLabel(" ",
 			JLabel.CENTER);
 	
 	//Text fields
@@ -47,7 +47,7 @@ public class RoomDialogue extends JDialog {
 	
 	
 	// Buttons
-	private JButton createBtn = new JButton("Login");
+	private JButton createBtn = new JButton("Create");
 	private JButton cancelBtn = new JButton("Cancel");
 	
 	// My Font.
@@ -111,46 +111,15 @@ public class RoomDialogue extends JDialog {
 		setResizable(false);
 		setAlwaysOnTop(true);
 		setLocationRelativeTo(parent);
-		
-		//will be used for enter button
-		
-//		passPwF.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				System.out.println("You pressed login!");
-//				try {
-//					if (Login.authenticate(getArgs(), getParent())) {
-//						JOptionPane.showMessageDialog(LoginDialog.this, "Hi "
-//								+ getUsername()
-//								+ "! You have successfully logged in.",
-//								"Login", JOptionPane.INFORMATION_MESSAGE);
-//						succeeded = true;
-//						dispose();
-//					} else {
-//						JOptionPane.showMessageDialog(LoginDialog.this,
-//								"Invalid username or password", "Login",
-//								JOptionPane.ERROR_MESSAGE);
-//						//userTxF.setText(""); only clears password field.
-//						passPwF.setText("");
-//						displayLB.setText("Incorrect username or password!");
-//						succeeded = false;
-//					}
-//				} catch (IOException e1) {
-//					displayLB.setText("Failed to connect!");
-//					succeeded = false;
-//				}
-//			
-//			}
-//		});
 
-		//'Create' button actionlistener
+		//Validate Room ActionListeners.
 		
 		createBtn.addActionListener(new RoomValidationAL() );
 		passwordPwF.addActionListener(new RoomValidationAL() );
 		limitTxF.addActionListener(new RoomValidationAL() );
 		nameTxF.addActionListener(new RoomValidationAL() );
 		
-		//'Cancel' button actionlistener
+		//'Cancel' button ActionListner
 		
 		cancelBtn.addActionListener(new ActionListener() {
 
@@ -161,7 +130,7 @@ public class RoomDialogue extends JDialog {
 	}
 	
 	
-	
+	//Triggered by the ActionListeners above.
 	private class RoomValidationAL implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -181,8 +150,6 @@ public class RoomDialogue extends JDialog {
 				}
 			} catch (Exception e1) {
 				displayLB.setText(e1.getMessage());
-//				e1.printStackTrace();
-			//	succeeded = false;
 			}
 		
 		}

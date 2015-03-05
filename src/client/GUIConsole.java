@@ -325,6 +325,8 @@ public class GUIConsole extends JFrame implements ChatIF {
           roomList.setSelectedItem(currentRoom);
           roomList.addItem("Create Room");
           
+          roomList.repaint();
+          
           
 		}
 		

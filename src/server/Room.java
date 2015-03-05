@@ -16,7 +16,7 @@ public class Room implements RoomInterface, Comparable<Room>{
     
     private int limit = DEFAULT_LIMIT;
     private String name = "commons";
-    private int id;
+    //private int id;
     private boolean open = true;
     private String owner = "server";
     private String password = "";
@@ -127,14 +127,14 @@ public class Room implements RoomInterface, Comparable<Room>{
 		this.limit = limit;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-
-	public void setId(int id) {
-		this.id = id;
-	}
+//	public int getId() {
+//		return id;
+//	}
+//
+//
+//	public void setId(int id) {
+//		this.id = id;
+//	}
 
 
 	/**
@@ -164,7 +164,7 @@ public class Room implements RoomInterface, Comparable<Room>{
 	
    @Override
     public int compareTo(Room o) {
-        return this.getId() - o.getId();
+        return this.getName().compareTo(o.getName());
     }   
 
 	@Override

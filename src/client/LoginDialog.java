@@ -2,7 +2,6 @@ package client;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 
 import javax.swing.*;
 
@@ -15,23 +14,17 @@ public class LoginDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// private JTextField tfUsername;
-	// private JPasswordField pfPassword;
-	// private JLabel lbUsername;
-	// private JLabel lbPassword;
-	// private JButton btnLogin;
-	// private JButton btnCancel;
-	private boolean succeeded;
+
 
 	// My Font.
 	private Font font = new javax.swing.plaf.FontUIResource("Tahoma",
 			Font.BOLD, 16);
 
 	// Text Fields
-	private JTextField hostTxF;// = new JTextField(args[0]); //host
-	private JTextField portTxF;// = new JTextField(args[1]); //port
-	private JTextField userTxF;// = new JTextField(args[2]); //user
-	private JPasswordField passPwF = new JPasswordField(); // user
+	private JTextField hostTxF;
+	private JTextField portTxF;
+	private JTextField userTxF;
+	private JPasswordField passPwF = new JPasswordField(); 
 
 	// Labels
 	private JLabel welcomeLB = new JLabel("Welcome!", JLabel.CENTER);
@@ -41,7 +34,7 @@ public class LoginDialog extends JDialog {
 	private JLabel userLB = new JLabel("Username: ", JLabel.LEFT);
 	private JLabel passLB = new JLabel("Password: ", JLabel.LEFT);
 
-	private JLabel displayLB = new JLabel("Error messages go here",
+	private JLabel displayLB = new JLabel(" ",
 			JLabel.CENTER);
 
 	// Buttons
@@ -51,7 +44,6 @@ public class LoginDialog extends JDialog {
 	// Passed Variables
 	private GUIConsole parent;
 
-///////////////////
 	
 	public LoginDialog(String[] args, GUIConsole parent) { //String[] args, 
 		super(parent, "Login", true);
@@ -83,9 +75,9 @@ public class LoginDialog extends JDialog {
 		south.setLayout(new GridLayout(1, 1, 30, 30));
 
 		north.add(welcomeLB);
-
-		center.add(portLB);		center.add(portTxF);
+		
 		center.add(hostLB);		center.add(hostTxF);
+		center.add(portLB);		center.add(portTxF);
 		center.add(userLB);		center.add(userTxF);
 		center.add(passLB);		center.add(passPwF);
 		center.add(exitBtn);	center.add(loginBtn);
@@ -101,63 +93,12 @@ public class LoginDialog extends JDialog {
 		setLocationRelativeTo(parent);
 		
 		
-		passPwF.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("You pressed login!");
-				try {
-					if (Login.authenticate(getArgs(), getParent())) {
-						JOptionPane.showMessageDialog(LoginDialog.this, "Hi "
-								+ getUsername()
-								+ "! You have successfully logged in.",
-								"Login", JOptionPane.INFORMATION_MESSAGE);
-						succeeded = true;
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(LoginDialog.this,
-								"Invalid username or password", "Login",
-								JOptionPane.ERROR_MESSAGE);
-						//userTxF.setText(""); only clears password field.
-						passPwF.setText("");
-						displayLB.setText("Incorrect username or password!");
-						succeeded = false;
-					}
-				} catch (IOException e1) {
-					displayLB.setText("Failed to connect!");
-					succeeded = false;
-				}
-			
-			}
-		});
-
-		loginBtn.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("You pressed login!");
-				try {
-					if (Login.authenticate(getArgs(), getParent())) {
-						JOptionPane.showMessageDialog(LoginDialog.this, "Hi "
-								+ getUsername()
-								+ "! You have successfully logged in.",
-								"Login", JOptionPane.INFORMATION_MESSAGE);
-						succeeded = true;
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(LoginDialog.this,
-								"Invalid username or password", "Login",
-								JOptionPane.ERROR_MESSAGE);
-						//userTxF.setText(""); only clears password field.
-						passPwF.setText("");
-						displayLB.setText("Incorrect username or password!");
-						succeeded = false;
-					}
-				} catch (IOException e1) {
-					displayLB.setText("Failed to connect!");
-					succeeded = false;
-				}
-			
-			}
-		});
+		hostTxF.addActionListener(new LoginAuthenticateAL());
+		portTxF.addActionListener(new LoginAuthenticateAL());
+		userTxF.addActionListener(new LoginAuthenticateAL());
+		passPwF.addActionListener(new LoginAuthenticateAL());
+		loginBtn.addActionListener(new LoginAuthenticateAL());
+		
 		exitBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -167,6 +108,27 @@ public class LoginDialog extends JDialog {
 		});
 	}
 
+	
+	private class LoginAuthenticateAL implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("You pressed login!");
+			try {
+				if (Login.authenticate(getArgs(), getParent())) {
+					JOptionPane.showMessageDialog(LoginDialog.this, "Hi "
+							+ getUsername()
+							+ "! You have successfully logged in.",
+							"Login", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+				}
+			} catch (Exception ex) {
+				passPwF.setText("");
+				displayLB.setText(ex.getMessage());
+			}
+		
+		}
+	}
+		
+	
 	public String getUsername() {
 		return userTxF.getText().trim();
 	}
@@ -184,7 +146,4 @@ public class LoginDialog extends JDialog {
 		return new String[]{hostTxF.getText(), portTxF.getText(), userTxF.getText(), passPwF.getText()};
 	}
 
-	public boolean isSucceeded() {
-		return succeeded;
-	}
 }

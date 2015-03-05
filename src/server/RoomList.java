@@ -1,6 +1,7 @@
 package server;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -9,7 +10,7 @@ import java.util.ListIterator;
 
 
 
-public class RoomList implements RoomListInterface{//Comparable<RoomList>
+public class RoomList implements RoomListInterface{
 
 	private int maxClients = DEFAULT_MAX_CLIENTS;
 	private int clientCount = 0;
@@ -35,6 +36,7 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
     
     public String[] toStringArray()
     {
+    	Collections.sort(list);
     	String[] array = new String[this.size()];
     	for (int y = 0; y < list.size(); y++) 
     	{
@@ -259,26 +261,22 @@ public class RoomList implements RoomListInterface{//Comparable<RoomList>
 		for (int i = 0; i < list.size(); i++) {
 			Room currentRoom = list.get(i);
 			if (currentRoom.getName().toLowerCase().equals(room)) {
+				
 				client.getClientInfo().setRoom(room);
 				foundRoom = true;
 				currentRoom.add(client);
 				System.out.println("Added client " + client + " to room "
 					+ currentRoom);
-				
-				
-				
-				if (currentRoom.isEmpty()) {
+
+				if (currentRoom.isEmpty() ) {
 					list.remove(currentRoom);
 					System.out.println("Removed empty room.");
 				}
-				
-				
-				
-				
+
 				if (!roomOpen(room))
 				{
 					System.out.println("Room is closed, moving to commons");
-					boolean moved = moveClient(client, "commons");
+					boolean moved = moveClient(client, defaultRoom);
 					if(moved)
 					{
 						System.out.println(client + " sent to room " + defaultRoom);

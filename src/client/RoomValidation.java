@@ -10,7 +10,7 @@ public class RoomValidation {
 
 		String room = args[0];
 		if (room.isEmpty()) throw new NumberFormatException("Name required");
-		if (room.contains(" ")) throw new NumberFormatException("Can't have a space in name");
+		//if (room.contains("(") || room.contains(")") || room.contains(" ")) throw new NumberFormatException("Name can't have () or spaces");
 		
 		if (room.length() > 20) throw new NumberFormatException("Name too long");
 		
