@@ -92,13 +92,9 @@ public class ChatClient extends AbstractClient {
 			}
 		}
 		else
-		{
-			if(message instanceof String[])
-			{
-				roomList = (String[])message;
-				clientUI.sendToUI(roomList);
-			}
-			
+		{	
+			//sends the object to GUIConsole to handle.
+			clientUI.sendToUI(message);
 		}
 		
 

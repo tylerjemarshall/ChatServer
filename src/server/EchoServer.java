@@ -125,6 +125,10 @@ public class EchoServer extends AbstractServer {
 					roomList.moveClient(client, newRoom.getName());
 					newRoom.setOpen(roomInfo.getOpen());
 					Collections.sort(roomList);
+					
+					
+//					tryToSendToClient(client.getClientInfo(), client);
+					//Throws serialization Error. Tried serializing ClientInfo.
 					tryToSendToClient(roomList.toStringArray(), client);
 				}
 			}

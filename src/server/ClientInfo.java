@@ -1,15 +1,19 @@
 package server;
-
+import java.io.Serializable;
 
 /**
  * This class takes in ConnectionToClient to be able to handle the HashMap of ConnectionToClient and other variables.
  * 
  * @author Tyler M
  */
-public class ClientInfo implements Comparable<ClientInfo> {
+public class ClientInfo implements Comparable<ClientInfo>, Serializable {
 
 	
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1690162822656358481L;
+	//private static final long serialVersionUID = 1L;
 	private String userName = "User";
 	private int id = 0;
 	private String room = "commons";

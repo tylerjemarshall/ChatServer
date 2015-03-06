@@ -3,6 +3,7 @@ package client;
 
 
 import game.TicTacToe;
+import server.ClientInfo;
 
 import javax.swing.*;
 
@@ -148,7 +149,9 @@ public class GUIConsole extends JFrame implements ChatIF {
 		        JComboBox cb = (JComboBox)e.getSource();
 		        
 		        String room = (String)cb.getSelectedItem();
-		        Object tempRoom = cb.getSelectedItem();
+		        String tempRoom = (String)cb.getSelectedItem();
+		        //String tempRoomString = (String) tempRoom;
+		        String truncTempRoom = (tempRoom.indexOf("(") == -1) ? tempRoom : tempRoom.substring(0, tempRoom.indexOf("("));
 		        String truncRoom = (room.indexOf("(") == -1) ? room : room.substring(0, room.indexOf("("));
 		        
 		        //don't change room if you are already in the room
@@ -158,12 +161,12 @@ public class GUIConsole extends JFrame implements ChatIF {
 			        roomDlg.setVisible(true);
 
 		        	}
-		        else if(!currentRoom.equals(tempRoom))
+		        else if(!currentRoom.equals(truncTempRoom))
 		        	client.handleMessageFromClientUI("#join " + truncRoom);
 		        
 		        
 		        
-		        currentRoom=tempRoom;
+		        currentRoom=truncRoom;
 
 			}
 		});
@@ -322,12 +325,45 @@ public class GUIConsole extends JFrame implements ChatIF {
 			DefaultComboBoxModel cbm = new DefaultComboBoxModel(
                   newString);
           roomList.setModel(cbm);
-          roomList.setSelectedItem(currentRoom);
+          
+          
+          for(int x = 0; x < newString.length; x++)
+          {
+        	  String truncRoom = (newString[x].indexOf("(") == -1) ? newString[x] : newString[x].substring(0, newString[x].indexOf("("));
+        	  if(currentRoom.equals(truncRoom)) 
+        		  {
+        		  	System.out.println("Changing selected item to: " + newString[x]);
+        		  	roomList.setSelectedItem(newString[x]);
+        		  }
+          }
+
           roomList.addItem("Create Room");
           
           roomList.repaint();
           
           
+		}
+		else if (o instanceof ClientInfo)
+		{
+			//This is where we can take info on the client and then update the ComboBox for which room he is in.
+			//Currently the ComboBox isn't changing the selected item to current room, this will help with that.
+			ClientInfo info = (ClientInfo)o;
+			currentRoom = info.getRoom();
+			
+			
+		}
+		else if (o instanceof ClientInfo[])
+		{
+			//This is where we can take in a list of all clients in same room as user. 
+			//Could be used to update a GUI List of clients in current room.
+			ClientInfo[] clientList = (ClientInfo[])o;
+			System.out.println(clientList);
+			
+			
+		}
+		else
+		{
+			System.out.println("Recieved a foreign object");
 		}
 		
 	}
