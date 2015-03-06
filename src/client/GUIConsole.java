@@ -390,7 +390,6 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 * @param args[1] = port (Default: 5555)
 	 * @param args[2] = userName (Default: User)
 	 */
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		String userName = "", host = "";
 		int port = 0;
