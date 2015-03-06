@@ -108,7 +108,7 @@ public class EchoServer extends AbstractServer {
 		}
 		// client requesting room being created
 		else if (msg instanceof RoomInfo) {
-			System.out.println("Recieved object");
+			System.out.println("Recieved RoomInfo");
 			
 			try
 			{

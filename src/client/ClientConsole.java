@@ -145,7 +145,7 @@ public class ClientConsole implements ChatIF
     {
       port = Integer.parseInt(args[1]); //Get port from command line
     }
-    catch(Throwable t)
+    catch(ArrayIndexOutOfBoundsException e)
     {
       port = DEFAULT_PORT; //if fails set port to default (5555)
     }
@@ -156,7 +156,7 @@ public class ClientConsole implements ChatIF
     	
       userName = args[2]; //Get userName from Command Line
     }
-    catch(Throwable t)
+    catch(ArrayIndexOutOfBoundsException e)
     {
       userName = "User"; //if fails set userName to "User"
     }
@@ -166,9 +166,9 @@ public class ClientConsole implements ChatIF
     	ClientConsole chat= new ClientConsole(host, port, userName);
     	chat.accept();  //Wait for console data
     }
-    catch(Throwable t)
+    catch(Exception e)
     {
-    	System.out.println(t.toString() + "\nFailed to create ClientConsole");
+    	System.out.println(e.toString() + "\nFailed to create ClientConsole");
     }
     
     

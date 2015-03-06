@@ -397,19 +397,19 @@ public class GUIConsole extends JFrame implements ChatIF {
 		try {
 			host = args[0];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			args[0] = "localhost";
+			host = "localhost";
 		}
 		try {
 			port = Integer.parseInt(args[1]);
 		} catch (Throwable t) {
-			args[1] = DEFAULT_PORT + "";
+			port = DEFAULT_PORT;
 		}
 		try {
 			userName = args[2];
-		} catch (Throwable t) {
-			args[2] = "User";
+		} catch (ArrayIndexOutOfBoundsException e) {
+			userName = "User";
 		}
-		setClientConsole(new GUIConsole(args));
+		setClientConsole(new GUIConsole(new String[]{host, port + "", userName}));
 	}
 
 	public static GUIConsole getClientConsole() {
