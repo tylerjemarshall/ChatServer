@@ -1,6 +1,7 @@
 package server;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -157,6 +158,29 @@ public class Room implements RoomInterface, Comparable<Room>{
 	{
 		return name + "(" + list.size()+"/"+getLimit()+")";
 	}
+	
+	
+    public String[] toStringArray()
+    {
+    	Collections.sort(list);
+    	String[] array = new String[this.size()];
+    	for (int y = 0; y < list.size(); y++) 
+    	{
+    		array[y] = list.get(y).toString();
+    	}
+		return array;
+    	
+    }
+    
+    public ClientInfo[] toClientInfoArray()
+    {
+    	ClientInfo[] clientList = new ClientInfo[this.size()];
+    	for (int x = 0; x < this.size(); x++)
+    	{
+    		clientList[x] = this.get(x).getClientInfo();
+    	}
+    	return clientList;
+    }
 	
 	
 	//From Comparable, since I have a list of these rooms.

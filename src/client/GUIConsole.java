@@ -6,6 +6,8 @@ import game.TicTacToe;
 import server.ClientInfo;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import java.awt.event.*;
 import java.awt.*;
@@ -29,7 +31,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private JButton quitB = new JButton("Quit");
 	private JTextField messageTxF = new JTextField("");		
 	private JTextArea messageList = new JTextArea();
-	JScrollPane scroll; 
+	JList<String> clientList = new JList<String>();
+//	JScrollPane scroll; 
 	
 	private ChatClient client;
 	private Profile profile = new Profile();
@@ -37,7 +40,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	
 	
 	private String[] roomArray;
-	private JButton refresh = new JButton("Refresh Rooms");
+	private JButton refresh = new JButton("Refresh");
 	@SuppressWarnings("rawtypes")
 	private JComboBox roomList = new JComboBox();
 	
@@ -85,7 +88,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 		super("Simple Chat GUI");
 		this.args = args;
 	
-		setSize(300, 400);
+		setSize(400, 500);
 	
 //		messageList.setWrapStyleWord(true);
 //		messageList.setSize(300, 1000);
@@ -117,7 +120,19 @@ public class GUIConsole extends JFrame implements ChatIF {
 					southButtons.add(quitB);	southButtons.add(sendB);
 					
 					
-		JList clientList = new JList();
+					
+					
+		clientList = new JList<String>(new String[]{(String) currentRoom});
+		
+		clientList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		clientList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		clientList.setVisibleRowCount(-1);
+		
+		
+		JScrollPane clientScroll = new JScrollPane(clientList);
+		clientScroll.setPreferredSize(new Dimension(250, 80));
+		
+		
 		add("East", clientList);
 		
 			
@@ -126,11 +141,11 @@ public class GUIConsole extends JFrame implements ChatIF {
 		messageList.setLineWrap(true);
 		messageList.setEditable(false);
 		
-		scroll = new JScrollPane (messageList);
-	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane messageScroll = new JScrollPane (messageList);
+	    messageScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	    messageScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    
-	    add(scroll);
+	    add(messageScroll);
 	
 	    
 	    //centering the window to middle of screen.
@@ -171,6 +186,34 @@ public class GUIConsole extends JFrame implements ChatIF {
 		        	client.handleMessageFromClientUI("#join " + truncRoom);
 		        	currentRoom=truncRoom;
 		        }
+
+			}
+		});
+
+		// Handles Client List
+
+		clientList.addListSelectionListener(new ListSelectionListener() {
+			@SuppressWarnings("rawtypes")
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				// TODO Auto-generated method stub
+
+				if (!e.getValueIsAdjusting()) {
+					JList jl = (JList) e.getSource();
+
+					if (jl.getSelectedIndex() != 0) {
+						String client = (String) jl.getSelectedValue();
+						try {
+							String truncClient = (client.indexOf("#") == -1) ? client
+									: client.substring(client.indexOf("#") + 1,
+											client.length());
+							messageTxF.setText("#whisper " + truncClient + " ");
+						} catch (NullPointerException npe) {
+						}
+						;
+
+					}
+				}
 
 			}
 		});
@@ -310,7 +353,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	@Override
 	public void display(String message) {
 			messageList.append("> " + message + "\n");
-			scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+			messageList.select(Integer.MAX_VALUE, 0); 
 	}
 	/**
 	 * Displays message in GUIConsole's Message List with a UserName before the message.
@@ -319,7 +362,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	public void display(String message, String user) 
 	{
 		messageList.append(user + "> " + message + "\n");
-		scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+		messageList.select(Integer.MAX_VALUE, 0); 
 		
 		
 	}
@@ -327,48 +370,44 @@ public class GUIConsole extends JFrame implements ChatIF {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void sendToUI(Object o) {
-		if(o instanceof String[])
-		{
+		if (o instanceof String[]) {
 			String[] newString = (String[]) o;
-			DefaultComboBoxModel cbm = new DefaultComboBoxModel(
-                  newString);
-          roomList.setModel(cbm);
-          
-          
-          for(int x = 0; x < newString.length; x++)
-          {
-        	  String truncRoom = (newString[x].indexOf("(") == -1) ? newString[x] : newString[x].substring(0, newString[x].indexOf("("));
-        	  if(currentRoom.equals(truncRoom)) 
-        		  {
-        		  	roomList.setSelectedItem(newString[x]);
-        		  }
-          }
+			DefaultComboBoxModel cbm = new DefaultComboBoxModel(newString);
+			roomList.setModel(cbm);
 
-          roomList.addItem("Create Room");
-          
-          roomList.repaint();
-          
-          
-		}
-		else if (o instanceof ClientInfo)
-		{
-			ClientInfo info = (ClientInfo)o;
-			currentRoom = info.getRoom();	
-		}
-		else if (o instanceof ClientInfo[])
-		{
-			//This is where we can take in a list of all clients in same room as user. 
-			//Could be used to update a GUI List of clients in current room.
-			ClientInfo[] clientList = (ClientInfo[])o;
-			System.out.println(clientList);
-			
-			
-		}
-		else
-		{
+			for (int x = 0; x < newString.length; x++) {
+				String truncRoom = (newString[x].indexOf("(") == -1) ? newString[x]
+						: newString[x].substring(0, newString[x].indexOf("("));
+				if (currentRoom.equals(truncRoom)) {
+					roomList.setSelectedItem(newString[x]);
+				}
+			}
+			roomList.addItem("Create Room");
+
+		} else if (o instanceof ClientInfo) {
+			ClientInfo info = (ClientInfo) o;
+			currentRoom = info.getRoom();
+		} else if (o instanceof ClientInfo[]) {
+			try {
+
+				ClientInfo[] clientList = (ClientInfo[]) o;
+
+				DefaultListModel lm = new DefaultListModel();
+				this.clientList.setModel(lm);
+
+				lm.addElement(currentRoom);
+				for (int x = 0; x < clientList.length; x++) {
+					lm.addElement(clientList[x].getUserName() + "#"
+							+ clientList[x].getId());
+					Thread.sleep(5);
+				}
+			} catch (Exception e) {
+			}
+
+		} else {
 			System.out.println("Recieved a foreign object");
 		}
-		
+
 	}
 	
 	/**
