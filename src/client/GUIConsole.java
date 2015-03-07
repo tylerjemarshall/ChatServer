@@ -29,6 +29,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private JButton quitB = new JButton("Quit");
 	private JTextField messageTxF = new JTextField("");		
 	private JTextArea messageList = new JTextArea();
+	JScrollPane scroll; 
 	
 	private ChatClient client;
 	private Profile profile = new Profile();
@@ -86,8 +87,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	
 		setSize(300, 400);
 	
-		messageList.setWrapStyleWord(true);
-		messageList.setSize(300, 1000);
+//		messageList.setWrapStyleWord(true);
+//		messageList.setSize(300, 1000);
 
 	    profile.setFont("Tahoma",Font.PLAIN,12);
 		messageList.setFont(profile.getFont());
@@ -114,14 +115,18 @@ public class GUIConsole extends JFrame implements ChatIF {
 				southBox.add(southButtons);
 					southButtons.setLayout(new GridLayout(1, 2, 5, 5));
 					southButtons.add(quitB);	southButtons.add(sendB);
-			
+					
+					
+		JList clientList = new JList();
+		add("East", clientList);
+		
 			
 		
 		//making messageList look nice
 		messageList.setLineWrap(true);
 		messageList.setEditable(false);
 		
-		JScrollPane scroll = new JScrollPane (messageList);
+		scroll = new JScrollPane (messageList);
 	    scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	    scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    
@@ -304,7 +309,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 */
 	@Override
 	public void display(String message) {
-			messageList.insert("> " + message + "\n", 0);
+			messageList.append("> " + message + "\n");
+			scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
 	}
 	/**
 	 * Displays message in GUIConsole's Message List with a UserName before the message.
@@ -312,7 +318,10 @@ public class GUIConsole extends JFrame implements ChatIF {
 	@Override
 	public void display(String message, String user) 
 	{
-		messageList.insert(user + "> " + message + "\n", 0);
+		messageList.append(user + "> " + message + "\n");
+		scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
+		
+		
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
