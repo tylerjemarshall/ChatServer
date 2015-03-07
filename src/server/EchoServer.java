@@ -112,8 +112,8 @@ public class EchoServer extends AbstractServer {
 			
 			try
 			{
-				RoomInfo roomInfo = (RoomInfo) msg; // cast obj into RoomInfo
-				if (roomList.getRoom(roomInfo.getRoom()) != null) { // || roomList.getRoom(roomInfo.getRoom()).equals(roomList.getDefaultRoom())
+				RoomInfo roomInfo = (RoomInfo) msg;
+				if (roomList.getRoom(roomInfo.getRoom()) != null) { 
 					tryToSendToClient("Room already exists. Going to try and join", client);
 					roomList.moveClient(client, roomInfo.getRoom());
 				} else {
@@ -125,8 +125,7 @@ public class EchoServer extends AbstractServer {
 					roomList.moveClient(client, newRoom.getName());
 					newRoom.setOpen(roomInfo.getOpen());
 					Collections.sort(roomList);
-					
-					
+
 					tryToSendToClient(client.getClientInfo(), client);
 					tryToSendToClient(roomList.toStringArray(), client);
 				}
@@ -291,7 +290,9 @@ public class EchoServer extends AbstractServer {
 			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
 			tryToSendToClient("You have switched rooms to " + truncMsg, client);
 			sendToARoom(client + " Just joined " + truncMsg, truncMsg);
+			tryToSendToClient(client.getClientInfo(), client);
 			tryToSendToClient(roomList.toStringArray(), client);
+			
 			break;
 		case "#info":
 			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());
@@ -324,8 +325,13 @@ public class EchoServer extends AbstractServer {
 		case "#lc":
 		case "#listclients":	
 		case "#listrooms":
+		case "#list":
 			Collections.sort(roomList);
 			tryToSendToClient(roomList.toString(), client);
+			break;
+		case "#refresh":
+			tryToSendToClient(client.getClientInfo(), client);
+			tryToSendToClient(roomList.toStringArray(), client);
 			break;
 		// Game Stuff
 		case "#game": {
@@ -333,15 +339,11 @@ public class EchoServer extends AbstractServer {
 		}
 		case "#move":
 			sendToARoom(msg, client.getClientInfo().getRoom());
-			tryToSendToClient(roomList.toStringArray(), client);
 			break;
 		case "#clearboard":
 			sendToARoom(msg, client.getClientInfo().getRoom());
 			break;
-		// Test Stuff
-		case "#getlist":
-			tryToSendToClient(roomList.toStringArray(), client);
-			break;
+
 		default:
 			tryToSendToClient("Invalid command: " + cmd, client);
 		}
@@ -406,7 +408,8 @@ public class EchoServer extends AbstractServer {
 			System.out.println("Added client to room");
 			
 			sendToARoom(client + " just logged in.", room);
-			//tryToSendToClient(roomList.toStringArray(), client);
+			tryToSendToClient(client.getClientInfo(), client);
+			tryToSendToClient(roomList.toStringArray(), client);
 			return exit;
 		} catch (Exception e) {
 			e.printStackTrace();

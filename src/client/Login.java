@@ -27,6 +27,10 @@ public class Login {
     	   
             return true;
        }
+       else if (args[2].toLowerCase().equals("user") && args[3].equals("")) { 
+    	   
+           return true;
+      }
        else
        {
     	   

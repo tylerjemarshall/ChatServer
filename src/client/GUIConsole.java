@@ -137,7 +137,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	    refresh.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		
-	    		client.handleMessageFromClientUI("#getlist");
+	    		client.handleMessageFromClientUI("#refresh");
 	    	}
 	    });
 	    
@@ -154,7 +154,6 @@ public class GUIConsole extends JFrame implements ChatIF {
 		        String truncTempRoom = (tempRoom.indexOf("(") == -1) ? tempRoom : tempRoom.substring(0, tempRoom.indexOf("("));
 		        String truncRoom = (room.indexOf("(") == -1) ? room : room.substring(0, room.indexOf("("));
 		        
-		        System.out.println("Comparing currentRoom: " + currentRoom + " with truncTempRoom: " + truncTempRoom);
 		        
 		        //don't change room if you are already in the room
 		        if(room.equals("Create Room"))
@@ -333,7 +332,6 @@ public class GUIConsole extends JFrame implements ChatIF {
         	  String truncRoom = (newString[x].indexOf("(") == -1) ? newString[x] : newString[x].substring(0, newString[x].indexOf("("));
         	  if(currentRoom.equals(truncRoom)) 
         		  {
-        		  	System.out.println("Changing selected item to: " + newString[x]);
         		  	roomList.setSelectedItem(newString[x]);
         		  }
           }
@@ -346,16 +344,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 		}
 		else if (o instanceof ClientInfo)
 		{
-			//This is where we can take info on the client and then update the ComboBox for which room he is in.
-			//Currently the ComboBox isn't changing the selected item to current room, this will help with that.
 			ClientInfo info = (ClientInfo)o;
-			System.out.println("Recieved ClientInfo object: " + info);
-			System.out.println("Changing currentRoom from: " + currentRoom + " to " + info.getRoom());
-			currentRoom = info.getRoom();
-			
-			
-			
-			
+			currentRoom = info.getRoom();	
 		}
 		else if (o instanceof ClientInfo[])
 		{
