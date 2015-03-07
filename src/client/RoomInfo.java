@@ -53,5 +53,10 @@ public class RoomInfo implements Serializable {
 		this.password = password;
 	}
 	
+	public String toString()
+	{
+		return this.getRoom();
+	}
+	
 
 }

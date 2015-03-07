@@ -269,8 +269,17 @@ public class RoomList implements RoomListInterface{
 					+ currentRoom);
 
 				if (currentRoom.isEmpty() ) {
-					list.remove(currentRoom);
-					System.out.println("Removed empty room.");
+					if(currentRoom.getName().toLowerCase().equals(defaultRoom))
+					{
+						System.out.println("Not removing default room");
+					}
+					else
+					{
+						list.remove(currentRoom);
+						System.out.println("Removed empty room.");
+					}
+					
+					
 				}
 
 				if (!roomOpen(room))
@@ -333,8 +342,16 @@ public class RoomList implements RoomListInterface{
 						+ currentRoom);
 
 				if (currentRoom.isEmpty()) {
-					list.remove(currentRoom);
-					System.out.println("Removed empty room.");
+					if(currentRoom.getName().toLowerCase().equals(defaultRoom))
+					{
+						System.out.println("Not removing empty defaultRoom");
+					}
+					else
+					{
+						list.remove(currentRoom);
+						System.out.println("Removed empty room.");
+					}
+					
 				}
 				return exit;
 

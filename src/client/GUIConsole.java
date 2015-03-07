@@ -154,6 +154,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 		        String truncTempRoom = (tempRoom.indexOf("(") == -1) ? tempRoom : tempRoom.substring(0, tempRoom.indexOf("("));
 		        String truncRoom = (room.indexOf("(") == -1) ? room : room.substring(0, room.indexOf("("));
 		        
+		        System.out.println("Comparing currentRoom: " + currentRoom + " with truncTempRoom: " + truncTempRoom);
+		        
 		        //don't change room if you are already in the room
 		        if(room.equals("Create Room"))
 		        	{
@@ -162,11 +164,10 @@ public class GUIConsole extends JFrame implements ChatIF {
 
 		        	}
 		        else if(!currentRoom.equals(truncTempRoom))
+		        {
 		        	client.handleMessageFromClientUI("#join " + truncRoom);
-		        
-		        
-		        
-		        currentRoom=truncRoom;
+		        	currentRoom=truncRoom;
+		        }
 
 			}
 		});
@@ -348,7 +349,11 @@ public class GUIConsole extends JFrame implements ChatIF {
 			//This is where we can take info on the client and then update the ComboBox for which room he is in.
 			//Currently the ComboBox isn't changing the selected item to current room, this will help with that.
 			ClientInfo info = (ClientInfo)o;
+			System.out.println("Recieved ClientInfo object: " + info);
+			System.out.println("Changing currentRoom from: " + currentRoom + " to " + info.getRoom());
 			currentRoom = info.getRoom();
+			
+			
 			
 			
 		}

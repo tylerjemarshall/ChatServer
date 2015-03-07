@@ -20,6 +20,25 @@ public class ClientInfo implements Comparable<ClientInfo>, Serializable
 	
 	private boolean yellable = false;
 	
+	
+	
+	/**
+	 * This class holds basic info for client including room, id, and userName.
+	 * 
+	 * @param userName Declares the userName for client
+	 * @param room Declares the room for client
+	 */
+	public ClientInfo(String userName, int id, String room) {
+		this.userName = userName;
+		this.room = room;
+	}
+	
+	/**
+	 * This class holds basic info for client including room, id, and userName.
+	 * Sets default values for userName to User, and room to Commons.
+	 * 
+	 */
+	public ClientInfo(){}
 
 
 	public String getUserName() {
@@ -56,25 +75,15 @@ public class ClientInfo implements Comparable<ClientInfo>, Serializable
 		return getId();
 	}
 	
-
-	/**
-	 * This class holds basic info for client including room, id, and userName.
-	 * 
-	 * @param userName Declares the userName for client
-	 * @param room Declares the room for client
-	 */
-	public ClientInfo(String userName, int id, String room) {
-		this.userName = userName;
-		this.room = room;
+	
+	public boolean isYellable() {
+		return yellable;
 	}
-	
-	/**
-	 * This class holds basic info for client including room, id, and userName.
-	 * Sets default values for userName to User, and room to Commons.
-	 * 
-	 */
-	public ClientInfo(){}
-	
+
+	public void setYellable(boolean yellable) {
+		this.yellable = yellable;
+	}
+
 
 
 	
@@ -107,13 +116,7 @@ public class ClientInfo implements Comparable<ClientInfo>, Serializable
        return result;
    }
 
-	public boolean isYellable() {
-		return yellable;
-	}
 
-	public void setYellable(boolean yellable) {
-		this.yellable = yellable;
-	}
 	
 
 
