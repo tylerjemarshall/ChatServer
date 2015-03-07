@@ -257,9 +257,11 @@ public class ChatClient extends AbstractClient {
 			}
 
 		default:
+			
 			try {
 				sendToServer(message);
-			} catch (IOException e2) {
+			} catch (Exception e) {
+				e.printStackTrace();
 				clientUI.display("Failed to send command to server.");
 			}
 		}
