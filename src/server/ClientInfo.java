@@ -2,54 +2,39 @@ package server;
 import java.io.Serializable;
 
 /**
- * This class takes in ConnectionToClient to be able to handle the HashMap of ConnectionToClient and other variables.
+ * This class holds clients information, including userName, id, room, and isYellable
  * 
  * @author Tyler M
  */
-public class ClientInfo implements Comparable<ClientInfo>, Serializable {
+public class ClientInfo implements Comparable<ClientInfo>, Serializable 
+{
 
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1690162822656358481L;
-	//private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 	private String userName = "User";
 	private int id = 0;
 	private String room = "commons";
 	
 	private boolean yellable = false;
 	
-	
 
-	private ConnectionToClient client = null;
-	
-	
-	public ConnectionToClient getClient() {
-		return client;
-	}
-
-	public void setClient(ConnectionToClient client) {
-		this.client = client;
-	}
 
 	public String getUserName() {
-		//userName=client.getInfo("userName").toString();
 		return userName;
 	}
 
 	public void setUserName(String userName) {
-		//client.setInfo("userName", userName);
 		this.userName = userName;
 	}
 
 	public int getId() {
-		//id=(Integer)client.getInfo("id");
 		return id;
 	}
 
 	public void setId(int id) {
-		//client.setInfo("id", id);
 		this.id = id;
 	}
 
@@ -58,7 +43,6 @@ public class ClientInfo implements Comparable<ClientInfo>, Serializable {
 	}
 
 	public void setRoom(String room) {
-		//client.setInfo("room", room);
 		this.room = room;
 	}
 	
@@ -72,35 +56,25 @@ public class ClientInfo implements Comparable<ClientInfo>, Serializable {
 		return getId();
 	}
 	
-	
-	/**
-	 * This class takes in ConnectionToClient to be able to handle the HashMap of ConnectionToClient and other variables.
 
-	 * @param client Uses ConnectionToClient to pull information from the client.
-	 */
-	public ClientInfo(ConnectionToClient client) {
-		this.client = client;
-		this.userName = getUserName();
-		this.room = getRoom();
-	}
 	/**
-	 * This class takes in ConnectionToClient and the client's info
-	 * to be overwritten to be able to handle the HashMap of ConnectionToClient and other variables.
-
-	 * @param client Uses ConnectionToClient to pull information from the client.
+	 * This class holds basic info for client including room, id, and userName.
+	 * 
 	 * @param userName Declares the userName for client
 	 * @param room Declares the room for client
 	 */
-	public ClientInfo(ConnectionToClient client, String userName, int id, String room) {
-//		client.setInfo("userName", userName);
-//		client.setInfo("id", id);
-//		client.setInfo("room", room);
-		this.client = client;
+	public ClientInfo(String userName, int id, String room) {
 		this.userName = userName;
 		this.room = room;
 	}
 	
-
+	/**
+	 * This class holds basic info for client including room, id, and userName.
+	 * Sets default values for userName to User, and room to Commons.
+	 * 
+	 */
+	public ClientInfo(){}
+	
 
 
 	

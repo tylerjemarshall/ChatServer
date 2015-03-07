@@ -127,8 +127,7 @@ public class EchoServer extends AbstractServer {
 					Collections.sort(roomList);
 					
 					
-//					tryToSendToClient(client.getClientInfo(), client);
-					//Throws serialization Error. Tried serializing ClientInfo.
+					tryToSendToClient(client.getClientInfo(), client);
 					tryToSendToClient(roomList.toStringArray(), client);
 				}
 			}
@@ -592,6 +591,7 @@ public class EchoServer extends AbstractServer {
 		try {
 			clientDisconnected(client);
 		} catch (Exception e) {
+			//e.printStackTrace();
 		}
 	}
 
