@@ -62,14 +62,10 @@ public class ChatClient extends AbstractClient {
 		this.clientUI = clientUI;
 		this.userName = userName;
 		openConnection();
-
 		try {
 			sendToServer("#login " + userName);
-			System.out.println("Sent userName " + userName
-					+ " to server successfully!");
-		} catch (Throwable t) {
-			System.out.println(t.toString()
-					+ "\nCould not send userName to Server");
+		} catch (IOException e) {
+			throw e;
 		}
 
 	}

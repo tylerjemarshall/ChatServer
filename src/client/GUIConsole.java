@@ -150,7 +150,6 @@ public class GUIConsole extends JFrame implements ChatIF {
 		        
 		        String room = (String)cb.getSelectedItem();
 		        String tempRoom = (String)cb.getSelectedItem();
-		        //String tempRoomString = (String) tempRoom;
 		        String truncTempRoom = (tempRoom.indexOf("(") == -1) ? tempRoom : tempRoom.substring(0, tempRoom.indexOf("("));
 		        String truncRoom = (room.indexOf("(") == -1) ? room : room.substring(0, room.indexOf("("));
 		        

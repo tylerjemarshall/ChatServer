@@ -220,8 +220,15 @@ public class EchoServer extends AbstractServer {
 			}
 			break;
 		case "#setport":
-			server.setPort(Integer.parseInt(truncMsg));
-			serverUI.display("Port set to: " + server.getPort());
+			if (isNumber(truncMsg))
+			{
+				server.setPort(Integer.parseInt(truncMsg));
+				serverUI.display("Port set to: " + server.getPort());
+			}
+			else 
+			{
+				serverUI.display("Invalid Number");
+			}
 			break;
 		case "#allowyell":
 			String user = (truncMsg.indexOf(" ") == -1) ? truncMsg : truncMsg
@@ -230,8 +237,16 @@ public class EchoServer extends AbstractServer {
 					.valueOf((truncMsg.indexOf(" ") == -1) ? truncMsg
 							: truncMsg.substring(truncMsg.indexOf(" "),
 									truncMsg.length()).trim());
-			serverUI.display(user + " can yell is " + yell);
-			roomList.getClientByName(user).getClientInfo().setYellable(yell);
+			if (isNumber(user))
+			{
+				roomList.getClientById(Integer.parseInt(user)).getClientInfo().setYellable(yell);
+			}
+			else 
+			{
+				serverUI.display("Invalid number");
+			}
+			
+			
 			break;
 		default:
 			break;

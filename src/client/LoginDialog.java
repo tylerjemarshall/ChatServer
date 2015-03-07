@@ -111,7 +111,6 @@ public class LoginDialog extends JDialog {
 	
 	private class LoginAuthenticateAL implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("You pressed login!");
 			try {
 				if (Login.authenticate(getArgs(), getParent())) {
 					JOptionPane.showMessageDialog(LoginDialog.this, "Hi "
