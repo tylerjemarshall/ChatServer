@@ -1,4 +1,2 @@
 # ChatServer
-Will support lobbies and mini-games.
-
-Created by Tyler. o.o
+Will support rooms and mini-games.
