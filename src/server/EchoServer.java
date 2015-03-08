@@ -374,16 +374,18 @@ public class EchoServer extends AbstractServer {
 	public void updateClient(ConnectionToClient client)
 	{
 		tryToSendToClient(client.getClientInfo(), client);
-		//tryToSendToClient(roomList.toStringArray(), client);
-		//tryToSendToClient(roomList.getRoomByClient(client).toClientInfoArray(), client);
 		sendToAllRooms(roomList.toStringArray());
 		updateRoom(client.getClientInfo().getRoom());
 	}
 	
 	public void updateRoom(String room)
 	{
+		try
+		{
+			sendToARoom(roomList.getRoom(room).toClientInfoArray(), room);
+		}
+		catch (NullPointerException npe){};
 		
-		sendToARoom(roomList.getRoom(room).toClientInfoArray(), room);
 	}
 	
 	
@@ -508,15 +510,20 @@ public class EchoServer extends AbstractServer {
 	 *            Room the message is being sent to
 	 */
 	public void sendToARoom(Object msg, String room) {
-		//String message = (String) msg;
-		Room tempRoom = roomList.getRoom(room);
-		if (!tempRoom.equals(null)) {
-			for (int r = 0; r < tempRoom.size(); r++) {
-				tryToSendToClient(msg, tempRoom.get(r));
+		try
+		{
+			Room tempRoom = roomList.getRoom(room);
+			if (tempRoom.equals(null) || msg.equals(null)) {
+				System.out.println("Message or room is null. Not sending message.");
+			} else {
+				for (int r = 0; r < tempRoom.size(); r++) {
+					tryToSendToClient(msg, tempRoom.get(r));
+				}
+				
 			}
-		} else {
-			System.out.println("Couldn't find room, not sending message.");
 		}
+		catch (NullPointerException npe){};
+		
 	}
 
 	/**
@@ -595,6 +602,10 @@ public class EchoServer extends AbstractServer {
 		} catch (IOException e) {
 			System.out.println("Failed to send to client " + client);
 			e.printStackTrace();
+		} catch (NullPointerException npe)
+		{
+			System.out.println("Can't send null objects!");
+			npe.printStackTrace();
 		}
 	}
 
