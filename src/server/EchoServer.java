@@ -109,14 +109,18 @@ public class EchoServer extends AbstractServer {
 		// client requesting room being created
 		else if (msg instanceof RoomInfo) {
 			System.out.println("Recieved RoomInfo");
-			
+			String oldRoom = client.getClientInfo().getRoom();
 			try
 			{
 				RoomInfo roomInfo = (RoomInfo) msg;
 				if (roomList.getRoom(roomInfo.getRoom()) != null) { 
 					tryToSendToClient("Room already exists. Going to try and join", client);
 					roomList.moveClient(client, roomInfo.getRoom());
+					updateClient(client);
+					updateRoom(oldRoom);
 				} else {
+					
+					
 					Room newRoom = new Room();
 					newRoom.setName(roomInfo.getRoom());
 					newRoom.setPassword(roomInfo.getPassword());
@@ -127,6 +131,7 @@ public class EchoServer extends AbstractServer {
 					Collections.sort(roomList);
 
 					updateClient(client);
+					updateRoom(oldRoom);
 				}
 			}
 			catch (Exception e)
@@ -304,10 +309,12 @@ public class EchoServer extends AbstractServer {
 			break;
 		case "#j":
 		case "#join":
+			String oldRoom = client.getClientInfo().getRoom();
 			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
 			tryToSendToClient("You have switched rooms to " + truncMsg, client);
 			sendToARoom(client + " Just joined " + truncMsg, truncMsg);
 			updateClient(client);
+			updateRoom(oldRoom);
 			break;
 		case "#info":
 			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());
@@ -367,9 +374,18 @@ public class EchoServer extends AbstractServer {
 	public void updateClient(ConnectionToClient client)
 	{
 		tryToSendToClient(client.getClientInfo(), client);
-		tryToSendToClient(roomList.toStringArray(), client);
-		tryToSendToClient(roomList.getRoomByClient(client).toClientInfoArray(), client);
+		//tryToSendToClient(roomList.toStringArray(), client);
+		//tryToSendToClient(roomList.getRoomByClient(client).toClientInfoArray(), client);
+		sendToAllRooms(roomList.toStringArray());
+		updateRoom(client.getClientInfo().getRoom());
 	}
+	
+	public void updateRoom(String room)
+	{
+		
+		sendToARoom(roomList.getRoom(room).toClientInfoArray(), room);
+	}
+	
 	
 	/**
 	 * Method that checks to see if a String contains only numerical digits.
@@ -492,11 +508,11 @@ public class EchoServer extends AbstractServer {
 	 *            Room the message is being sent to
 	 */
 	public void sendToARoom(Object msg, String room) {
-		String message = (String) msg;
+		//String message = (String) msg;
 		Room tempRoom = roomList.getRoom(room);
 		if (!tempRoom.equals(null)) {
 			for (int r = 0; r < tempRoom.size(); r++) {
-				tryToSendToClient(message, tempRoom.get(r));
+				tryToSendToClient(msg, tempRoom.get(r));
 			}
 		} else {
 			System.out.println("Couldn't find room, not sending message.");
@@ -510,11 +526,11 @@ public class EchoServer extends AbstractServer {
 	 *            Message being sent
 	 */
 	public void sendToAllRooms(Object msg) {
-		String message = (String) msg;
+		//String message = (String) msg;
 		for (int i = 0; i < roomList.size(); i++) {
 			Room currentRoom = roomList.get(i);
 			for (int r = 0; r < currentRoom.size(); r++) {
-				tryToSendToClient(message, currentRoom.get(r));
+				tryToSendToClient(msg, currentRoom.get(r));
 			}
 		}
 	}

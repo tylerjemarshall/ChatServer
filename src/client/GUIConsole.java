@@ -31,8 +31,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private JButton quitB = new JButton("Quit");
 	private JTextField messageTxF = new JTextField("");		
 	private JTextArea messageList = new JTextArea();
-	JList<String> clientList = new JList<String>();
-//	JScrollPane scroll; 
+	private JList<String> clientList = new JList<String>();
 	
 	private ChatClient client;
 	private Profile profile = new Profile();
