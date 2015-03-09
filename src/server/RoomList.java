@@ -1,4 +1,5 @@
 package server;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -285,6 +286,15 @@ public class RoomList implements RoomListInterface{
 				if (!roomOpen(room))
 				{
 					System.out.println("Room is closed, moving to commons");
+					try 
+					  {
+						client.sendToClient("Room capacity full.");
+					  } 
+					  catch(IOException e) 
+					  {
+						  System.out.println(e.toString() + "Error: could not send message to client.");
+						  System.exit(1);
+					  }			
 					boolean moved = moveClient(client, defaultRoom);
 					if(moved)
 					{

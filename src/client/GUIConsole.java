@@ -234,7 +234,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 		            "Are you sure to close this window?", "Really Closing?", 
 		            JOptionPane.YES_NO_OPTION,
 		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-		        	client.handleMessageFromClientUI("Good Bye!");
+		        	client.handleMessageFromClientUI("#logoff");
 		        	try 
 		        	{
 						client.closeConnection();
@@ -270,7 +270,6 @@ public class GUIConsole extends JFrame implements ChatIF {
 						"Are you sure to close this window?",
 						"Really Closing?", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					client.handleMessageFromClientUI("Good Bye!");
 					try {
 						client.sendToServer("#logout");
 					} catch (IOException ioe) {
@@ -369,6 +368,19 @@ public class GUIConsole extends JFrame implements ChatIF {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void sendToUI(Object o) {
+		 if (o instanceof String)
+		 {
+		 String msg = (String)o;
+		 switch (msg) {
+		 case "#logon":
+		 LoginDialog loginDlg = new LoginDialog(args, this);
+		         loginDlg.setVisible(true);
+		 break;
+		 default: break;
+
+		 }
+		 }
+
 		if (o instanceof String[]) {
 			String[] newString = (String[]) o;
 			DefaultComboBoxModel cbm = new DefaultComboBoxModel(newString);

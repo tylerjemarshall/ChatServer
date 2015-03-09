@@ -361,5 +361,12 @@ public class ChatClient extends AbstractClient {
 		}
 		System.exit(0);
 	}
+	
+	protected void connectionException(Exception e)
+	{
+		clientUI.display("Lost connection to server!");
+		clientUI.sendToUI("#logon");
+	}
+	
 }
 // End of ChatClient class

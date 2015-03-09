@@ -311,7 +311,7 @@ public class EchoServer extends AbstractServer {
 		case "#join":
 			String oldRoom = client.getClientInfo().getRoom();
 			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
-			tryToSendToClient("You have switched rooms to " + truncMsg, client);
+			tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
 			sendToARoom(client + " Just joined " + truncMsg, truncMsg);
 			updateClient(client);
 			updateRoom(oldRoom);
@@ -629,7 +629,8 @@ public class EchoServer extends AbstractServer {
 			//logoff(client);
 			roomList.remove(client);
 			System.out.println("Removed client from roomList");
-
+			updateClient(client);
+			
 		} catch (Exception e) {
 			System.out.println("Client disconnected from " + client);
 			e.printStackTrace();
