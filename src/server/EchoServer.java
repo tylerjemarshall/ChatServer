@@ -189,7 +189,7 @@ public class EchoServer extends AbstractServer {
 		case "#quit":
 			try {
 
-				server.close();
+				close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -197,11 +197,11 @@ public class EchoServer extends AbstractServer {
 			System.exit(0);
 			break;
 		case "#stop":
-			server.stopListening();
+			stopListening();
 			break;
 		case "#close":
 			try {
-				server.close();
+				close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -209,7 +209,7 @@ public class EchoServer extends AbstractServer {
 			break;
 		case "#start":
 			try {
-				server.listen();
+				listen();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -218,7 +218,7 @@ public class EchoServer extends AbstractServer {
 		case "#getport":
 			try
 			{
-				serverUI.display("Port is: " + server.getPort());
+				serverUI.display("Port is: " + getPort());
 			}
 			catch (Exception e)
 			{
@@ -229,8 +229,8 @@ public class EchoServer extends AbstractServer {
 		case "#setport":
 			if (isNumber(truncMsg))
 			{
-				server.setPort(Integer.parseInt(truncMsg));
-				serverUI.display("Port set to: " + server.getPort());
+				setPort(Integer.parseInt(truncMsg));
+				serverUI.display("Port set to: " + getPort());
 			}
 			else 
 			{
@@ -629,7 +629,8 @@ public class EchoServer extends AbstractServer {
 			//logoff(client);
 			roomList.remove(client);
 			System.out.println("Removed client from roomList");
-			updateClient(client);
+//			updateClient(client);
+			sendToAllRooms(roomList.toStringArray());
 			
 		} catch (Exception e) {
 			System.out.println("Client disconnected from " + client);

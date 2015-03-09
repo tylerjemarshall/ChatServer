@@ -234,9 +234,10 @@ public class GUIConsole extends JFrame implements ChatIF {
 		            "Are you sure to close this window?", "Really Closing?", 
 		            JOptionPane.YES_NO_OPTION,
 		            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-		        	client.handleMessageFromClientUI("#logoff");
+		        	
 		        	try 
 		        	{
+		        		client.handleMessageFromClientUI("#logoff");
 						client.closeConnection();
 					} 
 		        	catch (IOException e) 

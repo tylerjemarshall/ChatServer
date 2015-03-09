@@ -12,7 +12,7 @@ public class Login {
 	    } 
 	    catch(IOException e) 
 	    {
-	    	throw new IOException("Can't connection to server!");
+	    	throw new IOException("Can't connect to server!");
 	    }
 
 		
