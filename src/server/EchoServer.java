@@ -18,7 +18,7 @@ public class EchoServer extends AbstractServer {
 
 	final public static int DEFAULT_PORT = 5555;
 
-	private EchoServer server;
+	//private EchoServer server;
 	private RoomList roomList = new RoomList();
 
 	ChatIF serverUI;
@@ -191,7 +191,6 @@ public class EchoServer extends AbstractServer {
 
 				close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.exit(0);
@@ -203,7 +202,6 @@ public class EchoServer extends AbstractServer {
 			try {
 				close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -211,29 +209,22 @@ public class EchoServer extends AbstractServer {
 			try {
 				listen();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
 		case "#getport":
-			try
-			{
+			try {
 				serverUI.display("Port is: " + getPort());
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 				serverUI.display("Port is: null");
 			}
 			break;
 		case "#setport":
-			if (isNumber(truncMsg))
-			{
+			if (isNumber(truncMsg)) {
 				setPort(Integer.parseInt(truncMsg));
 				serverUI.display("Port set to: " + getPort());
-			}
-			else 
-			{
+			} else {
 				serverUI.display("Invalid Number");
 			}
 			break;
@@ -244,16 +235,12 @@ public class EchoServer extends AbstractServer {
 					.valueOf((truncMsg.indexOf(" ") == -1) ? truncMsg
 							: truncMsg.substring(truncMsg.indexOf(" "),
 									truncMsg.length()).trim());
-			if (isNumber(user))
-			{
-				roomList.getClientById(Integer.parseInt(user)).getClientInfo().setYellable(yell);
-			}
-			else 
-			{
+			if (isNumber(user)) {
+				roomList.getClientById(Integer.parseInt(user)).getClientInfo()
+						.setYellable(yell);
+			} else {
 				serverUI.display("Invalid number");
 			}
-			
-			
 			break;
 		default:
 			break;
@@ -625,17 +612,22 @@ public class EchoServer extends AbstractServer {
 		try {
 
 			System.out.println("Client " + client
-					+ " disconnected from " + client);
-			//logoff(client);
-			roomList.remove(client);
-			System.out.println("Removed client from roomList");
-//			updateClient(client);
-			sendToAllRooms(roomList.toStringArray());
-			
+					+ " disconnected from " + client.getInetAddress());
 		} catch (Exception e) {
-			System.out.println("Client disconnected from " + client);
-			e.printStackTrace();
-			System.out.println("Failed to remove client from roomList");
+			System.out.println(client + " disconnected. Error: " + e.getMessage());
+		}
+		finally
+		{
+			String room = client.getClientInfo().getRoom();
+			
+			
+			if(!roomList.remove(client)) 
+				serverUI.display("Failed to remove client from RoomList");
+			else
+				serverUI.display("Removed client from RoomList");
+			
+			sendToAllRooms(roomList.toStringArray());
+			updateRoom(room);
 		}
 	}
 
@@ -643,9 +635,7 @@ public class EchoServer extends AbstractServer {
 			Throwable exception) {
 		try {
 			clientDisconnected(client);
-		} catch (Exception e) {
-			//e.printStackTrace();
-		}
+		} catch (Exception e) {}
 	}
 
 }
