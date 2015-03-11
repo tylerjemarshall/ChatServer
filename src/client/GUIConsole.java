@@ -369,6 +369,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void sendToUI(Object o) {
+		System.out.println("Recieved object... checking instance of object");
 		 if (o instanceof String)
 		 {
 		 String msg = (String)o;
@@ -377,6 +378,11 @@ public class GUIConsole extends JFrame implements ChatIF {
 		 LoginDialog loginDlg = new LoginDialog(args, this);
 		         loginDlg.setVisible(true);
 		 break;
+		 case "#roomauth":
+			 System.out.println("Recieved command #roomauth");
+			 RoomAuthentication roomAuth = new RoomAuthentication(this);
+			 roomAuth.setVisible(true);
+			 break;
 		 default: break;
 
 		 }
@@ -399,7 +405,9 @@ public class GUIConsole extends JFrame implements ChatIF {
 		} else if (o instanceof ClientInfo) {
 			ClientInfo info = (ClientInfo) o;
 			currentRoom = info.getRoom();
-		} else if (o instanceof ClientInfo[]) {
+		} 
+		
+		else if (o instanceof ClientInfo[]) {
 			try {
 
 				ClientInfo[] clientList = (ClientInfo[]) o;

@@ -106,6 +106,23 @@ public class EchoServer extends AbstractServer {
 				this.sendToARoom(message, client.getClientInfo().getRoom());
 			}
 		}
+		else if (msg instanceof char[]){
+			System.out.println("Recieved object of type char[]");
+			char[] passwordSent = (char[]) msg;
+			if (client.getTempRoom().toCharArray().equals(passwordSent))
+			{
+				if (roomList.moveClient(client, client.getTempRoom())) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
+				tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
+				sendToARoom(client + " Just joined " + client.getTempRoom(), client.getTempRoom());
+				updateClient(client);
+				//updateRoom(oldRoom);
+			}
+			else 
+			{
+			
+				tryToSendToClient("Incorrect password", client);
+			}
+		}
 		// client requesting room being created
 		else if (msg instanceof RoomInfo) {
 			System.out.println("Recieved RoomInfo");
@@ -120,14 +137,15 @@ public class EchoServer extends AbstractServer {
 					updateRoom(oldRoom);
 				} else {
 					
-					
 					Room newRoom = new Room();
 					newRoom.setName(roomInfo.getRoom());
 					newRoom.setPassword(roomInfo.getPassword());
 					newRoom.setLimit(roomInfo.getLimit());
+					newRoom.setReserved(roomInfo.isReserved());
 					roomList.add(newRoom);
+					//try for full room
 					roomList.moveClient(client, newRoom.getName());
-					newRoom.setOpen(roomInfo.getOpen());
+			
 					Collections.sort(roomList);
 
 					updateClient(client);
@@ -297,11 +315,38 @@ public class EchoServer extends AbstractServer {
 		case "#j":
 		case "#join":
 			String oldRoom = client.getClientInfo().getRoom();
-			if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
-			tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
-			sendToARoom(client + " Just joined " + truncMsg, truncMsg);
-			updateClient(client);
-			updateRoom(oldRoom);
+			System.out.println("Recieved #join command: " + truncMsg);
+			try
+			{
+				System.out.println("Room is private is: " + roomList.getRoom(truncMsg).isReserved());
+			}
+			catch(Exception e)
+			{
+				
+				e.printStackTrace();
+			}
+			
+			if (roomList.getRoom(truncMsg).isReserved())
+			{
+				try
+				{
+					System.out.println("Sending to client #roomauth");
+					client.setTempRoom(truncMsg);
+					tryToSendToClient("#roomauth", client);
+				}
+				catch (Exception e) {e.printStackTrace();}
+				
+			}
+			else
+			{
+				System.out.println("Room is public, attempting to join...");
+				if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
+				tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
+				sendToARoom(client + " Just joined " + truncMsg, truncMsg);
+				updateClient(client);
+				updateRoom(oldRoom);
+			}
+			
 			break;
 		case "#info":
 			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());

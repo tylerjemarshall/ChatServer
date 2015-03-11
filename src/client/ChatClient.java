@@ -78,6 +78,9 @@ public class ChatClient extends AbstractClient {
 	 */
 	public void handleMessageFromServer(Object message) {
 		if (message instanceof String) {
+			
+			
+			
 			String msg = message.toString();
 
 			if (msg.indexOf("#") == 0) {
@@ -107,6 +110,9 @@ public class ChatClient extends AbstractClient {
 			String truncMsg = msg.substring(space, end).trim();
 
 			switch (cmd) {
+			case "#roomauth":
+				clientUI.sendToUI(msg);
+				break;
 			case "#from":
 				String user = (truncMsg.indexOf(" ") == -1) ? truncMsg
 						: truncMsg.substring(0, truncMsg.indexOf(" ")).trim();

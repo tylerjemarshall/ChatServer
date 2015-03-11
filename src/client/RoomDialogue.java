@@ -164,7 +164,7 @@ public class RoomDialogue extends JDialog {
 	
 	@SuppressWarnings("deprecation")
 	public String[] getArgs() {
-		return new String[]{nameTxF.getText(), limitTxF.getText(), passwordPwF.getText(), Boolean.toString(open.isSelected())};
+		return new String[]{nameTxF.getText(), limitTxF.getText(), passwordPwF.getPassword().toString(), Boolean.toString(closed.isSelected())};
 	}
 	
 }

@@ -18,12 +18,12 @@ public class Room implements RoomInterface, Comparable<Room>{
     private int limit = DEFAULT_LIMIT;
     private String name = "commons";
     //private int id;
-    private boolean open = true;
+    private boolean isFull = true;
     private String owner = "server";
-    private String password = "";
+    private char[] password;
+    private boolean reserved = false;
     
-    
-    /**
+	/**
      * Class that acts as a container for the list ClientInfo.
      * Will have a limit to clients in a room and custom attributes.
      */
@@ -36,11 +36,19 @@ public class Room implements RoomInterface, Comparable<Room>{
 //		
 //    }
     
-	public String getPassword() {
+    public boolean isReserved() {
+		return reserved;
+	}
+
+	public void setReserved(boolean reserved) {
+		this.reserved = reserved;
+	}
+
+	public char[] getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(char[] password) {
 		this.password = password;
 	}
 
@@ -142,15 +150,15 @@ public class Room implements RoomInterface, Comparable<Room>{
 	 * If the Room is accepting new clients, true. Else is closed and sending new clients to their default room.
 	 * @return Returns true if Room is open. False if closed.
 	 */
-	public boolean isOpen() {
-		return open;
+	public boolean isFull() {
+		return isFull;
 	}
 
 
 
-	public void setOpen(boolean open) {
-		this.open = open;
-	}
+//	public void setOpen(boolean open) {
+//		this.isFull = open;
+//	}
 
 
 
@@ -232,27 +240,27 @@ public class Room implements RoomInterface, Comparable<Room>{
 	@Override
 	public boolean add(ConnectionToClient e) {
 		boolean b = list.add(e);
-		open = (list.size()>limit) ? false : true;
+		isFull = (list.size()>limit) ? false : true;
 		return b;
 	}
 
 	@Override
 	public void add(int index, ConnectionToClient element) {
 		list.add(index, element);
-		open = (list.size()>limit) ? false : true;
+		isFull = (list.size()>limit) ? false : true;
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends ConnectionToClient> c) {
 		boolean b = list.addAll(c);
-		open = (list.size()>limit) ? false : true;
+		isFull = (list.size()>limit) ? false : true;
 		return b;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends ConnectionToClient> c) {
 		boolean b = list.addAll(index, c);
-		open = (list.size()>limit) ? false : true;
+		isFull = (list.size()>limit) ? false : true;
 		return b;
 	}
 
@@ -306,24 +314,25 @@ public class Room implements RoomInterface, Comparable<Room>{
 		return list.listIterator(index);
 	}
 
+
 	@Override
 	public boolean remove(Object o) {
 		boolean b = list.remove(o);
-		open = (list.size()>limit) ? false : true;
+		isFull = (list.size()>limit) ? false : true;
 		return b;
 	}
 
 	@Override
 	public ConnectionToClient remove(int index) {
 		ConnectionToClient client = list.remove(index);
-		open = (list.size()>limit) ? false : true;
+		isFull = (list.size()>limit) ? false : true;
 		return client;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
 		boolean b = removeAll(c);
-		open = (list.size()>limit) ? false : true;
+		isFull = (list.size()>limit) ? false : true;
 		return b;
 	}
 

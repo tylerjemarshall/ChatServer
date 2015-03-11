@@ -47,14 +47,19 @@ public class RoomValidation {
 		
 
 		// This part just enforces client to have a password if room is private. If it's public it ignores entered password.
-		Boolean open = Boolean.valueOf(args[3]);
-		if (open) password = "";
+		Boolean reserved = Boolean.valueOf(args[3]);
+//		if (!reserved) password = "";
 		
-		if (!open && password.isEmpty()) throw new NumberFormatException("Password required");
+//		if (reserved && password.isEmpty()) throw new NumberFormatException("Password required");
 		
+		System.out.println("room reserved is: " + reserved);
 
+		
+//		if(reserved) reserved = false; else reserved = true; //this is noobfix, should be corrected
+		
+		
 		// Adds the information to the object RoomInfo, to send to the server to create the room.
-		RoomInfo newRoom = new RoomInfo ( room, limit, open, password );
+		RoomInfo newRoom = new RoomInfo ( room, limit, reserved, password.toCharArray() );
 
 		try
 		{

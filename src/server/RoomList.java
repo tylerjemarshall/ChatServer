@@ -52,12 +52,12 @@ public class RoomList implements RoomListInterface{
 		return clientCount;
 	}
     
-    public boolean roomOpen(String room)
+    public boolean roomFull(String room)
     {
     	try
     	{
     		Room tempRoom = getRoom(room);
-    		return tempRoom.isOpen();
+    		return tempRoom.isFull();
     	}
     	catch(Exception e)
     	{
@@ -283,7 +283,7 @@ public class RoomList implements RoomListInterface{
 					
 				}
 
-				if (!roomOpen(room))
+				if (!roomFull(room))
 				{
 					System.out.println("Room is closed, moving to commons");
 					try 

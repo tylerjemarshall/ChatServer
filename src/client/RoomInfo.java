@@ -8,16 +8,17 @@ public class RoomInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	private String room;
 	private int limit;
-	private Boolean open;
-	private String password;
+	private Boolean reserved;
+	private char[] password;
 
-	public RoomInfo ( String room, int limit, Boolean open, String password ){
+	public RoomInfo ( String room, int limit, Boolean open, char[] password ){
 		
 		this.room = room;
 		this.limit = limit;
-		this.open = open;
+		this.reserved = open;
 		this.password = password;
 	}
 
@@ -37,19 +38,19 @@ public class RoomInfo implements Serializable {
 		this.limit = limit;
 	}
 
-	public Boolean getOpen() {
-		return open;
+	public Boolean isReserved() {
+		return reserved;
 	}
 
-	public void setOpen(Boolean b) {
-		open = b;
+	public void setReserved(Boolean b) {
+		reserved = b;
 	}
 
-	public String getPassword() {
+	public char[] getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(char[] password) {
 		this.password = password;
 	}
 	
