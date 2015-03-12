@@ -42,7 +42,7 @@ public class RoomValidation {
 		// I don't have many rules for the password, i feel like the client should have control over this. 
 		// Only limitation is the length.
 		String password = args[2];
-		
+		System.out.println("Password set to: " + password);
 		if (password.length() > 18) throw new NumberFormatException("Password too long");
 		
 

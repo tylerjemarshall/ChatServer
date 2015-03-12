@@ -118,19 +118,29 @@ public class EchoServer extends AbstractServer {
 		else if (msg instanceof char[]){
 			display("Recieved object of type char[]");
 			char[] passwordSent = (char[]) msg;
-			if (client.getTempRoom().toCharArray().equals(passwordSent))
+			try
 			{
-				if (roomList.moveClient(client, client.getTempRoom())) display("Moved client succesfully"); else display("Failed to move client");
-				tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
-				sendToARoom(client + " Just joined " + client.getTempRoom(), client.getTempRoom());
-				updateClient(client);
-				//updateRoom(oldRoom);
+				display("Comparing following passwords: " + roomList.getRoomByClient(client).getPassword().toString() + " && " + passwordSent.toString());
+				
+				if (roomList.getRoomByClient(client).getPassword().equals(passwordSent))
+				{
+					if (roomList.moveClient(client, client.getTempRoom())) display("Moved client succesfully"); else display("Failed to move client");
+					tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
+					sendToARoom(client + " just joined " + client.getTempRoom(), client.getTempRoom());
+					updateClient(client);
+					//updateRoom(oldRoom);
+				}
+				else 
+				{
+				
+					tryToSendToClient("Incorrect password", client);
+				}
 			}
-			else 
+			catch (Exception e)
 			{
+				e.printStackTrace();
+			}
 			
-				tryToSendToClient("Incorrect password", client);
-			}
 		}
 		// client requesting room being created
 		else if (msg instanceof RoomInfo) {
@@ -149,6 +159,9 @@ public class EchoServer extends AbstractServer {
 					Room newRoom = new Room();
 					newRoom.setName(roomInfo.getRoom());
 					newRoom.setPassword(roomInfo.getPassword());
+					
+					display("Creating room with password: " + roomInfo.getPassword().toString());
+					
 					newRoom.setLimit(roomInfo.getLimit());
 					newRoom.setReserved(roomInfo.isReserved());
 					roomList.add(newRoom);
