@@ -110,10 +110,10 @@ public class ChatClient extends AbstractClient {
 			case "#from":
 				String user = (truncMsg.indexOf(" ") == -1) ? truncMsg
 						: truncMsg.substring(0, truncMsg.indexOf(" ")).trim();
-				String whisper = (truncMsg.indexOf(" ") == -1) ? truncMsg
+				String message = (truncMsg.indexOf(" ") == -1) ? truncMsg
 						: truncMsg.substring(truncMsg.indexOf(" "),
 								truncMsg.length()).trim();
-				clientUI.display(whisper, user);
+				clientUI.display(message, user);
 				break;
 			case "#server":
 				clientUI.display(truncMsg, "SERVER MSG");

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import client.ChatIF;
+
 
 
 
@@ -20,6 +22,7 @@ public class RoomList implements RoomListInterface{
 	
 	
     protected ArrayList<Room> list;
+	private ChatIF log;
 
     /**
      * Class that acts as a container for the list Room.
@@ -27,6 +30,12 @@ public class RoomList implements RoomListInterface{
      */
     public RoomList(){
         list = new ArrayList<Room>();
+    }
+    
+    public RoomList(ChatIF log)
+    {
+    	 list = new ArrayList<Room>();
+    this.setLog(log);
     }
     
     
@@ -46,6 +55,8 @@ public class RoomList implements RoomListInterface{
 		return array;
     	
     }
+    
+ 
     
     public int getClientCount() {
     	countClients();
@@ -507,5 +518,13 @@ public class RoomList implements RoomListInterface{
 	@Override
 	public boolean addAll(int index, Collection<? extends Room> c) {
 		return list.addAll(index, c);
+	}
+
+	public ChatIF getLog() {
+		return log;
+	}
+
+	public void setLog(ChatIF log) {
+		this.log = log;
 	}
 }

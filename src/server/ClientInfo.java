@@ -70,6 +70,8 @@ public class ClientInfo implements Comparable<ClientInfo>, Serializable
 		return getUserName() + "#" + getId() + " [" + getRoom()+ "]";
 	}
 	
+
+	
 	public int toInt()
 	{
 		return getId();
