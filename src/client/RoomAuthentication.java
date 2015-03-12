@@ -62,7 +62,7 @@ import javax.swing.JPasswordField;
 
 			
 			north.setLayout(new GridLayout(1, 1, 30, 30));
-			center.setLayout(new GridLayout(6, 2, 2, 2));
+			center.setLayout(new GridLayout(2, 2, 2, 2));
 			south.setLayout(new GridLayout(1, 1, 30, 30));
 
 			
@@ -70,8 +70,7 @@ import javax.swing.JPasswordField;
 			
 			north.add(descriptionLB);
 
-			center.add(passwordLB);
-			center.add(passwordPwF);
+			center.add(passwordLB);		center.add(passwordPwF);
 			center.add(cancelBtn);		center.add(submitBtn);
 
 			south.add(displayLB);
@@ -125,11 +124,7 @@ import javax.swing.JPasswordField;
 			}
 		}
 		
-		
-//		public char[] getMsg() {
-//			return msg;
-//		}
-		
+
 		public GUIConsole getParent() {
 			return parent;
 		}

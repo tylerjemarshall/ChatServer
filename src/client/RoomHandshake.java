@@ -4,10 +4,7 @@ public class RoomHandshake {
 
 	public static boolean authenticate(char[] password, GUIConsole parent) throws Exception{
 	
-	// char[] newCharArray = new RoomInfo (password);
-		
-//		if (password.equals(msg))
-//		{
+
 			try
 			{
 				parent.getChatClient().sendToServer(password);
@@ -18,11 +15,7 @@ public class RoomHandshake {
 			}
 			
 			return true;
-//		}
-//		else
-//		{
-//			return false;
-//		}
+
 		
 
 	

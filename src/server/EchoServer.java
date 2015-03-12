@@ -162,8 +162,8 @@ public class EchoServer extends AbstractServer {
 					newRoom.setName(roomInfo.getRoom());
 					newRoom.setPassword(roomInfo.getPassword());
 
-					display("Creating room with password...");
-					System.out.println(roomInfo.getPassword());
+//					display("Creating room with password...");
+//					System.out.println(roomInfo.getPassword());
 
 					newRoom.setLimit(roomInfo.getLimit());
 					newRoom.setReserved(roomInfo.isReserved());
