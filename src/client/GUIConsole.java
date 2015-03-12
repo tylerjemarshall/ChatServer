@@ -381,18 +381,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 
 			if (cmd.equals("#cred")) {
 
-				try {
-					StyledDocument doc = messageList.getStyledDocument();
-
-					Style style = messageList.addStyle("Red", null);
-					StyleConstants.setForeground(style, Color.red);
-
-					doc.insertString(doc.getLength(), user + "> " + truncMsg + "\n",
-							style);
-					messageList.select(Integer.MAX_VALUE, 0);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				append(user + "> " + truncMsg + "\n", Color.red);
+				messageList.select(Integer.MAX_VALUE, 0);
 
 			}
 
@@ -418,14 +408,6 @@ public class GUIConsole extends JFrame implements ChatIF {
 			 System.out.println("Recieved command #roomauth");
 			 RoomAuthentication roomAuth = new RoomAuthentication(this);
 			 roomAuth.setVisible(true);
-//			 try
-//			 {
-//				 roomList.setSelectedItem(currentRoom);
-//			 }
-//			 catch (Exception e)
-//			 {
-//				 e.printStackTrace();
-//			 }
 			 
 			 break;
 		 default: break;
@@ -498,55 +480,59 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 * @param args[2] = userName (Default: User)
 	 */
 	
-	private void appendToPane(JTextPane tp, String msg, Color c)
-    {
-        StyleContext sc = StyleContext.getDefaultStyleContext();
-        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
 
-        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
-        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
-
-        int len = tp.getDocument().getLength();
-        tp.setCaretPosition(len);
-        tp.setCharacterAttributes(aset, false);
-        tp.replaceSelection(msg);
-    }
 	
 	public void append(String s) {
 		try {
-
 			int len = s.length();
-
 			String newString = "";
-
 			if (len < 15) {
-
 				Document doc = messageList.getDocument();
 				doc.insertString(doc.getLength(), s, null);
-
 			}
-
 			else {
-
 				for (int x = 0; x < s.length(); x++) {
 					newString += s.charAt(x);
 					if (x % 50 == 0 && x != 0) {
 						newString += '\n';
 					}
 				}
-
 			}
-
 			Document doc = messageList.getDocument();
 			doc.insertString(doc.getLength(), newString, null);
-
 		}
-
 		catch (BadLocationException exc) {
 			exc.printStackTrace();
 		}
-
 	}
+	public void append(String s, Color c) {
+		try {
+			int len = s.length();
+			String newString = "";
+			
+			Style style = messageList.addStyle("Color", null);
+			StyleConstants.setForeground(style, c);
+			
+			if (len < 15) {
+				Document doc = messageList.getDocument();
+				doc.insertString(doc.getLength(), s, style);
+			}
+			else {
+				for (int x = 0; x < s.length(); x++) {
+					newString += s.charAt(x);
+					if (x % 50 == 0 && x != 0) {
+						newString += '\n';
+					}
+				}
+			}
+			Document doc = messageList.getDocument();
+			doc.insertString(doc.getLength(), newString, style);
+		}
+		catch (BadLocationException exc) {
+			exc.printStackTrace();
+		}
+	}
+	
 	
 	public static void main(String[] args) {
 		String userName = "", host = "";
