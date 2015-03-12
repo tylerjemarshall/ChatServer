@@ -116,12 +116,7 @@ public class EchoServer extends AbstractServer {
 			}
 		}
 		else if (msg instanceof char[]){
-			display("Recieved object of type char[]");
 			char[] passwordSent = (char[]) msg;
-			display("Received password to compare...");
-			System.out.println(passwordSent);
-			display("With password...");
-			System.out.println(roomList.getRoom(client.getTempRoom()).getPassword());
 			try
 			{
 				if (Arrays.equals(passwordSent, roomList.getRoom(client.getTempRoom()).getPassword()))
@@ -130,7 +125,6 @@ public class EchoServer extends AbstractServer {
 					tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
 					sendToARoom(client + " just joined " + client.getTempRoom(), client.getTempRoom());
 					updateClient(client);
-					//updateRoom(oldRoom);
 				}
 				else 
 				{
@@ -146,7 +140,6 @@ public class EchoServer extends AbstractServer {
 		}
 		// client requesting room being created
 		else if (msg instanceof RoomInfo) {
-			display("Recieved RoomInfo");
 			String oldRoom = client.getClientInfo().getRoom();
 			try
 			{
@@ -162,13 +155,10 @@ public class EchoServer extends AbstractServer {
 					newRoom.setName(roomInfo.getRoom());
 					newRoom.setPassword(roomInfo.getPassword());
 
-//					display("Creating room with password...");
-//					System.out.println(roomInfo.getPassword());
-
 					newRoom.setLimit(roomInfo.getLimit());
 					newRoom.setReserved(roomInfo.isReserved());
+					
 					roomList.add(newRoom);
-					//try for full room
 					roomList.moveClient(client, newRoom.getName());
 			
 					Collections.sort(roomList);
@@ -210,9 +200,6 @@ public class EchoServer extends AbstractServer {
 		}
 	}
 
-	
-
-	
 	/**
 	 * Method that handles commands from the Server Most of these are broken FYI
 	 * 
@@ -340,38 +327,19 @@ public class EchoServer extends AbstractServer {
 		case "#j":
 		case "#join":
 			String oldRoom = client.getClientInfo().getRoom();
-			display("Recieved #join command: " + truncMsg);
-			try
-			{
-				display("Room is private is: " + roomList.getRoom(truncMsg).isReserved());
-			}
-			catch(Exception e)
-			{
-				
-				e.printStackTrace();
-			}
-			
 			if (roomList.getRoom(truncMsg).isReserved())
 			{
-				try
-				{
-					display("Sending to client #roomauth");
-					client.setTempRoom(truncMsg);
-					tryToSendToClient("#roomauth", client);
-				}
-				catch (Exception e) {e.printStackTrace();}
-				
+				client.setTempRoom(truncMsg);
+				tryToSendToClient("#roomauth", client);
 			}
 			else
 			{
-				display("Room is public, attempting to join...");
 				if (roomList.moveClient(client, truncMsg)) display("Moved client succesfully"); else display("Failed to move client");
 				tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
 				sendToARoom(client + " Just joined " + truncMsg, truncMsg);
 				updateClient(client);
 				updateRoom(oldRoom);
 			}
-			
 			break;
 		case "#info":
 			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());
@@ -618,33 +586,7 @@ public class EchoServer extends AbstractServer {
 
 	// Class methods ***************************************************
 
-	/**
-	 * This method is responsible for the creation of the server instance (there
-	 * is no UI in this phase).
-	 * 
-	 * @param args
-	 *            [0] The port number to listen on. Defaults to 5555 if no
-	 *            argument is entered.
-	 */
-//	public static void main(String[] args) {
-//		int port = 0; // Port to listen on
-//
-//		try {
-//			port = Integer.parseInt(args[0]); // Get port from command line
-//		} catch (Throwable t) {
-//			port = DEFAULT_PORT; // Set port to 5555
-//		}
-//
-//		EchoServer sv = new EchoServer(port);
-//
-//		try {
-//			sv.listen(); // Start listening for connections
-//		} catch (Exception ex) {
-//			display(ex.toString()
-//					+ "EchoServer - Could not listen for clients!\n"
-//					+ ex.toString());
-//		}
-//	}
+
 
 	/**
 	 * @param message

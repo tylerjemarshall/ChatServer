@@ -7,7 +7,7 @@ public class RoomHandshake {
 		try {
 			parent.getChatClient().sendToServer(password);
 		} catch (Exception e) {
-			throw new Exception("Unable to send to server: " + e.getMessage());
+			throw new Exception("Unable to send to server");
 		}
 		return true;
 	}
