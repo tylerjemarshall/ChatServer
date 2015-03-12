@@ -122,7 +122,7 @@ public class ChatClient extends AbstractClient {
 				clientUI.display(message, user);
 				break;
 			case "#server":
-				clientUI.display(truncMsg, "SERVER MSG");
+				clientUI.display("#cred " +  truncMsg, "SERVER MSG");
 				break;
 			case "#move":
 				System.out.println("Entered move case");

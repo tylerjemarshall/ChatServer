@@ -8,6 +8,14 @@ import server.ClientInfo;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 import java.awt.event.*;
 import java.awt.*;
@@ -30,7 +38,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 	private JButton sendB = new JButton("Send");
 	private JButton quitB = new JButton("Quit");
 	private JTextField messageTxF = new JTextField("");		
-	private JTextArea messageList = new JTextArea();
+	private JTextPane messageList = new JTextPane();
 	private JList<String> clientList = new JList<String>();
 	
 	private ChatClient client;
@@ -137,7 +145,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 			
 		
 		//making messageList look nice
-		messageList.setLineWrap(true);
+		//messageList.setLineWrap(true);
 		messageList.setEditable(false);
 		
 		JScrollPane messageScroll = new JScrollPane (messageList);
@@ -351,21 +359,49 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 */
 	@Override
 	public void display(String message) {
-			messageList.append("> " + message + "\n");
+			append("> " + message + "\n");
 			messageList.select(Integer.MAX_VALUE, 0); 
 	}
 	/**
 	 * Displays message in GUIConsole's Message List with a UserName before the message.
 	 */
 	@Override
-	public void display(String message, String user) 
-	{
-		messageList.append(user + "> " + message + "\n");
-		messageList.select(Integer.MAX_VALUE, 0); 
-		
-		
-	}
+	public void display(String message, String user) {
 
+		String cmd;
+
+		if (message.indexOf("#") == 0) {
+
+			cmd = (message.indexOf(" ") == -1) ? message : message.substring(0,
+					message.indexOf(" "));
+			int end = message.length();
+			int space = (message.indexOf(" ") == -1) ? end : message
+					.indexOf(" ");
+			String truncMsg = message.substring(space, end).trim();
+
+			if (cmd.equals("#cred")) {
+
+				try {
+					StyledDocument doc = messageList.getStyledDocument();
+
+					Style style = messageList.addStyle("Red", null);
+					StyleConstants.setForeground(style, Color.red);
+
+					doc.insertString(doc.getLength(), user + "> " + truncMsg + "\n",
+							style);
+					messageList.select(Integer.MAX_VALUE, 0);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+
+		} else {
+			append(user + "> " + message + "\n");
+			messageList.select(Integer.MAX_VALUE, 0);
+		}
+
+	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void sendToUI(Object o) {
@@ -461,6 +497,57 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 * @param args[1] = port (Default: 5555)
 	 * @param args[2] = userName (Default: User)
 	 */
+	
+	private void appendToPane(JTextPane tp, String msg, Color c)
+    {
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console");
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+
+        int len = tp.getDocument().getLength();
+        tp.setCaretPosition(len);
+        tp.setCharacterAttributes(aset, false);
+        tp.replaceSelection(msg);
+    }
+	
+	public void append(String s) {
+		try {
+
+			int len = s.length();
+
+			String newString = "";
+
+			if (len < 15) {
+
+				Document doc = messageList.getDocument();
+				doc.insertString(doc.getLength(), s, null);
+
+			}
+
+			else {
+
+				for (int x = 0; x < s.length(); x++) {
+					newString += s.charAt(x);
+					if (x % 50 == 0 && x != 0) {
+						newString += '\n';
+					}
+				}
+
+			}
+
+			Document doc = messageList.getDocument();
+			doc.insertString(doc.getLength(), newString, null);
+
+		}
+
+		catch (BadLocationException exc) {
+			exc.printStackTrace();
+		}
+
+	}
+	
 	public static void main(String[] args) {
 		String userName = "", host = "";
 		int port = 0;
