@@ -158,6 +158,7 @@ public class EchoServer extends AbstractServer {
 
 					newRoom.setLimit(roomInfo.getLimit());
 					newRoom.setReserved(roomInfo.isReserved());
+					newRoom.setOwner(client);
 					
 					roomList.add(newRoom);
 					roomList.moveClient(client, newRoom.getName());
@@ -342,6 +343,20 @@ public class EchoServer extends AbstractServer {
 				updateRoom(oldRoom);
 			}
 			break;
+		case "#kick":
+			if (client.getId() == roomList.getRoomByClient(client).getOwner().getId())
+			{
+				if (isNumber(truncMsg)){
+					roomList.moveClient(roomList.getClientById(Integer.parseInt(truncMsg)), "commons");
+					updateClient(client);
+					updateClient(roomList.getClientById(Integer.parseInt(truncMsg)));
+				}
+				else
+					tryToSendToClient("Must enter clients ID", client);
+			}
+			else
+				tryToSendToClient("You are not the owner of this room.", client);
+			break;
 		case "#info":
 			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());
 			break;
@@ -349,6 +364,7 @@ public class EchoServer extends AbstractServer {
 		case "#quit":
 			sendToARoom(client + " has left the chat!", client.getClientInfo().getRoom());
 			break;
+		case "#gavinsucks":
 		case "#logout":
 		case "#logoff":
 			sendToARoom(client + " has logged off!", client.getClientInfo().getRoom());

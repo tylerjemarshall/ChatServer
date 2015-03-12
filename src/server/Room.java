@@ -19,7 +19,7 @@ public class Room implements RoomInterface, Comparable<Room>{
     private String name = "commons";
     //private int id;
     private boolean isFull = true;
-    private String owner = "server";
+    private ConnectionToClient owner;
     private char[] password;
     private boolean reserved = false;
     
@@ -52,13 +52,13 @@ public class Room implements RoomInterface, Comparable<Room>{
 		this.password = password;
 	}
 
-	public String getOwner() {
+	public ConnectionToClient getOwner() {
 		return owner;
 	}
 
 
 
-	public void setOwner(String owner) {
+	public void setOwner(ConnectionToClient owner) {
 		this.owner = owner;
 	}
 
