@@ -355,19 +355,16 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 */
 	@Override
 	public void display(String message) {
-			append("> " + message + "\n");
-			messageList.select(Integer.MAX_VALUE, 0); 
+		
+		display(message, "");
 	}
 	/**
 	 * Displays message in GUIConsole's Message List with a UserName before the message.
 	 */
 	@Override
 	public void display(String message, String user) {
-
 		String cmd;
-
 		if (message.indexOf("#") == 0) {
-
 			cmd = (message.indexOf(" ") == -1) ? message : message.substring(0,
 					message.indexOf(" "));
 			int end = message.length();
@@ -375,12 +372,19 @@ public class GUIConsole extends JFrame implements ChatIF {
 					.indexOf(" ");
 			String truncMsg = message.substring(space, end).trim();
 
-			if (cmd.equals("#cred")) {
-
+			switch(cmd)
+			{
+			case "#cred":
 				append(user + "> " + truncMsg + "\n", Color.red);
 				messageList.select(Integer.MAX_VALUE, 0);
-
+				break;
+			default:
+				append(user + "> " + message + "\n");
+				messageList.select(Integer.MAX_VALUE, 0);
+				break;
+			
 			}
+			
 
 		} else {
 			append(user + "> " + message + "\n");
