@@ -133,7 +133,6 @@ public class LoginDialog extends JDialog {
 				passPwF.setText("");
 				displayLB.setText(ex.getMessage());
 			}
-		
 		}
 	}
 		
