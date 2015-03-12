@@ -118,11 +118,16 @@ public class EchoServer extends AbstractServer {
 		else if (msg instanceof char[]){
 			display("Recieved object of type char[]");
 			char[] passwordSent = (char[]) msg;
+			display("Received password to compare...");
+			System.out.println(passwordSent);
+			display("With password...");
+			System.out.println(roomList.getRoom(client.getTempRoom()).getPassword());
 			try
 			{
-				display("Comparing following passwords: " + roomList.getRoomByClient(client).getPassword().toString() + " && " + passwordSent.toString());
+//				display("Comparing following passwords: " + roomList.getRoom(client.getTempRoom()).getPassword().toString() + " && " + passwordSent.toString());
 				
-				if (roomList.getRoomByClient(client).getPassword().equals(passwordSent))
+//				if (roomList.getRoom(client.getTempRoom()).getPassword().equals(passwordSent))
+				if (Arrays.equals(passwordSent, roomList.getRoom(client.getTempRoom()).getPassword()))
 				{
 					if (roomList.moveClient(client, client.getTempRoom())) display("Moved client succesfully"); else display("Failed to move client");
 					tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
@@ -160,7 +165,10 @@ public class EchoServer extends AbstractServer {
 					newRoom.setName(roomInfo.getRoom());
 					newRoom.setPassword(roomInfo.getPassword());
 					
-					display("Creating room with password: " + roomInfo.getPassword().toString());
+//					display("Creating room with password: " + roomInfo.getPassword().toString());
+					display("Creating room with password...");
+					System.out.println(roomInfo.getPassword());
+//					System.out.println(passwordSent);
 					
 					newRoom.setLimit(roomInfo.getLimit());
 					newRoom.setReserved(roomInfo.isReserved());

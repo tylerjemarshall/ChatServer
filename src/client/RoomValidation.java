@@ -3,8 +3,8 @@ package client;
 
 
 public class RoomValidation {
-
-	public static boolean authenticate(String[] args, GUIConsole parent)
+//				if (RoomValidation.authenticate(nameTxF.getText(), limitTxF.getText(), passwordPwF.getPassword(), closed.isSelected()
+	public static boolean authenticate(String name, String slimit, char[] password, Boolean reserved, GUIConsole parent)
 			throws Exception {
 
 
@@ -13,7 +13,7 @@ public class RoomValidation {
 		// I'm not allowing Parentheses because i use them the represent the size of room.
 		// I have a limit of 18 characters in the room, i feel like i might want to shorten this.
 		// Lastly, i don't want spaces in the name. I use spaces to collect information from a String.
-		String room = args[0];
+		String room = name;
 		if (room.isEmpty()) throw new NumberFormatException("Name required");
 		if (room.contains("(") || room.contains(")") ) throw new NumberFormatException("Name can't have (Parentheses)");
 		if (room.length() > 18) throw new NumberFormatException("Name too long");
@@ -24,9 +24,9 @@ public class RoomValidation {
 		int limit = 0;
 		try 
 		{
-			if (isNumber(args[1])) 
+			if (isNumber(slimit) )
 			{
-				limit = Integer.parseInt(args[1]);
+				limit = Integer.parseInt(slimit);
 			}
 				
 		} 
@@ -41,13 +41,14 @@ public class RoomValidation {
 		
 		// I don't have many rules for the password, i feel like the client should have control over this. 
 		// Only limitation is the length.
-		String password = args[2];
-		System.out.println("Password set to: " + password);
-		if (password.length() > 18) throw new NumberFormatException("Password too long");
+//		String password = args[2];
+		System.out.println("Password is...");
+		System.out.println(password);
+		if (password.length > 18) throw new NumberFormatException("Password too long");
 		
 
 		// This part just enforces client to have a password if room is private. If it's public it ignores entered password.
-		Boolean reserved = Boolean.valueOf(args[3]);
+//		Boolean reserved = Boolean.valueOf(args[3]);
 //		if (!reserved) password = "";
 		
 //		if (reserved && password.isEmpty()) throw new NumberFormatException("Password required");
@@ -59,7 +60,7 @@ public class RoomValidation {
 		
 		
 		// Adds the information to the object RoomInfo, to send to the server to create the room.
-		RoomInfo newRoom = new RoomInfo ( room, limit, reserved, password.toCharArray() );
+		RoomInfo newRoom = new RoomInfo ( room, limit, reserved, password );
 
 		try
 		{

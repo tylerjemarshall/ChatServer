@@ -134,7 +134,7 @@ public class RoomDialogue extends JDialog {
 	private class RoomValidationAL implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			try {
-				if (RoomValidation.authenticate(getArgs(), getParent())) {
+				if (RoomValidation.authenticate(nameTxF.getText(), limitTxF.getText(), passwordPwF.getPassword(), closed.isSelected(), getParent())) {
 					JOptionPane.showMessageDialog(RoomDialogue.this, 
 							 "Room Created.",
 							"Create a room", JOptionPane.INFORMATION_MESSAGE);
@@ -162,8 +162,8 @@ public class RoomDialogue extends JDialog {
 	
 	//sending information to validation
 	
-	public String[] getArgs() {
-		return new String[]{nameTxF.getText(), limitTxF.getText(), passwordPwF.getPassword().toString(), Boolean.toString(closed.isSelected())};
-	}
+//	public String[] getArgs() {
+//		return new String[]{nameTxF.getText(), limitTxF.getText(), passwordPwF.getPassword().toString(), Boolean.toString(closed.isSelected())};
+//	}
 	
 }
