@@ -98,7 +98,7 @@ public class EchoServer extends AbstractServer {
 	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		if (msg instanceof String) {
-			String message = msg.toString();
+			String message = (String) msg;
 			if (message.indexOf("#") == 0) {
 				handleClientCommand(msg, client);
 			} else {
@@ -130,6 +130,7 @@ public class EchoServer extends AbstractServer {
 				{
 				
 					tryToSendToClient("Incorrect password", client);
+					updateClient(client);
 				}
 			}
 			catch (Exception e)

@@ -382,6 +382,15 @@ public class GUIConsole extends JFrame implements ChatIF {
 			 System.out.println("Recieved command #roomauth");
 			 RoomAuthentication roomAuth = new RoomAuthentication(this);
 			 roomAuth.setVisible(true);
+//			 try
+//			 {
+//				 roomList.setSelectedItem(currentRoom);
+//			 }
+//			 catch (Exception e)
+//			 {
+//				 e.printStackTrace();
+//			 }
+			 
 			 break;
 		 default: break;
 

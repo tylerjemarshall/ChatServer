@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -84,6 +85,26 @@ import javax.swing.JPasswordField;
 			setLocationRelativeTo(parent);
 			pack();
 			
+			
+			
+			
+			
+			//This handles closing the client with the X Button
+			setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+			addWindowListener(new java.awt.event.WindowAdapter() {
+			    @Override
+			    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+			        try {
+						getParent().getChatClient().sendToServer("#refresh");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			        dispose();
+			}});
+			
+			
+			
 			//Validate Room ActionListeners.
 			
 			submitBtn.addActionListener(new RoomAuthenticationAL() );
@@ -94,7 +115,13 @@ import javax.swing.JPasswordField;
 			cancelBtn.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					dispose();
+					try {
+						getParent().getChatClient().sendToServer("#refresh");
+					} catch (IOException ioe) {
+						// TODO Auto-generated catch block
+						ioe.printStackTrace();
+					}
+			        dispose();
 				}
 			});	
 		}
