@@ -3,24 +3,23 @@ package client;
 
 
 public class RoomValidation {
-//				if (RoomValidation.authenticate(nameTxF.getText(), limitTxF.getText(), passwordPwF.getPassword(), closed.isSelected()
 	public static boolean authenticate(String name, String slimit, char[] password, Boolean reserved, GUIConsole parent)
 			throws Exception {
 
 
 		
-		// A name for room is required, for obvious reasons. 
+		// A name for room is required. 
 		// I'm not allowing Parentheses because i use them the represent the size of room.
 		// I have a limit of 18 characters in the room, i feel like i might want to shorten this.
-		// Lastly, i don't want spaces in the name. I use spaces to collect information from a String.
+		// Can't have spaces in the name. Used to collect information from a String.
 		String room = name;
 		if (room.isEmpty()) throw new NumberFormatException("Name required");
 		if (room.contains("(") || room.contains(")") ) throw new NumberFormatException("Name can't have (Parentheses)");
 		if (room.length() > 18) throw new NumberFormatException("Name too long");
 		room = room.replace(" ", "-");
 		
-		// First, client needs to enter an Integer for the room size, not a string.
-		// Secondly, i just check the range, 2 to 30. This can be altered.
+		// Client needs to enter an Integer for the room size, not a string.
+		// Range = 2 to 30.
 		int limit = 0;
 		try 
 		{
@@ -41,23 +40,20 @@ public class RoomValidation {
 		
 		// I don't have many rules for the password, i feel like the client should have control over this. 
 		// Only limitation is the length.
-//		String password = args[2];
+
 		System.out.println("Password is...");
 		System.out.println(password);
 		if (password.length > 18) throw new NumberFormatException("Password too long");
 		
 
 		// This part just enforces client to have a password if room is private. If it's public it ignores entered password.
-//		Boolean reserved = Boolean.valueOf(args[3]);
-//		if (!reserved) password = "";
+		if (!reserved) password = null;
 		
-//		if (reserved && password.isEmpty()) throw new NumberFormatException("Password required");
+		if (reserved && password.length == 0) throw new NumberFormatException("Password required");
 		
 		System.out.println("room reserved is: " + reserved);
 
-		
-//		if(reserved) reserved = false; else reserved = true; //this is noobfix, should be corrected
-		
+	
 		
 		// Adds the information to the object RoomInfo, to send to the server to create the room.
 		RoomInfo newRoom = new RoomInfo ( room, limit, reserved, password );

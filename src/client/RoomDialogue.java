@@ -144,7 +144,6 @@ public class RoomDialogue extends JDialog {
 					JOptionPane.showMessageDialog(RoomDialogue.this,
 							"A problem has occurred", "Error",
 							JOptionPane.ERROR_MESSAGE);
-					//userTxF.setText(""); only clears password field.
 					passwordPwF.setText("");
 					displayLB.setText("A problem has happened");
 				}
@@ -159,11 +158,6 @@ public class RoomDialogue extends JDialog {
 	public GUIConsole getParent() {
 		return parent;
 	}
-	
-	//sending information to validation
-	
-//	public String[] getArgs() {
-//		return new String[]{nameTxF.getText(), limitTxF.getText(), passwordPwF.getPassword().toString(), Boolean.toString(closed.isSelected())};
-//	}
+
 	
 }

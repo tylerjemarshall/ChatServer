@@ -93,6 +93,16 @@ public class LoginDialog extends JDialog {
 		setLocationRelativeTo(parent);
 		
 		
+		
+		// This handles closing the client with the X Button
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+				System.exit(0);}});
+		
+		
+		
 		hostTxF.addActionListener(new LoginAuthenticateAL());
 		portTxF.addActionListener(new LoginAuthenticateAL());
 		userTxF.addActionListener(new LoginAuthenticateAL());

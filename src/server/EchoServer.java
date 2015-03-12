@@ -124,9 +124,6 @@ public class EchoServer extends AbstractServer {
 			System.out.println(roomList.getRoom(client.getTempRoom()).getPassword());
 			try
 			{
-//				display("Comparing following passwords: " + roomList.getRoom(client.getTempRoom()).getPassword().toString() + " && " + passwordSent.toString());
-				
-//				if (roomList.getRoom(client.getTempRoom()).getPassword().equals(passwordSent))
 				if (Arrays.equals(passwordSent, roomList.getRoom(client.getTempRoom()).getPassword()))
 				{
 					if (roomList.moveClient(client, client.getTempRoom())) display("Moved client succesfully"); else display("Failed to move client");
@@ -164,12 +161,10 @@ public class EchoServer extends AbstractServer {
 					Room newRoom = new Room();
 					newRoom.setName(roomInfo.getRoom());
 					newRoom.setPassword(roomInfo.getPassword());
-					
-//					display("Creating room with password: " + roomInfo.getPassword().toString());
+
 					display("Creating room with password...");
 					System.out.println(roomInfo.getPassword());
-//					System.out.println(passwordSent);
-					
+
 					newRoom.setLimit(roomInfo.getLimit());
 					newRoom.setReserved(roomInfo.isReserved());
 					roomList.add(newRoom);
