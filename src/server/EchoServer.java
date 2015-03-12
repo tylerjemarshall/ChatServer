@@ -46,6 +46,7 @@ public class EchoServer extends AbstractServer {
 	public EchoServer(int port, ChatIF serverUI) {
 		super(port);
 		this.serverUI = serverUI;
+		roomList.setLog(serverUI);
 
 	}
 
@@ -71,10 +72,18 @@ public class EchoServer extends AbstractServer {
 		}
 	}
 
+	/**Method used to display the message in the server's console.
+	 * > message
+	 * @param message The message to be displayed in the server's console
+	 */
 	public void display(String message) {
 		System.out.println("> " + message);
 	}
-
+	/**Method used to display the message in the server's console.
+	 * > message
+	 * @param message The message to be displayed in the server's console
+	 * @param user The prefix that can be added before the message.
+	 */
 	public void display(String message, String user) {
 		System.out.println(user + "> " + message);
 	}
@@ -102,16 +111,16 @@ public class EchoServer extends AbstractServer {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				message = "#from " + client + " " + message;
+				message = "#from " + client.toStringShort() + " " + message;
 				this.sendToARoom(message, client.getClientInfo().getRoom());
 			}
 		}
 		else if (msg instanceof char[]){
-			System.out.println("Recieved object of type char[]");
+			display("Recieved object of type char[]");
 			char[] passwordSent = (char[]) msg;
 			if (client.getTempRoom().toCharArray().equals(passwordSent))
 			{
-				if (roomList.moveClient(client, client.getTempRoom())) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
+				if (roomList.moveClient(client, client.getTempRoom())) display("Moved client succesfully"); else display("Failed to move client");
 				tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
 				sendToARoom(client + " Just joined " + client.getTempRoom(), client.getTempRoom());
 				updateClient(client);
@@ -125,7 +134,7 @@ public class EchoServer extends AbstractServer {
 		}
 		// client requesting room being created
 		else if (msg instanceof RoomInfo) {
-			System.out.println("Recieved RoomInfo");
+			display("Recieved RoomInfo");
 			String oldRoom = client.getClientInfo().getRoom();
 			try
 			{
@@ -160,7 +169,7 @@ public class EchoServer extends AbstractServer {
 			
 		}
 		else {
-			System.out.println("Recieved an object from " + client);
+			display("Recieved an object from " + client);
 		}
 	}
 
@@ -315,10 +324,10 @@ public class EchoServer extends AbstractServer {
 		case "#j":
 		case "#join":
 			String oldRoom = client.getClientInfo().getRoom();
-			System.out.println("Recieved #join command: " + truncMsg);
+			display("Recieved #join command: " + truncMsg);
 			try
 			{
-				System.out.println("Room is private is: " + roomList.getRoom(truncMsg).isReserved());
+				display("Room is private is: " + roomList.getRoom(truncMsg).isReserved());
 			}
 			catch(Exception e)
 			{
@@ -330,7 +339,7 @@ public class EchoServer extends AbstractServer {
 			{
 				try
 				{
-					System.out.println("Sending to client #roomauth");
+					display("Sending to client #roomauth");
 					client.setTempRoom(truncMsg);
 					tryToSendToClient("#roomauth", client);
 				}
@@ -339,8 +348,8 @@ public class EchoServer extends AbstractServer {
 			}
 			else
 			{
-				System.out.println("Room is public, attempting to join...");
-				if (roomList.moveClient(client, truncMsg)) System.out.println("Moved client succesfully"); else System.out.println("Failed to move client");
+				display("Room is public, attempting to join...");
+				if (roomList.moveClient(client, truncMsg)) display("Moved client succesfully"); else display("Failed to move client");
 				tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
 				sendToARoom(client + " Just joined " + truncMsg, truncMsg);
 				updateClient(client);
@@ -477,14 +486,14 @@ public class EchoServer extends AbstractServer {
 			client.setId(id);
 			client.setClientName(user);
 			boolean exit = (roomList.add(client, room)) ? true :false;
-			System.out.println("Added client to room");
+			display("Added client to room");
 			
 			sendToARoom(client + " just logged in.", room);
 			updateClient(client);
 			return exit;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Failed to add client to room");
+			display("Failed to add client to room");
 			//info = new ClientInfo(client, user, 1, room);
 			return false;
 		}
@@ -546,7 +555,7 @@ public class EchoServer extends AbstractServer {
 		{
 			Room tempRoom = roomList.getRoom(room);
 			if (tempRoom.equals(null) || msg.equals(null)) {
-				System.out.println("Message or room is null. Not sending message.");
+				display("Message or room is null. Not sending message.");
 			} else {
 				for (int r = 0; r < tempRoom.size(); r++) {
 					tryToSendToClient(msg, tempRoom.get(r));
@@ -579,7 +588,7 @@ public class EchoServer extends AbstractServer {
 	 * starts listening for connections.
 	 */
 	protected void serverStarted() {
-		System.out.println("Server listening for connections on port "
+		display("Server listening for connections on port "
 				+ getPort());
 	}
 
@@ -588,7 +597,7 @@ public class EchoServer extends AbstractServer {
 	 * stops listening for connections.
 	 */
 	protected void serverStopped() {
-		System.out.println("Server has stopped listening for connections.");
+		display("Server has stopped listening for connections.");
 	}
 
 	// Class methods ***************************************************
@@ -601,25 +610,25 @@ public class EchoServer extends AbstractServer {
 	 *            [0] The port number to listen on. Defaults to 5555 if no
 	 *            argument is entered.
 	 */
-	public static void main(String[] args) {
-		int port = 0; // Port to listen on
-
-		try {
-			port = Integer.parseInt(args[0]); // Get port from command line
-		} catch (Throwable t) {
-			port = DEFAULT_PORT; // Set port to 5555
-		}
-
-		EchoServer sv = new EchoServer(port);
-
-		try {
-			sv.listen(); // Start listening for connections
-		} catch (Exception ex) {
-			System.out.println(ex.toString()
-					+ "EchoServer - Could not listen for clients!\n"
-					+ ex.toString());
-		}
-	}
+//	public static void main(String[] args) {
+//		int port = 0; // Port to listen on
+//
+//		try {
+//			port = Integer.parseInt(args[0]); // Get port from command line
+//		} catch (Throwable t) {
+//			port = DEFAULT_PORT; // Set port to 5555
+//		}
+//
+//		EchoServer sv = new EchoServer(port);
+//
+//		try {
+//			sv.listen(); // Start listening for connections
+//		} catch (Exception ex) {
+//			display(ex.toString()
+//					+ "EchoServer - Could not listen for clients!\n"
+//					+ ex.toString());
+//		}
+//	}
 
 	/**
 	 * @param message
@@ -632,34 +641,34 @@ public class EchoServer extends AbstractServer {
 		try {
 			client.sendToClient(message);
 		} catch (IOException e) {
-			System.out.println("Failed to send to client " + client);
+			display("Failed to send to client " + client);
 			e.printStackTrace();
 		} catch (NullPointerException npe)
 		{
-			System.out.println("Can't send null objects!");
+			display("Can't send null objects!");
 			npe.printStackTrace();
 		}
 	}
 
 	protected void clientConnected(ConnectionToClient client) {
 		try {
-			System.out.println("Client " + client
+			display("Client " + client
 					+ " connected from " + client);
 			
 			
 			
 		} catch (Exception e) {
-			System.out.println("Client connected from " + client);
+			display("Client connected from " + client);
 		}
 	}
 
 	protected void clientDisconnected(ConnectionToClient client) {
 		try {
 
-			System.out.println("Client " + client
+			display("Client " + client
 					+ " disconnected from " + client.getInetAddress());
 		} catch (Exception e) {
-			System.out.println(client + " disconnected. Error: " + e.getMessage());
+			display(client + " disconnected. Error: " + e.getMessage());
 		}
 		finally
 		{

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import client.ChatIF;
+
 
 
 
@@ -20,6 +22,7 @@ public class RoomList implements RoomListInterface{
 	
 	
     protected ArrayList<Room> list;
+	private ChatIF log;
 
     /**
      * Class that acts as a container for the list Room.
@@ -29,8 +32,22 @@ public class RoomList implements RoomListInterface{
         list = new ArrayList<Room>();
     }
     
+    public RoomList(ChatIF log)
+    {
+    	list = new ArrayList<Room>();
+    	this.setLog(log);
+    }
     
-    public String toString()
+    
+    public ChatIF getLog() {
+		return log;
+	}
+
+	public void setLog(ChatIF log) {
+		this.log = log;
+	}
+
+	public String toString()
     {
     	return list.toString();
     }
@@ -266,18 +283,18 @@ public class RoomList implements RoomListInterface{
 				client.getClientInfo().setRoom(room);
 				foundRoom = true;
 				currentRoom.add(client);
-				System.out.println("Added client " + client + " to room "
+				log.display("Added client " + client + " to room "
 					+ currentRoom);
 
 				if (currentRoom.isEmpty() ) {
 					if(currentRoom.getName().toLowerCase().equals(defaultRoom))
 					{
-						System.out.println("Not removing default room");
+						log.display("Not removing default room");
 					}
 					else
 					{
 						list.remove(currentRoom);
-						System.out.println("Removed empty room.");
+						log.display("Removed empty room.");
 					}
 					
 					
@@ -285,20 +302,20 @@ public class RoomList implements RoomListInterface{
 
 				if (!roomFull(room))
 				{
-					System.out.println("Room is closed, moving to commons");
+					log.display("Room is closed, moving to commons");
 					try 
 					  {
 						client.sendToClient("Room capacity full.");
 					  } 
 					  catch(IOException e) 
 					  {
-						  System.out.println(e.toString() + "Error: could not send message to client.");
+						  log.display(e.toString() + "Error: could not send message to client.");
 						  System.exit(1);
 					  }			
 					boolean moved = moveClient(client, defaultRoom);
 					if(moved)
 					{
-						System.out.println(client + " sent to room " + defaultRoom);
+						log.display(client + " sent to room " + defaultRoom);
 					}
 				}
 				
@@ -307,7 +324,7 @@ public class RoomList implements RoomListInterface{
 			}
 		}
 		if (!foundRoom) {
-			System.out.println("Couldn't find room, creating new room");
+			log.display("Couldn't find room, creating new room");
 			Room newRoom = new Room();
 			newRoom.setName(room);
 			if (room.equals(defaultRoom)) newRoom.setLimit(200);
@@ -348,18 +365,18 @@ public class RoomList implements RoomListInterface{
 				boolean exit = currentRoom.remove(client);
 				
 				if (exit)
-				System.out.println("Removed client " + client + " from room "
+				log.display("Removed client " + client + " from room "
 						+ currentRoom);
 
 				if (currentRoom.isEmpty()) {
 					if(currentRoom.getName().toLowerCase().equals(defaultRoom))
 					{
-						System.out.println("Not removing empty defaultRoom");
+						log.display("Not removing empty defaultRoom");
 					}
 					else
 					{
 						list.remove(currentRoom);
-						System.out.println("Removed empty room.");
+						log.display("Removed empty room.");
 					}
 					
 				}
