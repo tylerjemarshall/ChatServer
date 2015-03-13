@@ -363,6 +363,8 @@ public class GUIConsole extends JFrame implements ChatIF {
 	 */
 	@Override
 	public void display(String message, String user) {
+		append(user + "> ", Color.blue);
+		
 		String cmd;
 		if (message.indexOf("#") == 0) {
 			cmd = (message.indexOf(" ") == -1) ? message : message.substring(0,
@@ -375,19 +377,33 @@ public class GUIConsole extends JFrame implements ChatIF {
 			switch(cmd)
 			{
 			case "#cred":
-				append(user + "> " + truncMsg + "\n", Color.red);
+				append(truncMsg + "\n", Color.red);
+				messageList.select(Integer.MAX_VALUE, 0);
+				break;
+			case "#cgreen":
+				append(truncMsg + "\n", Color.green);
+				messageList.select(Integer.MAX_VALUE, 0);
+				break;
+			case "#cblue":
+				append(truncMsg + "\n", Color.blue);
+				messageList.select(Integer.MAX_VALUE, 0);
+				break;
+			case "#cpink":
+				append(truncMsg + "\n", new Color(128, 0, 128));
+				messageList.select(Integer.MAX_VALUE, 0);
+				break;
+			case "#cgrey":
+			case "#cgray":
+				append(truncMsg + "\n", new Color(96, 96, 96));
 				messageList.select(Integer.MAX_VALUE, 0);
 				break;
 			default:
-				append(user + "> " + message + "\n");
+				append(message + "\n");
 				messageList.select(Integer.MAX_VALUE, 0);
 				break;
-			
 			}
-			
-
 		} else {
-			append(user + "> " + message + "\n");
+			append(message + "\n");
 			messageList.select(Integer.MAX_VALUE, 0);
 		}
 
@@ -510,8 +526,11 @@ public class GUIConsole extends JFrame implements ChatIF {
 			int len = s.length();
 			String newString = "";
 			
-			Style style = messageList.addStyle("Color", null);
+			Style style = messageList.addStyle("Message", null);
 			StyleConstants.setForeground(style, c);
+			
+//			Style userStyle = messageList.addStyle("User", null);
+//			StyleConstants.setForeground(userStyle, new Color(0, 128, 128));
 			
 			if (len < 15) {
 				Document doc = messageList.getDocument();

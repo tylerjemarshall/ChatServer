@@ -122,14 +122,14 @@ public class EchoServer extends AbstractServer {
 				if (Arrays.equals(passwordSent, roomList.getRoom(client.getTempRoom()).getPassword()))
 				{
 					if (roomList.moveClient(client, client.getTempRoom())) display("Moved client succesfully"); else display("Failed to move client");
-					tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
-					sendToARoom(client + " just joined " + client.getTempRoom(), client.getTempRoom());
+					tryToSendToClient("#cgray You have switched rooms to " + client.getClientInfo().getRoom(), client);
+					sendToARoom("#cgray " + client + " just joined " + client.getTempRoom(), client.getTempRoom());
 					updateClient(client);
 				}
 				else 
 				{
 				
-					tryToSendToClient("Incorrect password", client);
+					tryToSendToClient("#cred Incorrect password", client);
 					updateClient(client);
 				}
 			}
@@ -146,7 +146,7 @@ public class EchoServer extends AbstractServer {
 			{
 				RoomInfo roomInfo = (RoomInfo) msg;
 				if (roomList.getRoom(roomInfo.getRoom()) != null) { 
-					tryToSendToClient("Room already exists. Going to try and join", client);
+					tryToSendToClient("#cred Room already exists. Going to try and join", client);
 					roomList.moveClient(client, roomInfo.getRoom());
 					updateClient(client);
 					updateRoom(oldRoom);
@@ -315,16 +315,16 @@ public class EchoServer extends AbstractServer {
 			if (isNumber(user))
 				whisperToClient(Integer.parseInt(user), whisper, client);
 			else
-				tryToSendToClient("Must enter clients ID", client);
+				tryToSendToClient("#cred Must enter clients ID", client);
 			break;
 		case "#y":
 		case "#yell":
 			truncMsg = truncMsg.toUpperCase();
 			
 			if(client.getClientInfo().isYellable())
-				sendToAllRooms(client + " Just yelled " + truncMsg + "!");
+				sendToAllRooms("#cred " + client + " just yelled " + truncMsg + "!");
 			else
-				tryToSendToClient("You are not allowed to yell", client);
+				tryToSendToClient("#cred You are not allowed to yell", client);
 			break;
 		case "#j":
 		case "#join":
@@ -337,8 +337,8 @@ public class EchoServer extends AbstractServer {
 			else
 			{
 				if (roomList.moveClient(client, truncMsg)) display("Moved client succesfully"); else display("Failed to move client");
-				tryToSendToClient("You have switched rooms to " + client.getClientInfo().getRoom(), client);
-				sendToARoom(client + " Just joined " + truncMsg, truncMsg);
+				tryToSendToClient("#cgray You have switched rooms to " + client.getClientInfo().getRoom(), client);
+				sendToARoom("#cgray " + client.toStringShort() + " just joined " + truncMsg, truncMsg);
 				updateClient(client);
 				updateRoom(oldRoom);
 			}
@@ -352,22 +352,19 @@ public class EchoServer extends AbstractServer {
 					updateClient(roomList.getClientById(Integer.parseInt(truncMsg)));
 				}
 				else
-					tryToSendToClient("Must enter clients ID", client);
+					tryToSendToClient("#cred Must enter clients ID", client);
 			}
 			else
-				tryToSendToClient("You are not the owner of this room.", client);
-			break;
-		case "#info":
-			sendToAClient((int) client.getId(), client + " is in room: " + client.getClientInfo().getRoom());
+				tryToSendToClient("#cred You are not the owner of this room.", client);
 			break;
 		case "#exit":
 		case "#quit":
-			sendToARoom(client + " has left the chat!", client.getClientInfo().getRoom());
+			sendToARoom("#cgray " + client + " has left the chat!", client.getClientInfo().getRoom());
 			break;
 		case "#gavinsucks":
 		case "#logout":
 		case "#logoff":
-			sendToARoom(client + " has logged off!", client.getClientInfo().getRoom());
+			sendToARoom("#cgray " + client + " has logged off!", client.getClientInfo().getRoom());
 			logoff(client);
 			break;
 		case "#setlimit":
@@ -379,13 +376,14 @@ public class EchoServer extends AbstractServer {
 					roomList.getRoomByClient(client).setLimit(limit);
 				}//note: i just realized could of also did client.getInfo().getRoom() instead. 
 				else
-					tryToSendToClient("Must enter a #", client);	
+					tryToSendToClient("#cred Must enter a #", client);	
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
 			break;
+		case "#info":
 		case "#lc":
 		case "#listclients":	
 		case "#listrooms":
@@ -408,7 +406,7 @@ public class EchoServer extends AbstractServer {
 			break;
 
 		default:
-			tryToSendToClient("Invalid command: " + cmd, client);
+			tryToSendToClient("#cred Invalid command: " + cmd, client);
 		}
 	}
 
@@ -489,7 +487,7 @@ public class EchoServer extends AbstractServer {
 			boolean exit = (roomList.add(client, room)) ? true :false;
 			display("Added client to room");
 			
-			sendToARoom(client + " just logged in.", room);
+			sendToARoom("#cgray " + client + " just logged in.", room);
 			updateClient(client);
 			return exit;
 		} catch (Exception e) {
@@ -539,8 +537,9 @@ public class EchoServer extends AbstractServer {
 	 */
 	public void whisperToClient(int user, String message, ConnectionToClient clientFrom) {
 		ConnectionToClient clientTo = roomList.getClientById(user);
-		message = clientFrom + " whispered to you: " + message;
-		tryToSendToClient(message, clientTo);
+		tryToSendToClient("#cpink " + "You whispered to "  + clientFrom.toStringShort()  + ": " + message, clientFrom);
+		tryToSendToClient("#cpink " + clientFrom.toStringShort() + " whispered to you: " + message, clientTo);
+		
 	}
 
 	/**

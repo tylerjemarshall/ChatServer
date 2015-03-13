@@ -110,6 +110,16 @@ public class ChatClient extends AbstractClient {
 			String truncMsg = msg.substring(space, end).trim();
 
 			switch (cmd) {
+			case "#cred":
+			case "#cblue":
+			case "#cgreen":
+			case "#cpink":
+			case "#cgrey":
+			case "#cgray":
+				System.out.println("Recieved color command:" + cmd);
+				clientUI.display(msg);
+				break;
+				
 			case "#roomauth":
 				clientUI.sendToUI(msg);
 				break;
