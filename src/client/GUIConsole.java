@@ -499,27 +499,30 @@ public class GUIConsole extends JFrame implements ChatIF {
 
 	
 	public void append(String s) {
-		try {
-			int len = s.length();
-			String newString = "";
-			if (len < 15) {
-				Document doc = messageList.getDocument();
-				doc.insertString(doc.getLength(), s, null);
-			}
-			else {
-				for (int x = 0; x < s.length(); x++) {
-					newString += s.charAt(x);
-					if (x % 50 == 0 && x != 0) {
-						newString += '\n';
-					}
-				}
-			}
-			Document doc = messageList.getDocument();
-			doc.insertString(doc.getLength(), newString, null);
-		}
-		catch (BadLocationException exc) {
-			exc.printStackTrace();
-		}
+		
+		append(s, Color.white);
+		
+//		try {
+//			int len = s.length();
+//			String newString = "";
+//			if (len < 15) {
+//				Document doc = messageList.getDocument();
+//				doc.insertString(doc.getLength(), s, null);
+//			}
+//			else {
+//				for (int x = 0; x < s.length(); x++) {
+//					newString += s.charAt(x);
+//					if (x % 50 == 0 && x != 0) {
+//						newString += '\n';
+//					}
+//				}
+//			}
+//			Document doc = messageList.getDocument();
+//			doc.insertString(doc.getLength(), newString, null);
+//		}
+//		catch (BadLocationException exc) {
+//			exc.printStackTrace();
+//		}
 	}
 	public void append(String s, Color c) {
 		try {
@@ -532,7 +535,7 @@ public class GUIConsole extends JFrame implements ChatIF {
 //			Style userStyle = messageList.addStyle("User", null);
 //			StyleConstants.setForeground(userStyle, new Color(0, 128, 128));
 			
-			if (len < 15) {
+			if (true) {
 				Document doc = messageList.getDocument();
 				doc.insertString(doc.getLength(), s, style);
 			}
