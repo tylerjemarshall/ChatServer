@@ -346,7 +346,8 @@ public class EchoServer extends AbstractServer {
 		case "#kick":
 			if (client.getId() == roomList.getRoomByClient(client).getOwner().getId())
 			{
-				if (isNumber(truncMsg)){
+				if (isNumber(truncMsg))
+				{
 					roomList.moveClient(roomList.getClientById(Integer.parseInt(truncMsg)), "commons");
 					updateClient(client);
 					updateClient(roomList.getClientById(Integer.parseInt(truncMsg)));
@@ -370,13 +371,18 @@ public class EchoServer extends AbstractServer {
 		case "#setlimit":
 			try
 			{
-				if (isNumber(truncMsg))
+				if (client.getId() == roomList.getRoomByClient(client).getOwner().getId())
 				{
-					int limit = (Integer.parseInt(truncMsg) < 1) ? 1 : Integer.parseInt(truncMsg); //if truncMsg less than 1, will set to 1.
-					roomList.getRoomByClient(client).setLimit(limit);
-				}//note: i just realized could of also did client.getInfo().getRoom() instead. 
-				else
-					tryToSendToClient("#cred Must enter a #", client);	
+					if (isNumber(truncMsg))
+					{
+						int limit = (Integer.parseInt(truncMsg) < 1) ? 1 : Integer.parseInt(truncMsg); //if truncMsg less than 1, will set to 1.
+						roomList.getRoomByClient(client).setLimit(limit);
+						updateClient(client);
+						updateClient(roomList.getClientById(Integer.parseInt(truncMsg)));
+					}
+					else
+						tryToSendToClient("#cred Must enter a #", client);	
+				}
 			}
 			catch (Exception e)
 			{
@@ -394,7 +400,9 @@ public class EchoServer extends AbstractServer {
 		case "#refresh":
 			updateClient(client);
 			break;
+			
 		// Game Stuff
+			
 		case "#game": {
 			break;
 		}

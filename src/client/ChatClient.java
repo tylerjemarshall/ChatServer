@@ -265,7 +265,14 @@ public class ChatClient extends AbstractClient {
 //			handleClientCommandHelp(cmd);
 			clientUI.display("Commands are: ...\n" +
 					"#info\n" +
-					"#list\n");
+					"#list\n" +
+					"#fontsize\n" +
+					"#fontstyle\n" +
+					"#fontname\n" +
+					"#whisper (user ID#)\n \n" +
+					"If you are a room owner: ...\n" +
+					"#setlimit (room capacity)\n" +
+					"#kick (user ID#)\n");
 			break;
 		case "#info":
 			try {
@@ -290,9 +297,9 @@ public class ChatClient extends AbstractClient {
 	/**
 	 * This method handles help for console commands.
 	 */
-	private void handleClientCommandHelp(String cmd) {
-		clientUI.display("Help for:" + cmd);
-	}
+//	private void handleClientCommandHelp(String cmd) {
+//		clientUI.display("Help for:" + cmd);
+//	}
 
 	/**
 	 * This method tries to send message to server then throws Exception
