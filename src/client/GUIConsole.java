@@ -486,72 +486,37 @@ public class GUIConsole extends JFrame implements ChatIF {
 		messageTxF.setText("");
 	}
 	
-	
-	
 
-	
 
-	
 	public void append(String s) {
 		
 		append(s, Color.black);
-		
-//		try {
-//			int len = s.length();
-//			String newString = "";
-//			if (len < 15) {
-//				Document doc = messageList.getDocument();
-//				doc.insertString(doc.getLength(), s, null);
-//			}
-//			else {
-//				for (int x = 0; x < s.length(); x++) {
-//					newString += s.charAt(x);
-//					if (x % 50 == 0 && x != 0) {
-//						newString += '\n';
-//					}
-//				}
-//			}
-//			Document doc = messageList.getDocument();
-//			doc.insertString(doc.getLength(), newString, null);
-//		}
-//		catch (BadLocationException exc) {
-//			exc.printStackTrace();
-//		}
+
 	}
+
 	public void append(String s, Color c) {
 		try {
-//			int len = s.length();
 			String newString = "";
 			int count = 0;
-			
+
 			Style style = messageList.addStyle("Message", null);
 			StyleConstants.setForeground(style, c);
 
-			
 			for (int x = 0; x < s.length(); x++) {
-				if (s.charAt(x) == ' ')
-				{
+				if (s.charAt(x) == ' ') {
 					count = 0;
-				}
-				else
-				{
-					if (count > 15) 
-						{
-							newString+=' ';
-							count = 0;
-						}
+				} else {
+					if (count > 15) {
+						newString += ' ';
+						count = 0;
+					}
 					count++;
 				}
-				
 				newString += s.charAt(x);
 			}
-			
-//			if (true) {
 			Document doc = messageList.getDocument();
 			doc.insertString(doc.getLength(), newString, style);
-
-		}
-		catch (BadLocationException exc) {
+		} catch (BadLocationException exc) {
 			exc.printStackTrace();
 		}
 	}
