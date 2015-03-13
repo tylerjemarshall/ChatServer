@@ -488,19 +488,13 @@ public class GUIConsole extends JFrame implements ChatIF {
 	
 	
 	
-	/**
-	 * Main method, creates the JFrame for GUIConsole.
-	 * @param args
-	 * @param args[0] = host (Default: localhost)
-	 * @param args[1] = port (Default: 5555)
-	 * @param args[2] = userName (Default: User)
-	 */
+
 	
 
 	
 	public void append(String s) {
 		
-		append(s, Color.white);
+		append(s, Color.black);
 		
 //		try {
 //			int len = s.length();
@@ -526,36 +520,49 @@ public class GUIConsole extends JFrame implements ChatIF {
 	}
 	public void append(String s, Color c) {
 		try {
-			int len = s.length();
+//			int len = s.length();
 			String newString = "";
+			int count = 0;
 			
 			Style style = messageList.addStyle("Message", null);
 			StyleConstants.setForeground(style, c);
+
 			
-//			Style userStyle = messageList.addStyle("User", null);
-//			StyleConstants.setForeground(userStyle, new Color(0, 128, 128));
-			
-			if (true) {
-				Document doc = messageList.getDocument();
-				doc.insertString(doc.getLength(), s, style);
-			}
-			else {
-				for (int x = 0; x < s.length(); x++) {
-					newString += s.charAt(x);
-					if (x % 50 == 0 && x != 0) {
-						newString += '\n';
-					}
+			for (int x = 0; x < s.length(); x++) {
+				if (s.charAt(x) == ' ')
+				{
+					count = 0;
 				}
+				else
+				{
+					if (count > 15) 
+						{
+							newString+=' ';
+							count = 0;
+						}
+					count++;
+				}
+				
+				newString += s.charAt(x);
 			}
+			
+//			if (true) {
 			Document doc = messageList.getDocument();
 			doc.insertString(doc.getLength(), newString, style);
+
 		}
 		catch (BadLocationException exc) {
 			exc.printStackTrace();
 		}
 	}
 	
-	
+	/**
+	 * Main method, creates the JFrame for GUIConsole.
+	 * @param args
+	 * @param args[0] = host (Default: localhost)
+	 * @param args[1] = port (Default: 5555)
+	 * @param args[2] = userName (Default: User)
+	 */
 	public static void main(String[] args) {
 		String userName = "", host = "";
 		int port = 0;
