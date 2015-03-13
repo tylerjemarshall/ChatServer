@@ -263,7 +263,7 @@ public class ChatClient extends AbstractClient {
 
 		case "#help":
 //			handleClientCommandHelp(cmd);
-			clientUI.display("Commands are: ...\n" +
+			clientUI.display("#cred Commands are: ...\n" +
 					"#info\n" +
 					"#list\n" +
 					"#fontsize\n" +
