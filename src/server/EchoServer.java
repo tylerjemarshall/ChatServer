@@ -537,7 +537,7 @@ public class EchoServer extends AbstractServer {
 	 */
 	public void whisperToClient(int user, String message, ConnectionToClient clientFrom) {
 		ConnectionToClient clientTo = roomList.getClientById(user);
-		tryToSendToClient("#cpink " + "You whispered to "  + clientFrom.toStringShort()  + ": " + message, clientFrom);
+		tryToSendToClient("#cpink " + "You whispered to "  + clientTo.toStringShort()  + ": " + message, clientFrom);
 		tryToSendToClient("#cpink " + clientFrom.toStringShort() + " whispered to you: " + message, clientTo);
 		
 	}

@@ -110,13 +110,14 @@ public class ChatClient extends AbstractClient {
 			String truncMsg = msg.substring(space, end).trim();
 
 			switch (cmd) {
+			//A color must be in here to be able to forward to GUIConsole
 			case "#cred":
 			case "#cblue":
 			case "#cgreen":
 			case "#cpink":
 			case "#cgrey":
 			case "#cgray":
-				System.out.println("Recieved color command:" + cmd);
+				//System.out.println("Recieved color command:" + cmd);
 				clientUI.display(msg);
 				break;
 				
