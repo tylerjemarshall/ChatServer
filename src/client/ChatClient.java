@@ -203,7 +203,7 @@ public class ChatClient extends AbstractClient {
 				message.indexOf(" "));
 		int end = message.length();
 		int space = (message.indexOf(" ") == -1) ? end : message.indexOf(" ");
-		String truncMsg = message.substring(space, end).trim();
+//		String truncMsg = message.substring(space, end).trim();
 //		if (truncMsg.contains("help")) {
 //			handleClientCommandHelp(cmd);
 //			return;
